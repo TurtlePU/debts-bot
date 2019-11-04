@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "src",
+        "paths": {
+            "@bot": [ "bot/bot" ]
+        }
+    }
+}

@@ -1,9 +1,13 @@
 {
   "dependencies": {
+    "module-alias": "^2.2.2",
     "node-telegram-bot-api": "^0.40.0"
   },
   "devDependencies": {
     "@types/node-telegram-bot-api": "^0.31.1",
     "typescript": "^3.6.4"
+  },
+  "_moduleAliases": {
+    "@bot": "build/bot/bot.js"
   }
 }
