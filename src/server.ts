@@ -1,4 +1,4 @@
-import 'module-alias';
+import 'module-alias/register';
 
 import https from 'https';
 
