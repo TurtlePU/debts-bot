@@ -6,10 +6,11 @@ import { Locale } from '@locale';
 
 export default function Bot(
         token: string,
+        port: number,
         locale: (code?: string) => Locale,
         dataBase: DataBase
 ): TelegramBot {
-    const bot = new TelegramBot(token);
+    const bot = new TelegramBot(token, { webHook: { port } });
 
     const oldSendMessage = bot.sendMessage.bind(bot);
     bot.sendMessage = (chatId, text, options) =>
