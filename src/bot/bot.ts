@@ -18,6 +18,7 @@ export default function Bot(
 
     commands.forEach(({ regexp, requirements, callback }) => {
         bot.onText(regexp, (msg, _match) => {
+            console.log('caught command');
             if (msg.from) {
                 dataBase.updateUser(msg.from);
             }
