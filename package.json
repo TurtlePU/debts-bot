@@ -9,6 +9,7 @@
   },
   "_moduleAliases": {
     "@bot": "build/bot/bot.js",
-    "@locale": "build/locale/export.js"
+    "@locale": "build/locale/export.js",
+    "@commands": "build/bot/commands/export.js"
   }
 }

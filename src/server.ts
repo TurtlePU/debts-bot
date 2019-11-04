@@ -13,4 +13,4 @@ import Locale from '@locale';
     bot.setWebHook(url);
 
     setInterval(() => https.get(url), 1000 * 60 * 15);
-})()
+})();

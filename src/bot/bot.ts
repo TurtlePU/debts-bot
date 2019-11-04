@@ -6,4 +6,4 @@ export default function Bot(token: string, locale: (code: string) => Locale): Te
     // set commands
 
     return bot;
-}
+};
