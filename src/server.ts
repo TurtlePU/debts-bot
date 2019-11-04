@@ -11,6 +11,8 @@ import Locale from '@locale';
     const port = +(process.env.PORT || '8080');
     const token = process.env.TOKEN || 'none';
 
+    console.log(url, port, token);
+
     const db = DB();
 
     const bot = Bot(token, port, Locale, db);
