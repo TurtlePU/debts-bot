@@ -1,5 +1,6 @@
 import { Command } from './command';
 
-const commands: Command<any>[] = [];
+import start from './start';
+import debts from './debts';
 
-export default commands;
+export default <Command<any>[]> [ start, debts ];
