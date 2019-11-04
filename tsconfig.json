@@ -1,10 +1,18 @@
 {
     "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "build",
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
         "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "sourceMap": true,
         "baseUrl": "src",
         "paths": {
-            "@bot": [ "bot/bot" ]
+            "@bot": [ "bot/bot" ],
+            "@locale": [ "locale/locale" ]
         }
     }
 }

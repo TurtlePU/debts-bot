@@ -8,6 +8,7 @@
     "typescript": "^3.6.4"
   },
   "_moduleAliases": {
-    "@bot": "build/bot/bot.js"
+    "@bot": "build/bot/bot.js",
+    "@locale": "build/locale/locale.js"
   }
 }
