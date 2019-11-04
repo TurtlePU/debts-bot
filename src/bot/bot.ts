@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 
 import commands from '@commands';
 import { DataBase } from '@db';
+import { Locale } from '@locale';
 
 export default function Bot(
         token: string,

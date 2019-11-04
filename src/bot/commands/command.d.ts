@@ -1,6 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 
 import { DataBase } from '@db';
+import { Locale } from '@locale';
 
 declare type Context<MType = {}> = {
     bot: TelegramBot
