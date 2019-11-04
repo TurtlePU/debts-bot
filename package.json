@@ -1,1 +1,9 @@
-{}
+{
+  "dependencies": {
+    "node-telegram-bot-api": "^0.40.0"
+  },
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.31.1",
+    "typescript": "^3.6.4"
+  }
+}
