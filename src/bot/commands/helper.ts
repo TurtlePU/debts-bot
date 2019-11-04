@@ -1,4 +1,4 @@
-import { CommandProto, Command } from "./command";
+import { CommandProto, Command } from './command';
 
 export function simple(commandProto: CommandProto): Command {
     return command({}, commandProto);
