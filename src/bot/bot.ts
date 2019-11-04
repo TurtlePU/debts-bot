@@ -11,7 +11,7 @@ export default function Bot(
     commands.forEach(({ regexp, requirements, callback }) => {
         bot.onText(regexp, (msg, match) => {
             if (requirements.from && !msg.from) {
-                //
+                bot.sendMessage(msg.chat.id, locale().anon());
             } else if (match) {
                 callback({ msg, match, bot, locale: locale(msg.from && msg.from.language_code) });
             }
