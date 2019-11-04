@@ -4,7 +4,7 @@ import commands from '@commands';
 
 export default function Bot(
         token: string,
-        locale: (code: string | undefined) => Locale
+        locale: (code?: string) => Locale
 ): TelegramBot {
     const bot = new TelegramBot(token);
 

@@ -1,8 +1,8 @@
 import ru from './ru';
 
 const locales = new Map([ [ 'ru', ru ] ]);
-const noLocale = ru;
+const defLocale = ru;
 
-export default function getLocale(localeCode: string | undefined): Locale {
-    return locales.get(localeCode || '') || noLocale;
+export default function getLocale(localeCode?: string): Locale {
+    return (localeCode && locales.get(localeCode)) || defLocale;
 };
