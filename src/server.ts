@@ -14,7 +14,7 @@ import Locale from '@locale';
     const db = DB();
 
     const bot = Bot(token, port, Locale, db);
-    bot.setWebHook(url);
+    bot.setWebHook(`${url}/bot${token}`);
 
     setInterval(() => https.get(url), 1000 * 60 * 15);
 })();
