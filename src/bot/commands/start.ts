@@ -8,8 +8,8 @@ export default command(
     },
     {
         regexp: /^\/start$/,
-        callback: ({ msg, bot, locale, dataBase }) => {
-            bot.sendMessage(msg.chat.id, locale.hi(dataBase.name(msg.from.id)));
+        callback: async ({ msg, bot, locale, dataBase }) => {
+            bot.sendMessage(msg.chat.id, locale.hi(await dataBase.name(msg.from.id)));
         }
     }
 );

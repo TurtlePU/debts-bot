@@ -1,5 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 
+import { DataBase } from '@db';
+
 declare type Context<MType = {}> = {
     bot: TelegramBot
     msg: TelegramBot.Message & MType
