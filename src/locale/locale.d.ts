@@ -1,3 +1,3 @@
 declare type Locale = {
     //
-};
+}
