@@ -13,7 +13,8 @@
         "paths": {
             "@bot": [ "bot/bot" ],
             "@locale": [ "locale/export" ],
-            "@commands": [ "bot/commands/export" ]
+            "@commands": [ "bot/commands/export" ],
+            "@db": [ "db/export" ]
         }
     }
 }

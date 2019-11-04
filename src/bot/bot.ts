@@ -4,7 +4,8 @@ import commands from '@commands';
 
 export default function Bot(
         token: string,
-        locale: (code?: string) => Locale
+        locale: (code?: string) => Locale,
+        dataBase: DataBase
 ): TelegramBot {
     const bot = new TelegramBot(token);
 
@@ -13,7 +14,9 @@ export default function Bot(
             if (requirements.from && !msg.from) {
                 bot.sendMessage(msg.chat.id, locale().anon());
             } else if (match) {
-                callback({ msg, match, bot, locale: locale(msg.from && msg.from.language_code) });
+                callback({
+                    msg, match, bot, locale: locale(msg.from && msg.from.language_code), dataBase
+                });
             }
         });
     })
