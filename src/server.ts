@@ -7,11 +7,9 @@ import DB from '@db';
 import Locale from '@locale';
 
 (function start() {
-    const url = process.env.URL || 'none';
     const port = +(process.env.PORT || '8080');
+    const url = `${process.env.URL || 'none'}:${port}`;
     const token = process.env.TOKEN || 'none';
-
-    console.log(url, port, token);
 
     const db = DB();
 
