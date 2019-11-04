@@ -8,7 +8,7 @@ import Locale from '@locale';
 
 (function start() {
     const port = +(process.env.PORT || '8080');
-    const url = `${process.env.URL || 'none'}:${port}`;
+    const url = process.env.URL || 'none';
     const token = process.env.TOKEN || 'none';
 
     const db = DB();
