@@ -1,6 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 
 import commands from '@commands';
+import * as inline from '@inline';
 import { DataBase } from '@db';
 import { Locale } from '@locale';
 
@@ -31,7 +32,10 @@ export default function Bot(
                 });
             }
         });
-    })
+    });
+
+    bot.on('inline_query', inline.onInline.bind(bot));
+    bot.on('chosen_inline_result', inline.onInlineResult.bind(bot));
 
     return bot;
 };
