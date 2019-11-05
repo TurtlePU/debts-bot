@@ -14,7 +14,8 @@
             "@bot": [ "bot/bot" ],
             "@locale": [ "locale/export" ],
             "@commands": [ "bot/commands/export" ],
-            "@db": [ "db/export" ]
+            "@db": [ "db/export" ],
+            "@inline": [ "bot/inline/inline" ]
         }
     }
 }
