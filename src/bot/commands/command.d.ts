@@ -7,13 +7,13 @@ declare type Context<MType = {}> = {
     bot: TelegramBot
     msg: TelegramBot.Message & MType
     match?: RegExpExecArray
-    locale: Locale,
+    locale: Locale
     dataBase: DataBase
 }
 
 declare type CommandProto<MType = {}> = {
-    regexp: RegExp,
-    callback: (ctx: Context<MType>) => void;
+    regexp: RegExp
+    callback: (ctx: Context<MType>) => void
 }
 
 declare type Command<MType = {}> = CommandProto<MType> & {
