@@ -27,3 +27,7 @@ export function onInlineResult(this: TelegramBot, result: TelegramBot.ChosenInli
         }
     }
 }
+
+export function onInlineCallbackQuery(this: TelegramBot, query: TelegramBot.CallbackQuery) {
+    //
+}

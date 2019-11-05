@@ -6,10 +6,7 @@ import { DataBase } from '@db';
 import { Locale } from '@locale';
 
 export default function Bot(
-        token: string,
-        port: number,
-        locale: (code?: string) => Locale,
-        dataBase: DataBase
+        token: string, port: number, locale: (code?: string) => Locale, dataBase: DataBase
 ): TelegramBot {
     const bot = new TelegramBot(token, { webHook: { port } });
 
@@ -36,6 +33,14 @@ export default function Bot(
 
     bot.on('inline_query', inline.onInline.bind(bot));
     bot.on('chosen_inline_result', inline.onInlineResult.bind(bot));
+
+    bot.on('callback_query', query => {
+        if (query.inline_message_id) {
+            inline.onInlineCallbackQuery.call(bot, query);
+        } else {
+            //
+        }
+    })
 
     return bot;
 };
