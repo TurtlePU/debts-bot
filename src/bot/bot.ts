@@ -15,8 +15,8 @@ export default function Bot(
         oldSendMessage(chatId, text, { ...options, parse_mode: 'Markdown' });
 
     commands.forEach(({ regexp, requirements, callback }) => {
+        const clb = callback.call(bot, dataBase);
         bot.onText(regexp, (msg, _match) => {
-            console.log('caught command');
             if (msg.from) {
                 dataBase.updateUser(msg.from);
             }
@@ -24,8 +24,8 @@ export default function Bot(
                 bot.sendMessage(msg.chat.id, locale().anon());
             } else {
                 const match = _match || undefined;
-                callback({
-                    msg, match, bot, locale: locale(msg.from && msg.from.language_code), dataBase
+                clb({
+                    msg, match, locale: locale(msg.from && msg.from.language_code)
                 });
             }
         });

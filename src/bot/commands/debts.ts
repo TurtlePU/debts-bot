@@ -8,7 +8,9 @@ export default command(
     },
     {
         regexp: /\/debts/,
-        callback: async ({ msg, bot, locale, dataBase }) =>
-            bot.sendMessage(msg.chat.id, locale.debts(await dataBase.debts(msg.from.id)))
+        callback(dataBase) {
+            return async ({ msg, locale }) =>
+                this.sendMessage(msg.chat.id, locale.debts(await dataBase.debts(msg.from.id)))
+        }
     }
 );

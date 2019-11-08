@@ -4,16 +4,14 @@ import { DataBase } from '@db';
 import { Locale } from '@locale';
 
 declare type Context<MType = {}> = {
-    bot: TelegramBot
     msg: TelegramBot.Message & MType
     match?: RegExpExecArray
     locale: Locale
-    dataBase: DataBase
 }
 
 declare type CommandProto<MType = {}> = {
     regexp: RegExp
-    callback: (ctx: Context<MType>) => void
+    callback(this: TelegramBot, dataBase: DataBase): (ctx: Context<MType>) => void
 }
 
 declare type Command<MType = {}> = CommandProto<MType> & {
