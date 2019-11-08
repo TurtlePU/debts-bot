@@ -16,6 +16,6 @@
     "@locale": "build/locale/export.js",
     "@commands": "build/bot/commands/export.js",
     "@db": "build/db/export.js",
-    "@inline": "build/bot/inline/inline.js"
+    "@inline": "build/bot/inline/export.js"
   }
 }

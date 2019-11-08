@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 
-import { InlineHandler } from './inline/inline_handler';
+import { InlineHandler } from '@inline';
 
 export default function ConnectInline(bot: TelegramBot, handlers: InlineHandler[]) {
     bot.on('inline_query', onInline);

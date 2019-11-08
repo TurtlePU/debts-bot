@@ -2,7 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 
 import commands from '@commands';
 import Locale from '@locale';
-import handlers from './inline/export';
+import handlers from '@inline';
 import { DataBase } from '@db';
 import ConnectCommands from './command_controller';
 import ConnectInline from './inline_controller';
