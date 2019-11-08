@@ -4,7 +4,6 @@ import https from 'https';
 
 import Bot from '@bot';
 import DB from '@db';
-import Locale from '@locale';
 
 (function start() {
     const port = +(process.env.PORT || '8080');
@@ -13,7 +12,7 @@ import Locale from '@locale';
 
     const db = DB();
 
-    const bot = Bot(token, port, Locale, db);
+    const bot = Bot(token, port, db);
     bot.setWebHook(`${url}/bot${token}`);
 
     setInterval(() => https.get(url), 1000 * 60 * 15);
