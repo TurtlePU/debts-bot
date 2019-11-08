@@ -1,13 +1,22 @@
 import TelegramBot from 'node-telegram-bot-api';
 
-import commands from '@commands';
-import * as inline from '@inline';
+import { Command } from '@commands';
+import InlineControllerImpl from '@inline';
 import { DataBase } from '@db';
 import { Locale } from '@locale';
 
-export default function Bot(
-        token: string, port: number, locale: (code?: string) => Locale, dataBase: DataBase
-): TelegramBot {
+export type BotOptions = {
+    token: string
+    port: number
+    locale(code?: string): Locale,
+    dataBase: DataBase
+    commands: Command<any>[]
+    inlineController: InlineControllerImpl
+}
+
+export default function Bot({
+    token, port, locale, dataBase, commands, inlineController
+}: BotOptions): TelegramBot {
     const bot = new TelegramBot(token, { webHook: { port } });
 
     const oldSendMessage = bot.sendMessage.bind(bot);
@@ -31,16 +40,16 @@ export default function Bot(
         });
     });
 
-    bot.on('inline_query', inline.onInline.bind(bot));
-    bot.on('chosen_inline_result', inline.onInlineResult.bind(bot));
+    bot.on('inline_query', query => inlineController.onInline(bot, query));
+    bot.on('chosen_inline_result', result => inlineController.onInlineResult(bot, result));
 
     bot.on('callback_query', query => {
         if (query.inline_message_id) {
-            inline.onInlineCallbackQuery.call(bot, query);
+            inlineController.onInlineCallbackQuery(bot, query);
         } else {
             //
         }
-    })
+    });
 
     return bot;
 };

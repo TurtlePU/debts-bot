@@ -1,33 +1,37 @@
 import TelegramBot from 'node-telegram-bot-api';
 
-import debt from './debt';
-import share from './share';
-
 import { InlineHandler } from './inline_handler';
+import { InlineController } from './inline_controller';
 
-const handlers: InlineHandler[] = [ debt, share ];
+export default class InlineControllerImpl implements InlineController {
+    private readonly handlers: InlineHandler[];
 
-export function onInline(this: TelegramBot, query: TelegramBot.InlineQuery) {
-    for (const { regexp, onInline } of handlers) {
-        const match = regexp.exec(query.query);
-        if (match) {
-            onInline.call(this, query, match);
-            break;
-        }
+    constructor(handlers: InlineHandler[]) {
+        this.handlers = handlers;
     }
-}
 
-export function onInlineResult(this: TelegramBot, result: TelegramBot.ChosenInlineResult) {
-    for (const { regexp, onInlineResult } of handlers) {
-        if (regexp.exec(result.query)) {
-            if (onInlineResult) {
-                onInlineResult.call(this, result);
+    onInline(bot: TelegramBot, query: TelegramBot.InlineQuery) {
+        for (const { regexp, onInline } of this.handlers) {
+            const match = regexp.exec(query.query);
+            if (match) {
+                onInline.call(bot, query, match);
+                break;
             }
-            break;
         }
     }
-}
 
-export function onInlineCallbackQuery(this: TelegramBot, query: TelegramBot.CallbackQuery) {
-    //
+    onInlineResult(bot: TelegramBot, result: TelegramBot.ChosenInlineResult) {
+        for (const { regexp, onInlineResult } of this.handlers) {
+            if (regexp.exec(result.query)) {
+                if (onInlineResult) {
+                    onInlineResult.call(bot, result);
+                }
+                break;
+            }
+        }
+    }
+
+    onInlineCallbackQuery(bot: TelegramBot, query: TelegramBot.CallbackQuery) {
+        //
+    }
 }
