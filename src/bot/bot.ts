@@ -6,17 +6,12 @@ import handlers from './inline/export';
 import { DataBase } from '@db';
 import ConnectCommands from './command_controller';
 import ConnectInline from './inline_controller';
+import UseMarkdown from './message_decorator';
 
 export default function Bot(token: string, port: number, dataBase: DataBase): TelegramBot {
     const bot = new TelegramBot(token, { webHook: { port } });
-
-    const oldSendMessage = bot.sendMessage.bind(bot);
-    bot.sendMessage = (chatId, text, options) =>
-        oldSendMessage(chatId, text, { ...options, parse_mode: 'Markdown' });
-
+    UseMarkdown(bot);
     ConnectCommands({ bot, dataBase, commands, Locale });
-
     ConnectInline(bot, handlers);
-
     return bot;
 };
