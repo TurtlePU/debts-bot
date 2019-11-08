@@ -1,12 +1,19 @@
-import TelegramBot from 'node-telegram-bot-api';
+import { InlineHandler, CallbackPiece, FeedbackPiece } from './inline_handler';
 
-export default {
+const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
+    id: 'debt',
     regexp: /-?\d+/,
-    onInline(this: TelegramBot, query: TelegramBot.InlineQuery, match: RegExpExecArray) {
+    async onInline(query, match) {
         const amount = BigInt(match[0]);
         //
+        return [];
     },
-    onInlineResult(this: TelegramBot, result: TelegramBot.ChosenInlineResult) {
+    onInlineResult(result) {
+        //
+    },
+    onInlineCallbackQuery(query) {
         //
     }
-}
+};
+
+export default handler;

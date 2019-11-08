@@ -1,8 +1,11 @@
-import TelegramBot from 'node-telegram-bot-api';
+import { InlineHandler } from './inline_handler';
 
-export default {
+const handler: InlineHandler = {
     regexp: /.*/,
-    onInline(this: TelegramBot, query: TelegramBot.InlineQuery) {
+    async onInline(query) {
         //
+        return [];
     }
-}
+};
+
+export default handler;

@@ -1,39 +1,58 @@
 import TelegramBot from 'node-telegram-bot-api';
 
-import { InlineHandler } from '@inline';
+import { InlineHandler, InlineCallbackQuery, CallbackPiece, FeedbackPiece } from '@inline';
 
 export default function ConnectInline(bot: TelegramBot, handlers: InlineHandler[]) {
+    const withCallback = handlers.filter(hasCallback);
+    const withFeedback = handlers.filter(acceptsFeedback);
+    
     bot.on('inline_query', onInline);
     bot.on('chosen_inline_result', onInlineResult);
 
     bot.on('callback_query', query => {
-        if (query.inline_message_id) {
+        if (isInlineCallbackQuery(query)) {
             onInlineCallbackQuery(query);
         }
     });
 
-    function onInline(query: TelegramBot.InlineQuery) {
-        for (const { regexp, onInline } of handlers) {
+    async function onInline(query: TelegramBot.InlineQuery) {
+        const pending = handlers.map(({ regexp, onInline }) => {
             const match = regexp.exec(query.query);
-            if (match) {
-                onInline.call(bot, query, match);
-                break;
-            }
-        }
+            return match ? onInline.call(bot, query, match) : [];
+        });
+        const results = (await Promise.all(pending)).flat();
+        bot.answerInlineQuery(query.id, results);
     };
 
     function onInlineResult(result: TelegramBot.ChosenInlineResult) {
-        for (const { regexp, onInlineResult } of handlers) {
+        for (const { regexp, onInlineResult } of withFeedback) {
             if (regexp.exec(result.query)) {
-                if (onInlineResult) {
-                    onInlineResult.call(bot, result);
-                }
+                onInlineResult.call(bot, result);
                 break;
             }
         }
     };
 
-    function onInlineCallbackQuery(query: TelegramBot.CallbackQuery) {
-        //
+    function onInlineCallbackQuery(query: InlineCallbackQuery) {
+        if (!query.data) {
+            return;
+        }
+        for (const { id, onInlineCallbackQuery } of withCallback) {
+            if (query.data.startsWith(id)) {
+                onInlineCallbackQuery.call(bot, query);
+            }
+        }
     };
+}
+
+function isInlineCallbackQuery(query: TelegramBot.CallbackQuery): query is InlineCallbackQuery {
+    return !!query.inline_message_id;
+}
+
+function hasCallback(handler: InlineHandler): handler is InlineHandler & CallbackPiece {
+    return !!(handler as InlineHandler & CallbackPiece).id;
+}
+
+function acceptsFeedback(handler: InlineHandler): handler is InlineHandler & FeedbackPiece {
+    return !!(handler as InlineHandler & FeedbackPiece).onInlineResult;
 }
