@@ -1,47 +1,57 @@
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot from 'node-telegram-bot-api'
 
-import { InlineHandler, CallbackPiece, FeedbackPiece } from './inline_handler';
-import { Locale } from '@locale';
+import { InlineHandler, CallbackPiece, FeedbackPiece } from './inline_handler'
+import { Locale } from '@locale'
 
-const id = 'debt';
+const id = 'debt'
 
 const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
     id,
     regexp: /^(-?\d{1,9})\s*([^\s\d])?$/,
     onInline(locale) {
         return async (_, match) => {
-            const amount = +match[1];
-            const currency = match[2] || locale.currency;
-            return [ amount, -amount ].map(amount => debtArticle(locale, amount, currency));
+            const amount = +match[1]
+            const currency = match[2] || locale.currency
+            return [ amount, -amount ].map(amount => debtArticle(locale, amount, currency))
         }
     },
     onInlineResult(dataBase) {
         return result => {
             if (!result.inline_message_id) {
-                throw new Error('Debt article message_id is missing');
+                throw new Error('Debt article message_id is missing')
             }
-            const match = /^(-?\d+)([^\d])$/.exec(result.result_id);
+            const match = /^(-?\d+)([^\d])$/.exec(result.result_id)
             if (!match) {
-                throw new Error('Debt article id is in wrong format');
+                throw new Error('Debt article id is in wrong format')
             }
-            const amount = +match[1];
-            const currency = match[2];
+            const amount = +match[1]
+            const currency = match[2]
             dataBase.createOffer(result.inline_message_id, {
                 from_id: result.from.id,
                 amount, currency
-            });
+            })
         }
     },
-    onInlineCallbackQuery(query) {
-        //
+    onInlineCallbackQuery(dataBase) {
+        return async (query) => {
+            const offer = await dataBase.deleteOffer(query.inline_message_id)
+            if (!offer) {
+                this.editMessageText('')
+                return { text: '' }
+            } else {
+                // save to db
+                this.editMessageText('')
+                return { text: '' }
+            }
+        }
     }
-};
+}
 
-export default handler;
+export default handler
 
 function debtArticle(locale: Locale, amount: number, currency: string
         ): TelegramBot.InlineQueryResultArticle {
-    const article = locale.debtArticle(amount, currency);
+    const article = locale.debtArticle(amount, currency)
     return {
         id: amount + currency,
         type: 'article',
@@ -53,5 +63,5 @@ function debtArticle(locale: Locale, amount: number, currency: string
         reply_markup: {
             inline_keyboard: [[ { text: article.button_text, callback_data: id } ]]
         }
-    };
+    }
 }

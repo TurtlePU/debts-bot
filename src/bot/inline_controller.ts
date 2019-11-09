@@ -42,13 +42,15 @@ export default function ConnectInline({ bot, handlers, Locale, dataBase }: Inlin
         }
     };
 
-    function onInlineCallbackQuery(query: InlineCallbackQuery) {
+    async function onInlineCallbackQuery(query: InlineCallbackQuery) {
         if (!query.data) {
             return;
         }
         for (const { id, onInlineCallbackQuery } of withCallback) {
             if (query.data.startsWith(id)) {
-                onInlineCallbackQuery.call(bot, query);
+                bot.answerCallbackQuery(query.id,
+                    await onInlineCallbackQuery.call(bot, dataBase)(query));
+                break;
             }
         }
     };

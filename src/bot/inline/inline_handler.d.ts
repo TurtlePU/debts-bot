@@ -9,7 +9,8 @@ declare type InlineCallbackQuery = TelegramBot.CallbackQuery & {
 
 declare type CallbackPiece = {
     id: string
-    onInlineCallbackQuery(this: TelegramBot, query: InlineCallbackQuery): void
+    onInlineCallbackQuery(this: TelegramBot, dataBase: DataBase):
+        (query: InlineCallbackQuery) => Promise<Partial<TelegramBot.AnswerCallbackQueryOptions>>
 }
 
 declare type FeedbackPiece = {
