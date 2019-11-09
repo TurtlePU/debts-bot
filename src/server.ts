@@ -9,11 +9,12 @@ import DB from '@db';
     const port = +(process.env.PORT || '8080');
     const url = process.env.URL || 'none';
     const token = process.env.TOKEN || 'none';
+    const mongo_url = process.env.MONGODB_URI || 'none';
 
-    const db = DB();
-
+    const db = DB(mongo_url);
     const bot = Bot(token, port, db);
-    bot.setWebHook(`${url}/bot${token}`);
+    
+    db.connect().then(() => bot.setWebHook(`${url}/bot${token}`));
 
     setInterval(() => https.get(url), 1000 * 60 * 15);
 })();
