@@ -1,10 +1,12 @@
 import Mongoose from 'mongoose'
 
-export async function getDebts(id: number) {
+export async function getDebts(id: number)
+{
     return []
 }
 
-export async function createDebt(from: number, to: number, amount: number, currency: string) {
+export async function createDebt(from: number, to: number, amount: number, currency: string)
+{
     if (from > to) {
         [ from, to, amount ] = [ to, from, -amount ]
     }
@@ -21,7 +23,8 @@ export async function createDebt(from: number, to: number, amount: number, curre
     }
 }
 
-type Debt = {
+type Debt =
+{
     from: number
     to: number
     amount: number

@@ -8,7 +8,8 @@ import ConnectCommands from './command_controller'
 import ConnectInline from './inline_controller'
 import UseMarkdown from './message_decorator'
 
-export default function Bot(token: string, port: number, dataBase: DataBase): TelegramBot {
+export default function Bot(token: string, port: number, dataBase: DataBase): TelegramBot
+{
     const bot = new TelegramBot(token, { webHook: { port } })
     UseMarkdown(bot)
     ConnectCommands({ bot, dataBase, commands, Locale })

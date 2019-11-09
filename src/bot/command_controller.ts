@@ -4,14 +4,16 @@ import { Command } from '@commands'
 import { DataBase } from '@db'
 import { Locale } from '@locale'
 
-export type ConnectionOptions = {
+export type ConnectionOptions =
+{
     bot: TelegramBot
     dataBase: DataBase
     commands: Command<any>[]
     Locale(code?: string): Locale
 }
 
-export default function ConnectCommands({ bot, dataBase, commands, Locale }: ConnectionOptions) {
+export default function ConnectCommands({ bot, dataBase, commands, Locale }: ConnectionOptions)
+{
     for (const { regexp, requirements, callback } of commands) {
         const clb = callback.call(bot, dataBase)
         bot.onText(regexp, (msg, _match) => {

@@ -1,7 +1,8 @@
 import TelegramBot from 'node-telegram-bot-api'
 import { Offer } from './models/offer'
 
-declare type DataBase = {
+declare type DataBase =
+{
     connect(): Promise<void>
     getNameById(id: number): Promise<string>
     getName(user: TelegramBot.User): string
@@ -12,12 +13,14 @@ declare type DataBase = {
     getDebts(id: number): Promise<OutDebt[]>
 }
 
-declare type User = {
+declare type User =
+{
     id: number
     name: string
 }
 
-declare type OutDebt = {
+declare type OutDebt =
+{
     to_name: string
     amount: BigInt
 }

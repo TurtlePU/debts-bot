@@ -4,26 +4,32 @@ import { InlineHandler, InlineCallbackQuery, CallbackPiece, FeedbackPiece } from
 import { Locale } from '@locale'
 import { DataBase } from '@db'
 
-export type InlineOptions = {
+export type InlineOptions =
+{
     bot: TelegramBot
     Locale(code?: string): Locale
     handlers: InlineHandler[]
     dataBase: DataBase
 }
 
-export default function ConnectInline({ bot, handlers, Locale, dataBase }: InlineOptions) {
+export default function ConnectInline({ bot, handlers, Locale, dataBase }: InlineOptions)
+{
     const binded = handlers
-        .map(({ regexp, onInline }) => ({ regexp, callback: onInline.call(bot, dataBase) }))
+        .map(({ regexp, onInline }) => {
+            return { regexp, callback: onInline.call(bot, dataBase) }
+        })
 
     const withButtons = handlers
         .filter(hasButtons)
-        .map(({ id, onInlineCallbackQuery }) =>
-                ({ id, callback: onInlineCallbackQuery.call(bot, dataBase) }))
+        .map(({ id, onInlineCallbackQuery }) => {
+            return { id, callback: onInlineCallbackQuery.call(bot, dataBase) }
+        })
 
     const withFeedback = handlers
         .filter(acceptsFeedback)
-        .map(({ regexp, onInlineResult }) =>
-                ({ regexp, callback: onInlineResult.call(bot, dataBase) }))
+        .map(({ regexp, onInlineResult }) => {
+            return { regexp, callback: onInlineResult.call(bot, dataBase) }
+        })
 
     bot.on('inline_query', onInline)
     bot.on('chosen_inline_result', onInlineResult)
@@ -34,7 +40,8 @@ export default function ConnectInline({ bot, handlers, Locale, dataBase }: Inlin
         }
     })
 
-    async function onInline(query: TelegramBot.InlineQuery) {
+    async function onInline(query: TelegramBot.InlineQuery)
+    {
         const pending = binded.map(({ regexp, callback }) => {
             const match = regexp.exec(query.query)
             return match ? callback(match, Locale(query.from.language_code), query) : []
@@ -43,7 +50,8 @@ export default function ConnectInline({ bot, handlers, Locale, dataBase }: Inlin
         bot.answerInlineQuery(query.id, results)
     }
 
-    function onInlineResult(result: TelegramBot.ChosenInlineResult) {
+    function onInlineResult(result: TelegramBot.ChosenInlineResult)
+    {
         for (const { regexp, callback } of withFeedback) {
             if (regexp.exec(result.query)) {
                 callback(result)
@@ -52,7 +60,8 @@ export default function ConnectInline({ bot, handlers, Locale, dataBase }: Inlin
         }
     }
 
-    async function onInlineCallbackQuery(query: InlineCallbackQuery) {
+    async function onInlineCallbackQuery(query: InlineCallbackQuery)
+    {
         if (!query.data) {
             return
         }
@@ -66,14 +75,17 @@ export default function ConnectInline({ bot, handlers, Locale, dataBase }: Inlin
     }
 }
 
-function isInlineCallbackQuery(query: TelegramBot.CallbackQuery): query is InlineCallbackQuery {
+function isInlineCallbackQuery(query: TelegramBot.CallbackQuery): query is InlineCallbackQuery
+{
     return !!query.inline_message_id
 }
 
-function hasButtons(handler: InlineHandler): handler is InlineHandler & CallbackPiece {
+function hasButtons(handler: InlineHandler): handler is InlineHandler & CallbackPiece
+{
     return !!(handler as InlineHandler & CallbackPiece).id
 }
 
-function acceptsFeedback(handler: InlineHandler): handler is InlineHandler & FeedbackPiece {
+function acceptsFeedback(handler: InlineHandler): handler is InlineHandler & FeedbackPiece
+{
     return !!(handler as InlineHandler & FeedbackPiece).onInlineResult
 }

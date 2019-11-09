@@ -1,6 +1,7 @@
 import { OutDebt } from '@db'
 
-declare type Locale = {
+declare type Locale =
+{
     currency: string
     anon(): string
     hi(name: string): string
