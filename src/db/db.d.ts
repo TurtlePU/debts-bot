@@ -3,6 +3,7 @@ import { Offer } from './models/offer'
 
 declare type DataBase = {
     connect(): Promise<void>
+    getNameById(id: number): Promise<string>
     getName(user: TelegramBot.User): string
     updateUser(user: TelegramBot.User): Promise<void>
     getDebts(id: number): Promise<OutDebt[]>

@@ -11,8 +11,22 @@ export async function updateUser(user: TelegramBot.User) {
     }
 }
 
+export async function getNameById(id: number) {
+    const userDoc = await UserModel.findById(id)
+    if (!userDoc) {
+        throw new Error('User not found')
+    }
+    return userDoc.name
+}
+
 export function getName({ first_name, last_name, username }: TelegramBot.User) {
-    return username || (first_name + (last_name ? ` ${last_name}` : ''))
+    if (username) {
+        return '@' + username
+    } else if (last_name) {
+        return first_name + ' ' + last_name
+    } else {
+        return first_name
+    }
 }
 
 type User = {

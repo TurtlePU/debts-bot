@@ -41,7 +41,8 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
             } else {
                 // save to db
                 const text = locale.offer.saved(
-                    'offer.from_id', dataBase.getName(query.from), offer.amount, offer.currency);
+                    await dataBase.getNameById(offer.from_id), dataBase.getName(query.from),
+                    offer.amount, offer.currency);
                 this.editMessageText(text)
                 return { text }
             }
