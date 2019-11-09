@@ -33,15 +33,17 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
         }
     },
     onInlineCallbackQuery(dataBase) {
-        return async (query) => {
+        return async (query, locale) => {
             const offer = await dataBase.deleteOffer(query.inline_message_id)
             if (!offer) {
-                this.editMessageText('')
-                return { text: '' }
+                this.editMessageText(locale.offer.expired)
+                return { text: locale.offer.expired }
             } else {
                 // save to db
-                this.editMessageText('')
-                return { text: '' }
+                const text = locale.offer.saved(
+                    'offer.from_id', dataBase.getName(query.from), offer.amount, offer.currency);
+                this.editMessageText(text)
+                return { text }
             }
         }
     }

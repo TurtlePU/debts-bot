@@ -21,6 +21,15 @@ _ii_. Напиши мне в беседе с другим человеком к�
         const text = amount > 0 ? `Я взял ${amount}${currency}` : `Я дал ${amount}${currency}`
         const button_text = 'Ок'
         return { title, text, button_text }
+    },
+    offer: {
+        expired: `Простите, но время действия предложения истекло.`,
+        saved(from, to, amount, currency) {
+            if (amount < 0) {
+                [ from, to, amount ] = [ to, from, -amount ]
+            }
+            return `${from} получил ${amount}${currency} от ${to}`
+        }
     }
 }
 
