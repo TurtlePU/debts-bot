@@ -18,7 +18,7 @@ _ii_. Напиши мне в беседе с другим человеком к�
     },
     offerArticle: (amount: number, currency: string) => {
         const title = amount > 0 ? `Взять ${amount}${currency}` : `Дать ${amount}${currency}`
-        const text = amount > 0 ? `Я взял ${amount}${currency}` : `Я дал ${amount}${currency}`
+        const text = amount > 0 ? `Я взял ${amount}${currency}.` : `Я дал ${amount}${currency}.`
         const button_text = 'Ок'
         return { title, text, button_text }
     },
@@ -28,7 +28,7 @@ _ii_. Напиши мне в беседе с другим человеком к�
             if (amount < 0) {
                 [ from, to, amount ] = [ to, from, -amount ]
             }
-            return `${from} получил ${amount}${currency} от ${to}`
+            return `${from} получил ${amount}${currency} от ${to}.`
         }
     }
 }
