@@ -8,8 +8,8 @@ const id = 'debt'
 const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
     id,
     regexp: /^(-?\d{1,9})\s*([^\s\d])?$/,
-    onInline(locale) {
-        return async (_, match) => {
+    onInline() {
+        return async (match, locale) => {
             const amount = +match[1]
             const currency = match[2] || locale.currency
             return [ amount, -amount ].map(amount => debtArticle(locale, amount, currency))

@@ -21,7 +21,7 @@ declare type FeedbackPiece = {
 
 declare type InlineHandler = {
     regexp: RegExp
-    onInline(this: TelegramBot, locale: Locale):
-        (query: TelegramBot.InlineQuery, match: RegExpExecArray)
+    onInline(this: TelegramBot, dataBase: DataBase):
+        (match: RegExpExecArray, locale: Locale, query: TelegramBot.InlineQuery)
             => Promise<TelegramBot.InlineQueryResult[]>
 }
