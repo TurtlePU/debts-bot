@@ -12,6 +12,6 @@ export default function Bot(token: string, port: number, dataBase: DataBase): Te
     const bot = new TelegramBot(token, { webHook: { port } });
     UseMarkdown(bot);
     ConnectCommands({ bot, dataBase, commands, Locale });
-    ConnectInline(bot, handlers);
+    ConnectInline({ bot, handlers, Locale, dataBase });
     return bot;
 };

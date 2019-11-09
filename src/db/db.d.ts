@@ -6,8 +6,8 @@ declare type DataBase = {
     getName(user: TelegramBot.User): string
     updateUser(user: TelegramBot.User): Promise<void>
     getDebts(id: number): Promise<OutDebt[]>
-    createOffer(id: number, offer: Offer): Promise<void>
-    deleteOffer(id: number): Promise<Offer | null>
+    createOffer(id: string, offer: Offer): Promise<void>
+    deleteOffer(id: string): Promise<Offer | null>
 }
 
 declare type User = {

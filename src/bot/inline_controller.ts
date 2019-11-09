@@ -1,8 +1,17 @@
 import TelegramBot from 'node-telegram-bot-api';
 
 import { InlineHandler, InlineCallbackQuery, CallbackPiece, FeedbackPiece } from '@inline';
+import { Locale } from '@locale';
+import { DataBase } from '@db';
 
-export default function ConnectInline(bot: TelegramBot, handlers: InlineHandler[]) {
+export type InlineOptions = {
+    bot: TelegramBot
+    Locale(code?: string): Locale
+    handlers: InlineHandler[]
+    dataBase: DataBase
+}
+
+export default function ConnectInline({ bot, handlers, Locale, dataBase }: InlineOptions) {
     const withCallback = handlers.filter(hasCallback);
     const withFeedback = handlers.filter(acceptsFeedback);
     
@@ -18,7 +27,7 @@ export default function ConnectInline(bot: TelegramBot, handlers: InlineHandler[
     async function onInline(query: TelegramBot.InlineQuery) {
         const pending = handlers.map(({ regexp, onInline }) => {
             const match = regexp.exec(query.query);
-            return match ? onInline.call(bot, query, match) : [];
+            return match ? onInline.call(bot, Locale(query.from.language_code))(query, match) : [];
         });
         const results = (await Promise.all(pending)).flat();
         bot.answerInlineQuery(query.id, results);
@@ -27,7 +36,7 @@ export default function ConnectInline(bot: TelegramBot, handlers: InlineHandler[
     function onInlineResult(result: TelegramBot.ChosenInlineResult) {
         for (const { regexp, onInlineResult } of withFeedback) {
             if (regexp.exec(result.query)) {
-                onInlineResult.call(bot, result);
+                onInlineResult.call(bot, dataBase)(result);
                 break;
             }
         }

@@ -1,6 +1,7 @@
 import { Locale } from './locale';
 
 const ru: Locale = {
+    currency: '₽',
     anon: () => `Прости, я не знаю, кто ты.`,
     hi: name =>
 `Привет, ${name}!
@@ -14,6 +15,12 @@ _ii_. Напиши мне в беседе с другим человеком к�
                 .map(({ to_name, amount }) => `${to_name}: ${amount}`)
                 .reduce((prev, curr) => `${prev}\n${curr}`, `С кем вы связаны:\n`);
         }
+    },
+    debtArticle: (amount: number, currency: string) => {
+        const title = amount > 0 ? `Взять ${amount}${currency}` : `Дать ${amount}${currency}`;
+        const text = amount > 0 ? `Я взял ${amount}${currency}` : `Я дал ${amount}${currency}`;
+        const button_text = 'Ок';
+        return { title, text, button_text };
     }
 };
 

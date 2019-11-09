@@ -1,8 +1,6 @@
-import TelegramBot from 'node-telegram-bot-api';
-
-import { DataBase } from './db';
 import Mongoose from 'mongoose';
 
+import { DataBase } from './db';
 export * from './db';
 
 import { updateUser, getName } from './models/user';
