@@ -12,7 +12,7 @@ export type InlineOptions = {
 }
 
 export default function ConnectInline({ bot, handlers, Locale, dataBase }: InlineOptions) {
-    const withCallback = handlers.filter(hasCallback);
+    const withCallback = handlers.filter(hasCallback).map(({ id, onInlineCallbackQuery }) => ({ id, callback: onInlineCallbackQuery.call(bot, dataBase) }));
     const withFeedback = handlers.filter(acceptsFeedback);
     
     bot.on('inline_query', onInline);
@@ -46,10 +46,10 @@ export default function ConnectInline({ bot, handlers, Locale, dataBase }: Inlin
         if (!query.data) {
             return;
         }
-        for (const { id, onInlineCallbackQuery } of withCallback) {
+        for (const { id, callback } of withCallback) {
             if (query.data.startsWith(id)) {
                 bot.answerCallbackQuery(query.id,
-                    await onInlineCallbackQuery.call(bot, dataBase)(query));
+                    await callback(query, Locale(query.from.language_code)));
                 break;
             }
         }
