@@ -12,7 +12,7 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
         return async (match, locale) => {
             const amount = +match[1]
             const currency = match[2] || locale.currency
-            return [ amount, -amount ].map(amount => debtArticle(locale, amount, currency))
+            return [ amount, -amount ].map(amount => offerArticle(locale, amount, currency))
         }
     },
     onInlineResult(dataBase) {
@@ -51,9 +51,9 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
 
 export default handler
 
-function debtArticle(locale: Locale, amount: number, currency: string
+function offerArticle(locale: Locale, amount: number, currency: string
         ): TelegramBot.InlineQueryResultArticle {
-    const article = locale.debtArticle(amount, currency)
+    const article = locale.offerArticle(amount, currency)
     return {
         id: amount + currency,
         type: 'article',
