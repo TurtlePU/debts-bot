@@ -1,9 +1,9 @@
 import Mongoose from 'mongoose';
-import { Decimal128 } from 'bson';
 
 type Offer = {
+    _id: number
     from_id: number
-    amount: Decimal128
+    amount: number
     currency: string
     created: Date
 }
@@ -11,14 +11,19 @@ type Offer = {
 type OfferDoc = Mongoose.Document & Offer;
 
 const OfferSchema = new Mongoose.Schema({
+    _id: { type: Number, required: true },
     from_id: { type: Number, required: true },
-    amount: { type: Decimal128, required: true },
+    amount: { type: Number, required: true },
     currency: { type: String, required: true },
     created: { type: Date, expires: 3600, default: Date.now }
 });
 
 const OfferModel = Mongoose.model<OfferDoc>('Offer', OfferSchema);
 
-export function createOffer(from_id: number, amount: Decimal128, currency: string) {
-    return new OfferModel({ from_id, amount, currency }).save();
+export function createOffer(_id: number, from_id: number, amount: number, currency: string) {
+    return new OfferModel({ _id, from_id, amount, currency }).save();
+}
+
+export function getOffer(id: number) {
+    return OfferModel.findById(id);
 }
