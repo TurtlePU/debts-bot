@@ -11,7 +11,7 @@ import { getDebts } from './models/debt';
 export default function DB(url: string): DataBase {
     return { connect, getName, updateUser, getDebts };
 
-    function connect() {
-        return Mongoose.connect(url);
+    async function connect() {
+        await Mongoose.connect(url);
     }
 }

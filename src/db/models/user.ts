@@ -5,9 +5,9 @@ export async function updateUser(user: TelegramBot.User) {
     const userDoc = await UserModel.findById(user.id);
     if (userDoc) {
         userDoc.name = getName(user);
-        return userDoc.save();
+        await userDoc.save();
     } else {
-        return makeUser(user).save();
+        await makeUser(user).save();
     }
 }
 
