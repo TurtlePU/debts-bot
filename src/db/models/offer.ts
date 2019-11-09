@@ -1,4 +1,4 @@
-import Mongoose from 'mongoose';
+import Mongoose from 'mongoose'
 
 export type Offer = {
     from_id: number
@@ -17,12 +17,12 @@ const OfferModel = Mongoose.model<OfferDoc>('Offer', new Mongoose.Schema({
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
     created: { type: Date, expires: 3600, default: Date.now }
-}));
+}))
 
 export async function createOffer(_id: string, offer: Offer) {
-    await new OfferModel({ _id, ...offer }).save();
+    await new OfferModel({ _id, ...offer }).save()
 }
 
 export async function deleteOffer(id: string): Promise<Offer | null> {
-    return await OfferModel.findByIdAndDelete(id);
+    return await OfferModel.findByIdAndDelete(id)
 }

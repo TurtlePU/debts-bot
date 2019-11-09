@@ -1,6 +1,6 @@
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot from 'node-telegram-bot-api'
 
-import { command } from './helper';
+import { command } from './helper'
 
 export default command(
     {
@@ -10,7 +10,7 @@ export default command(
         regexp: /\/debts/,
         callback(dataBase) {
             return async ({ msg, locale }) =>
-                this.sendMessage(msg.chat.id, locale.debts(await dataBase.debts(msg.from.id)))
+                this.sendMessage(msg.chat.id, locale.debts(await dataBase.getDebts(msg.from.id)))
         }
     }
-);
+)

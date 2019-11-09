@@ -1,6 +1,6 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { Locale } from '@locale';
-import { DataBase } from '@db';
+import TelegramBot from 'node-telegram-bot-api'
+import { Locale } from '@locale'
+import { DataBase } from '@db'
 
 declare type InlineCallbackQuery = TelegramBot.CallbackQuery & {
     inline_message_id: string

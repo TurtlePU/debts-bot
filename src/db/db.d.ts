@@ -1,5 +1,5 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { Offer } from './models/offer';
+import TelegramBot from 'node-telegram-bot-api'
+import { Offer } from './models/offer'
 
 declare type DataBase = {
     connect(): Promise<void>

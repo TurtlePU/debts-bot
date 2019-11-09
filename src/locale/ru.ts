@@ -1,4 +1,4 @@
-import { Locale } from './locale';
+import { Locale } from './locale'
 
 const ru: Locale = {
     currency: '₽',
@@ -9,19 +9,19 @@ _i_. Напиши /debts, чтобы посмотреть список долг�
 _ii_. Напиши мне в беседе с другим человеком количество денег, и я оформлю новый долг.`,
     debts: debts => {
         if (debts.length == 0) {
-            return `Долгов нет!`;
+            return `Долгов нет!`
         } else {
             return debts
                 .map(({ to_name, amount }) => `${to_name}: ${amount}`)
-                .reduce((prev, curr) => `${prev}\n${curr}`, `С кем вы связаны:\n`);
+                .reduce((prev, curr) => `${prev}\n${curr}`, `С кем вы связаны:\n`)
         }
     },
     debtArticle: (amount: number, currency: string) => {
-        const title = amount > 0 ? `Взять ${amount}${currency}` : `Дать ${amount}${currency}`;
-        const text = amount > 0 ? `Я взял ${amount}${currency}` : `Я дал ${amount}${currency}`;
-        const button_text = 'Ок';
-        return { title, text, button_text };
+        const title = amount > 0 ? `Взять ${amount}${currency}` : `Дать ${amount}${currency}`
+        const text = amount > 0 ? `Я взял ${amount}${currency}` : `Я дал ${amount}${currency}`
+        const button_text = 'Ок'
+        return { title, text, button_text }
     }
-};
+}
 
-export default ru;
+export default ru

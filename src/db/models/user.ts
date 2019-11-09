@@ -1,18 +1,18 @@
 import Mongoose from 'mongoose'
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot from 'node-telegram-bot-api'
 
 export async function updateUser(user: TelegramBot.User) {
-    const userDoc = await UserModel.findById(user.id);
+    const userDoc = await UserModel.findById(user.id)
     if (userDoc) {
-        userDoc.name = getName(user);
-        await userDoc.save();
+        userDoc.name = getName(user)
+        await userDoc.save()
     } else {
-        await makeUser(user).save();
+        await makeUser(user).save()
     }
 }
 
 export function getName({ first_name, last_name, username }: TelegramBot.User) {
-    return username || (first_name + (last_name ? ` ${last_name}` : ''));
+    return username || (first_name + (last_name ? ` ${last_name}` : ''))
 }
 
 type User = {
@@ -20,16 +20,16 @@ type User = {
     name: string
 }
 
-type UserDoc = Mongoose.Document & User;
+type UserDoc = Mongoose.Document & User
 
 const UserModel = Mongoose.model<UserDoc>('User', new Mongoose.Schema({
     _id: { type: Number, required: true },
     name: { type: String, required: true }
-}));
+}))
 
 function makeUser(user: TelegramBot.User) {
     return new UserModel({
         _id: user.id,
         name: getName(user)
-    });
+    })
 }

@@ -1,6 +1,6 @@
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot from 'node-telegram-bot-api'
 
-import { command } from './helper';
+import { command } from './helper'
 
 export default command(
     {
@@ -13,4 +13,4 @@ export default command(
                 this.sendMessage(msg.chat.id, locale.hi(dataBase.getName(msg.from)))
         }
     }
-);
+)

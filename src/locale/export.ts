@@ -1,11 +1,11 @@
-import { Locale } from './locale';
-export * from './locale';
+import { Locale } from './locale'
+export * from './locale'
 
-import ru from './ru';
+import ru from './ru'
 
-const locales = new Map([ [ 'ru', ru ] ]);
-const defLocale = ru;
+const locales = new Map([ [ 'ru', ru ] ])
+const defLocale = ru
 
 export default function getLocale(localeCode?: string): Locale {
-    return (localeCode && locales.get(localeCode)) || defLocale;
-};
+    return (localeCode && locales.get(localeCode)) || defLocale
+}

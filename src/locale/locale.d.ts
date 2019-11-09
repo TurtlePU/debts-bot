@@ -1,4 +1,4 @@
-import { OutDebt } from '@db';
+import { OutDebt } from '@db'
 
 declare type Locale = {
     currency: string
