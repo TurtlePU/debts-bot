@@ -39,7 +39,7 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
                 this.editMessageText(locale.offer.expired)
                 return { text: locale.offer.expired }
             } else if (query.from.id == offer.from_id) {
-                return { text: '' }
+                return { text: locale.offer.selfAccept }
             } else {
                 dataBase.createDebt(offer.from_id, query.from.id, offer.amount, offer.currency)
                 const text = locale.offer.saved(
