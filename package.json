@@ -11,6 +11,8 @@
   "devDependencies": {
     "@types/mongoose": "^5.5.30",
     "@types/node-telegram-bot-api": "^0.31.1",
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
     "eslint": "^6.6.0",
     "typescript": "^3.6.4"
   },
