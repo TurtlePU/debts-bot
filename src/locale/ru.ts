@@ -11,7 +11,7 @@ _ii_. Напиши мне в беседе с другим человеком к�
             return `Долгов нет!`;
         } else {
             return debts
-                .map(({ to, amount }) => `${to}: ${amount}`)
+                .map(({ to_name, amount }) => `${to_name}: ${amount}`)
                 .reduce((prev, curr) => `${prev}\n${curr}`, `С кем вы связаны:\n`);
         }
     }

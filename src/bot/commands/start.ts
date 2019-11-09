@@ -9,8 +9,8 @@ export default command(
     {
         regexp: /\/start/,
         callback(dataBase) {
-            return async ({ msg, locale }) =>
-                this.sendMessage(msg.chat.id, locale.hi(await dataBase.name(msg.from.id)))
+            return ({ msg, locale }) =>
+                this.sendMessage(msg.chat.id, locale.hi(dataBase.getName(msg.from)))
         }
     }
 );

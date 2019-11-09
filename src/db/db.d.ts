@@ -1,17 +1,18 @@
 import TelegramBot from 'node-telegram-bot-api';
 
 declare type DataBase = {
-    name: (id: number) => Promise<string>
-    updateUser: (user: TelegramBot.User) => Promise<void>
-    debts: (id: number) => Promise<OutDebt[]>
+    connect(): Promise<any>
+    getName(user: TelegramBot.User): string
+    updateUser(user: TelegramBot.User): Promise<any>
+    getDebts(id: number): Promise<OutDebt[]>
 }
 
 declare type User = {
-    id: number;
-    name: string;
+    id: number
+    name: string
 }
 
 declare type OutDebt = {
-    to: User;
-    amount: BigInt;
+    to_name: string
+    amount: BigInt
 }
