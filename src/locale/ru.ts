@@ -12,7 +12,7 @@ const ru: Locale = {
             return 'Долгов нет!'
         } else {
             return debts
-                .map(({ to_name, amount }) => `${to_name}: ${amount}`)
+                .map(({ to_name, amount, currency }) => `${to_name}: ${amount}${currency}`)
                 .reduce((prev, curr) => `${prev}\n${curr}`, 'С кем вы связаны:\n')
         }
     },

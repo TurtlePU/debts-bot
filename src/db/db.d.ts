@@ -14,5 +14,6 @@ declare type DataBase = {
 
 declare type OutDebt = {
     to_name: string
-    amount: BigInt
+    amount: number
+    currency: string
 }

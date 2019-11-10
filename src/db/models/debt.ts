@@ -1,8 +1,19 @@
 import Mongoose from 'mongoose'
+import { OutDebt } from 'db/db'
+import { getNameById } from './user'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, require-await
-export async function getDebts(id: number) {
-    return []
+export async function getDebts(id: number): Promise<OutDebt[]> {
+    const result = await Promise.all([
+        DebtModel.find({ from: id }),
+        DebtModel.find({ to: id })
+    ])
+    const debts = [
+        ...result[0],
+        ...result[1].map(({ from, amount, ...tail }) => ({ to: from, amount: -amount, ...tail }))
+    ]
+    return Promise.all(debts.map(async ({ to, ...tail }) => ({
+        to_name: await getNameById(to), ...tail
+    })))
 }
 
 export async function createDebt(from_id: number, to_id: number, amnt: number, currency: string) {
