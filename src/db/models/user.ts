@@ -1,5 +1,6 @@
 import Mongoose from 'mongoose'
 import TelegramBot from 'node-telegram-bot-api'
+import { shieldMarkdown } from 'util/string_utils'
 
 export async function updateUser(user: TelegramBot.User) {
     const userDoc = await UserModel.findById(user.id)
@@ -20,7 +21,7 @@ export async function getNameById(id: number) {
 }
 
 export function getName(user: TelegramBot.User) {
-    return shield(getNameImpl(user))
+    return shieldMarkdown(getNameImpl(user))
 }
 
 function getNameImpl({ first_name, last_name, username }: TelegramBot.User) {
@@ -31,10 +32,6 @@ function getNameImpl({ first_name, last_name, username }: TelegramBot.User) {
     } else {
         return first_name
     }
-}
-
-function shield(str: string) {
-    return str.replace('_', '\\_')
 }
 
 type User = {

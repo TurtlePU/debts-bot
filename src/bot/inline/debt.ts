@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api'
 
 import { InlineHandler, CallbackPiece, FeedbackPiece } from './inline_handler'
 import { Locale } from '@locale'
+import { shieldMarkdown } from 'util/string_utils'
 
 const id = 'debt'
 
@@ -56,7 +57,7 @@ export default handler
 
 function offerArticle(
         locale: Locale, amount: number, currency: string): TelegramBot.InlineQueryResultArticle {
-    const article = locale.offerArticle(amount, currency)
+    const article = locale.offerArticle(amount, shieldMarkdown(currency))
     return {
         id: amount + currency,
         type: 'article',
