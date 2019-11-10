@@ -74,7 +74,9 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             onClick(dataBase) {
                 return ({ inline_message_id, from }, locale) => {
                     dataBase.deleteOffer(inline_message_id)
-                    return { text: locale.offer.declined(dataBase.getName(from)) }
+                    const text = locale.offer.declined(dataBase.getName(from))
+                    this.editMessageText(text, { inline_message_id })
+                    return { text }
                 }
             }
         }
