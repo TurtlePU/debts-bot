@@ -1,4 +1,5 @@
 import { Locale } from './locale'
+import { shieldMarkdown } from '@util'
 
 const ru: Locale = {
     currency: '₽',
@@ -18,8 +19,9 @@ const ru: Locale = {
     },
     offerArticle: (amount: number, currency: string) => {
         const abs = Math.abs(amount)
+        const shielded = shieldMarkdown(currency)
         const title = amount > 0 ? `Взять ${abs}${currency}` : `Дать ${abs}${currency}`
-        const text = amount > 0 ? `Я взял ${abs}${currency}.` : `Я дал ${abs}${currency}.`
+        const text = amount > 0 ? `Я взял ${abs}${shielded}.` : `Я дал ${abs}${shielded}.`
         const button_text = 'Ок'
         return { title, text, button_text }
     },
