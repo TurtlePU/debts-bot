@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose'
 import TelegramBot from 'node-telegram-bot-api'
-import { shieldMarkdown } from 'util/string_utils'
+import { shieldMarkdown } from '@util'
 
 export async function updateUser(user: TelegramBot.User) {
     const userDoc = await UserModel.findById(user.id)

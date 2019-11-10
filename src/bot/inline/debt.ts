@@ -2,7 +2,7 @@ import TelegramBot from 'node-telegram-bot-api'
 
 import { InlineHandler, CallbackPiece, FeedbackPiece } from './inline_handler'
 import { Locale } from '@locale'
-import { shieldMarkdown } from 'util/string_utils'
+import { shieldMarkdown } from '@util'
 
 const id = 'debt'
 

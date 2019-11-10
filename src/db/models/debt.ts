@@ -1,5 +1,5 @@
 import Mongoose from 'mongoose'
-import { OutDebt } from 'db/db'
+import { OutDebt } from '@db'
 import { getNameById } from './user'
 
 export async function getDebts(id: number): Promise<OutDebt[]> {
