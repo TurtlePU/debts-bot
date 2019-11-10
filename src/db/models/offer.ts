@@ -24,5 +24,5 @@ export async function createOffer(_id: string, offer: Offer) {
 }
 
 export async function deleteOffer(id: string): Promise<Offer | null> {
-    return await OfferModel.findByIdAndDelete(id)
+    return await OfferModel.findByIdAndRemove(id)
 }
