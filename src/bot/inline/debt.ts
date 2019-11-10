@@ -7,22 +7,20 @@ const id = 'debt'
 
 const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
     id,
-    regexp: /^(-?\d{1,9})\s*([^\s\d])?$/,
-    onInline()
-    {
-        return async (match, locale) => {
+    regexp: /^(-?\d{1,9})\s*([^\s\d])?$/u,
+    onInline() {
+        return (match, locale) => {
             const amount = +match[1]
             const currency = match[2] || locale.currency
-            return [ amount, -amount ].map(amount => offerArticle(locale, amount, currency))
+            return [ amount, -amount ].map(amnt => offerArticle(locale, amnt, currency))
         }
     },
-    onInlineResult(dataBase)
-    {
+    onInlineResult(dataBase) {
         return result => {
             if (!result.inline_message_id) {
                 throw new Error('Debt article message_id is missing')
             }
-            const match = /^(-?\d+)([^\d])$/.exec(result.result_id)
+            const match = /^(-?\d+)([^\d])$/u.exec(result.result_id)
             if (!match) {
                 throw new Error('Debt article id is in wrong format')
             }
@@ -34,8 +32,7 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
             })
         }
     },
-    onInlineCallbackQuery(dataBase)
-    {
+    onInlineCallbackQuery(dataBase) {
         return async (query, locale) => {
             const offer = await dataBase.deleteOffer(query.inline_message_id)
             if (!offer) {
@@ -58,8 +55,7 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
 export default handler
 
 function offerArticle(
-    locale: Locale, amount: number, currency: string): TelegramBot.InlineQueryResultArticle
-{
+        locale: Locale, amount: number, currency: string): TelegramBot.InlineQueryResultArticle {
     const article = locale.offerArticle(amount, currency)
     return {
         id: amount + currency,
@@ -70,7 +66,7 @@ function offerArticle(
             parse_mode: 'Markdown'
         },
         reply_markup: {
-            inline_keyboard: [[ { text: article.button_text, callback_data: id } ]]
+            inline_keyboard: [ [ { text: article.button_text, callback_data: id } ] ]
         }
     }
 }

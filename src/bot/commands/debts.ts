@@ -7,9 +7,8 @@ export default command(
         from: {} as TelegramBot.User
     },
     {
-        regexp: /\/debts/,
-        callback(dataBase)
-        {
+        regexp: /\/debts/u,
+        callback(dataBase) {
             return async ({ msg, locale }) =>
                 this.sendMessage(msg.chat.id, locale.debts(await dataBase.getDebts(msg.from.id)))
         }

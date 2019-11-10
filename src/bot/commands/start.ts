@@ -7,9 +7,8 @@ export default command(
         from: {} as TelegramBot.User
     },
     {
-        regexp: /\/start/,
-        callback(dataBase)
-        {
+        regexp: /\/start/u,
+        callback(dataBase) {
             return ({ msg, locale }) =>
                 this.sendMessage(msg.chat.id, locale.hi(dataBase.getName(msg.from)))
         }

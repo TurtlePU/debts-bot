@@ -15,4 +15,8 @@ const bot = Bot(token, port, db)
 
 db.connect().then(() => bot.setWebHook(`${url}/bot${token}`))
 
-setInterval(() => https.get(url), 1000 * 60 * 15)
+const msInSec = 1000
+const secInMin = 60
+const keepAwakeMinutes = 15
+
+setInterval(() => https.get(url), msInSec * secInMin * keepAwakeMinutes)

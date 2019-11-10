@@ -1,8 +1,7 @@
 import Mongoose from 'mongoose'
 import TelegramBot from 'node-telegram-bot-api'
 
-export async function updateUser(user: TelegramBot.User)
-{
+export async function updateUser(user: TelegramBot.User) {
     const userDoc = await UserModel.findById(user.id)
     if (userDoc) {
         userDoc.name = getName(user)
@@ -12,8 +11,7 @@ export async function updateUser(user: TelegramBot.User)
     }
 }
 
-export async function getNameById(id: number)
-{
+export async function getNameById(id: number) {
     const userDoc = await UserModel.findById(id)
     if (!userDoc) {
         throw new Error('User not found')
@@ -21,8 +19,7 @@ export async function getNameById(id: number)
     return userDoc.name
 }
 
-export function getName({ first_name, last_name, username }: TelegramBot.User)
-{
+export function getName({ first_name, last_name, username }: TelegramBot.User) {
     if (username) {
         return '@' + username
     } else if (last_name) {
@@ -32,8 +29,7 @@ export function getName({ first_name, last_name, username }: TelegramBot.User)
     }
 }
 
-type User =
-{
+type User = {
     _id: number
     name: string
 }

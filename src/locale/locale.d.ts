@@ -1,9 +1,8 @@
 import { OutDebt } from '@db'
 
-declare type Locale =
-{
+declare type Locale = {
     currency: string
-    anon(): string
+    anon: string
     hi(name: string): string
     debts(debts: OutDebt[]): string
     offerArticle(amount: number, currency: string): {

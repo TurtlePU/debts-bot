@@ -1,16 +1,16 @@
 import Mongoose from 'mongoose'
 
-export async function getDebts(id: number)
-{
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, require-await
+export async function getDebts(id: number) {
     return []
 }
 
-export async function createDebt(from: number, to: number, amount: number, currency: string)
-{
-    if (from > to) {
-        [ from, to, amount ] = [ to, from, -amount ]
-    }
-    const older = await DebtModel.findOne({ from, to })
+export async function createDebt(from_id: number, to_id: number, amnt: number, currency: string) {
+    const [ from, to, amount ] =
+        from_id < to_id ?
+            [ from_id, to_id, +amnt ] :
+            [ to_id, from_id, -amnt ]
+    const older = await DebtModel.findOne({ from, to, currency })
     if (!older) {
         new DebtModel({ from, to, amount, currency }).save()
     } else {
@@ -23,8 +23,7 @@ export async function createDebt(from: number, to: number, amount: number, curre
     }
 }
 
-type Debt =
-{
+type Debt = {
     from: number
     to: number
     amount: number

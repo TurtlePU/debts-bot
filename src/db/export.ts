@@ -7,8 +7,7 @@ import { updateUser, getName, getNameById } from './models/user'
 import { createDebt, getDebts } from './models/debt'
 import { createOffer, deleteOffer } from './models/offer'
 
-export default function DB(url: string): DataBase
-{
+export default function DB(url: string): DataBase {
     return {
         connect,
         getName, getNameById, updateUser,
@@ -16,8 +15,7 @@ export default function DB(url: string): DataBase
         createOffer, deleteOffer
     }
 
-    async function connect()
-    {
+    async function connect() {
         await Mongoose.connect(url)
     }
 }

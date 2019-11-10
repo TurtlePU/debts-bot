@@ -20,9 +20,64 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "brace-style": "off",
+        "indent": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/brace-style": [
+            "error",
+            "1tbs"
+        ],
+        "@typescript-eslint/indent": [
+            "error",
+            4,
+            {
+                "FunctionDeclaration": {
+                    "parameters": 2
+                }
+            }
+        ],
+        "@typescript-eslint/member-delimiter-style": [
+            "error",
+            {
+                "multiline": {
+                    "delimiter": "none"
+                }
+            }
+        ],
+        "@typescript-eslint/no-extra-parens": "error",
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false,
+                "varsIgnorePattern": "^_"
+            }
+        ],
+        "array-bracket-spacing": [
+            "error",
+            "always"
+        ],
         "arrow-parens": [
             "error",
             "as-needed"
+        ],
+        "block-spacing": [
+            "error",
+            "always"
+        ],
+        "curly": [
+            "error",
+            "all"
+        ],
+        "default-case": "error",
+        "dot-location": [
+            "error",
+            "property"
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
         ],
         "max-len": [
             "error",
@@ -30,29 +85,46 @@
                 "code": 100
             }
         ],
-        "indent": [
+        "no-await-in-loop": "error",
+        "no-extra-bind": "error",
+        "no-extra-label": "error",
+        "no-lone-blocks": "error",
+        "no-loop-func": "error",
+        "no-magic-numbers": [
             "error",
-            4
+            {
+                "ignore": [ 0, 1, 2 ]
+            }
         ],
-        "linebreak-style": [
+        "no-multi-spaces": [
             "error",
-            "unix"
+            {
+                "ignoreEOLComments": true
+            }
+        ],
+        "no-multi-str": "error",
+        "no-param-reassign": "error",
+        "no-sequences": "error",
+        "no-shadow": "error",
+        "no-unmodified-loop-condition": "error",
+        "no-useless-call": "error",
+        "no-with": "error",
+        "prefer-promise-reject-errors": "error",
+        "require-await": "error",
+        "require-unicode-regexp": "error",
+        "semi": [
+            "error",
+            "never"
         ],
         "quotes": [
             "error",
             "single"
         ],
-        "semi": [
+        "yoda": [
             "error",
-            "never"
-        ],
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": [
-            "warn",
+            "never",
             {
-                "vars": "all",
-                "args": "after-used",
-                "ignoreRestSiblings": false
+                "exceptRange": true
             }
         ]
     }
