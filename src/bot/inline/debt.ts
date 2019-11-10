@@ -33,23 +33,20 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
         }
     },
     onInlineCallbackQuery(dataBase) {
-        return async (query, locale) => {
-            const offer = await dataBase.deleteOffer(query.inline_message_id)
+        return async ({ from, inline_message_id }, locale) => {
+            const offer = await dataBase.deleteOffer(inline_message_id)
             if (!offer) {
-                this.editMessageText(locale.offer.expired, {
-                    message_id: +query.inline_message_id
-                })
+                this.editMessageText(locale.offer.expired, { inline_message_id })
                 return { text: locale.offer.expired }
-            } else if (query.from.id == offer.from_id) {
+            } else if (from.id == offer.from_id) {
+                dataBase.createOffer(inline_message_id, offer)
                 return { text: locale.offer.selfAccept }
             } else {
-                dataBase.createDebt(offer.from_id, query.from.id, offer.amount, offer.currency)
+                dataBase.createDebt(offer.from_id, from.id, offer.amount, offer.currency)
                 const text = locale.offer.saved(
-                    await dataBase.getNameById(offer.from_id), dataBase.getName(query.from),
+                    await dataBase.getNameById(offer.from_id), dataBase.getName(from),
                     offer.amount, offer.currency)
-                this.editMessageText(text, {
-                    message_id: +query.inline_message_id
-                })
+                this.editMessageText(text, { inline_message_id })
                 return { text }
             }
         }
