@@ -19,7 +19,11 @@ export async function getNameById(id: number) {
     return userDoc.name
 }
 
-export function getName({ first_name, last_name, username }: TelegramBot.User) {
+export function getName(user: TelegramBot.User) {
+    return shield(getNameImpl(user))
+}
+
+function getNameImpl({ first_name, last_name, username }: TelegramBot.User) {
     if (username) {
         return '@' + username
     } else if (last_name) {
@@ -27,6 +31,10 @@ export function getName({ first_name, last_name, username }: TelegramBot.User) {
     } else {
         return first_name
     }
+}
+
+function shield(str: string) {
+    return str.replace('_', '\\_')
 }
 
 type User = {
