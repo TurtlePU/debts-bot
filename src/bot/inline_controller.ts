@@ -41,6 +41,7 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
     })
 
     async function onInlineBase(query: TelegramBot.InlineQuery) {
+        dataBase.updateUser(query.from)
         const pending = binded.map(({ regexp, callback }) => {
             const match = regexp.exec(query.query)
             return match ? callback(match, getLocale(query.from.language_code), query) : []
@@ -50,6 +51,7 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
     }
 
     function onInlineResultBase(result: TelegramBot.ChosenInlineResult) {
+        dataBase.updateUser(result.from)
         for (const { regexp, callback } of withFeedback) {
             if (regexp.exec(result.query)) {
                 callback(result)
@@ -59,6 +61,7 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
     }
 
     async function onInlineCallbackQueryBase(query: InlineCallbackQuery) {
+        dataBase.updateUser(query.from)
         if (!query.data) {
             return
         }
