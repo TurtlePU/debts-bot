@@ -1,5 +1,6 @@
 import { Locale } from './locale'
 import { shieldMarkdown } from '@util'
+import { OutDebt } from '@db'
 
 const ru: Locale = {
     currency: '₽',
@@ -9,12 +10,12 @@ const ru: Locale = {
         '_i_. Напиши /debts, чтобы посмотреть список долгов и расходов.\n' +
         '_ii_. Напиши мне в беседе с другим человеком количество денег, и я оформлю новый долг.',
     debts: debts => {
-        if (debts.length == 0) {
-            return 'Долгов нет!'
+        const deb = reduce(debts.filter(({ amount }) => amount > 0), 'Вы должны:')
+        const owe = reduce(debts.filter(({ amount }) => amount < 0), 'Вам должны:')
+        if (!deb || !owe) {
+            return deb || owe || 'Долгов нет!'
         } else {
-            return debts
-                .map(({ to_name, amount, currency }) => `${to_name}: ${amount}${currency}`)
-                .reduce((prev, curr) => `${prev}\n${curr}`, 'С кем вы связаны:\n')
+            return deb + '\n\n' + owe
         }
     },
     offerArticle: (amount: number, currency: string) => {
@@ -39,3 +40,13 @@ const ru: Locale = {
 }
 
 export default ru
+
+function reduce(debts: OutDebt[], title: string): string | null {
+    if (debts.length == 0) {
+        return null
+    } else {
+        return debts
+            .map(({ to_name, amount, currency }) => `${to_name}: ${Math.abs(amount)}${currency}`)
+            .reduce((acc, cur) => acc + '\n' + cur, title + '\n')
+    }
+}
