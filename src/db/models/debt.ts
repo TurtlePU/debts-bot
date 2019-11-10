@@ -8,8 +8,8 @@ export async function getDebts(id: number): Promise<OutDebt[]> {
         DebtModel.find({ to: id })
     ])
     const debts = [
-        ...result[0],
-        ...result[1].map(({ from, amount, ...tail }) => ({ to: from, amount: -amount, ...tail }))
+        ...result[0].map(({ to, amount, currency }) => ({ to, amount, currency })),
+        ...result[1].map(({ from, amount, currency }) => ({ to: from, amount: -amount, currency }))
     ]
     return Promise.all(debts.map(async ({ to, ...tail }) => ({
         to_name: await getNameById(to), ...tail
