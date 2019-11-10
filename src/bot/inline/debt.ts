@@ -1,18 +1,32 @@
-import TelegramBot from 'node-telegram-bot-api'
+import { InlineHandler, ButtonPiece, FeedbackPiece } from './inline_handler'
 
-import { InlineHandler, CallbackPiece, FeedbackPiece } from './inline_handler'
-import { Locale } from '@locale'
+const ACCEPT = 'accept_offer'
+const DECLINE = 'decline_offer'
 
-const id = 'debt'
-
-const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
-    id,
+const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
     regexp: /^(-?\d{1,9})\s*([^\s\d])?$/u,
     onInline() {
         return (match, locale) => {
             const amount = +match[1]
             const currency = match[2] || locale.currency
-            return [ amount, -amount ].map(amnt => offerArticle(locale, amnt, currency))
+            return [ amount, -amount ].map(amnt => {
+                const article = locale.offerArticle(amnt, currency)
+                return {
+                    id: amnt + currency,
+                    type: 'article',
+                    title: article.title,
+                    input_message_content: {
+                        message_text: article.text,
+                        parse_mode: 'Markdown'
+                    },
+                    reply_markup: {
+                        inline_keyboard: [ [
+                            { text: article.button_accept, callback_data: ACCEPT },
+                            { text: article.button_reject, callback_data: DECLINE }
+                        ] ]
+                    }
+                }
+            })
         }
     },
     onInlineResult(dataBase) {
@@ -32,42 +46,39 @@ const handler: InlineHandler & CallbackPiece & FeedbackPiece = {
             })
         }
     },
-    onInlineCallbackQuery(dataBase) {
-        return async ({ from, inline_message_id }, locale) => {
-            const offer = await dataBase.deleteOffer(inline_message_id)
-            if (!offer) {
-                this.editMessageText(locale.offer.expired, { inline_message_id })
-                return { text: locale.offer.expired }
-            } else if (from.id == offer.from_id) {
-                dataBase.createOffer(inline_message_id, offer)
-                return { text: locale.offer.selfAccept }
-            } else {
-                dataBase.createDebt(offer.from_id, from.id, offer.amount, offer.currency)
-                const text = locale.offer.saved(
-                    await dataBase.getNameById(offer.from_id), dataBase.getName(from),
-                    offer.amount, offer.currency)
-                this.editMessageText(text, { inline_message_id })
-                return { text }
+    buttons: [
+        {
+            matcher: data => data == ACCEPT,
+            onClick(dataBase) {
+                return async ({ inline_message_id, from }, locale) => {
+                    const offer = await dataBase.deleteOffer(inline_message_id)
+                    if (!offer) {
+                        this.editMessageText(locale.offer.expired, { inline_message_id })
+                        return { text: locale.offer.expired }
+                    } else if (from.id == offer.from_id) {
+                        dataBase.createOffer(inline_message_id, offer)
+                        return { text: locale.offer.selfAccept }
+                    } else {
+                        dataBase.createDebt(offer.from_id, from.id, offer.amount, offer.currency)
+                        const text = locale.offer.saved(
+                            await dataBase.getNameById(offer.from_id), dataBase.getName(from),
+                            offer.amount, offer.currency)
+                        this.editMessageText(text, { inline_message_id })
+                        return { text }
+                    }
+                }
+            }
+        },
+        {
+            matcher: data => data == DECLINE,
+            onClick(dataBase) {
+                return ({ inline_message_id, from }, locale) => {
+                    dataBase.deleteOffer(inline_message_id)
+                    return { text: locale.offer.declined(dataBase.getName(from)) }
+                }
             }
         }
-    }
+    ]
 }
 
 export default handler
-
-function offerArticle(
-        locale: Locale, amount: number, currency: string): TelegramBot.InlineQueryResultArticle {
-    const article = locale.offerArticle(amount, currency)
-    return {
-        id: amount + currency,
-        type: 'article',
-        title: article.title,
-        input_message_content: {
-            message_text: article.text,
-            parse_mode: 'Markdown'
-        },
-        reply_markup: {
-            inline_keyboard: [ [ { text: article.button_text, callback_data: id } ] ]
-        }
-    }
-}

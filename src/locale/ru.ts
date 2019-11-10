@@ -23,11 +23,13 @@ const ru: Locale = {
         const shielded = shieldMarkdown(currency)
         const title = amount > 0 ? `Взять ${abs}${currency}` : `Дать ${abs}${currency}`
         const text = amount > 0 ? `Я взял ${abs}${shielded}.` : `Я дал ${abs}${shielded}.`
-        const button_text = 'Ок'
-        return { title, text, button_text }
+        return { title, text, button_accept: 'Ок 👍', button_reject: 'Не 👎' }
     },
     offer: {
         expired: 'Простите, но время действия предложения истекло.',
+        declined(by) {
+            return `Предложение отклонено ${by}`
+        },
         selfAccept: 'Нельзя принять своё же предложение!',
         saved(from_name, to_name, amnt, currency) {
             const [ from, to, amount ] =

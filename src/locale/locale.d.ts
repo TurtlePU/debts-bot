@@ -8,11 +8,13 @@ declare type Locale = {
     offerArticle(amount: number, currency: string): {
         title: string
         text: string
-        button_text: string
+        button_accept: string
+        button_reject: string
     }
     offer: {
         expired: string
         selfAccept: string
+        declined(by: string): string
         saved(from: string, to: string, amount: number, currency: string): string
     }
 }

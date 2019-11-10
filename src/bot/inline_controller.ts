@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api'
 
-import { InlineHandler, InlineCallbackQuery, CallbackPiece, FeedbackPiece } from '@inline'
+import { InlineHandler, InlineCallbackQuery, ButtonPiece, FeedbackPiece } from '@inline'
 import { Locale } from '@locale'
 import { DataBase } from '@db'
 
@@ -17,11 +17,13 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
             return { regexp, callback: onInline.call(bot, dataBase) }
         })
 
-    const withButtons = handlers
+    const buttonCallbacks = handlers
         .filter(hasButtons)
-        .map(({ id, onInlineCallbackQuery }) => {
-            return { id, callback: onInlineCallbackQuery.call(bot, dataBase) }
+        .map(({ buttons }) => {
+            return buttons
+                .map(({ matcher, onClick }) => ({ matcher, onClick: onClick.call(bot, dataBase) }))
         })
+        .flat()
 
     const withFeedback = handlers
         .filter(acceptsFeedback)
@@ -60,13 +62,10 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
         if (!query.data) {
             return
         }
-        for (const { id, callback } of withButtons) {
-            if (query.data.startsWith(id)) {
-                bot.answerCallbackQuery(query.id,
-                    // eslint-disable-next-line no-await-in-loop
-                    await callback(query, getLocale(query.from.language_code)))
-                break
-            }
+        const handler = buttonCallbacks.find(({ matcher }) => matcher(query.data))
+        if (handler) {
+            bot.answerCallbackQuery(query.id,
+                await handler.onClick(query, getLocale(query.from.language_code)))
         }
     }
 }
@@ -75,8 +74,8 @@ function isInlineCallbackQuery(query: TelegramBot.CallbackQuery): query is Inlin
     return !!query.inline_message_id
 }
 
-function hasButtons(handler: InlineHandler): handler is InlineHandler & CallbackPiece {
-    return !!(handler as InlineHandler & CallbackPiece).id
+function hasButtons(handler: InlineHandler): handler is InlineHandler & ButtonPiece {
+    return !!(handler as InlineHandler & ButtonPiece).buttons
 }
 
 function acceptsFeedback(handler: InlineHandler): handler is InlineHandler & FeedbackPiece {
