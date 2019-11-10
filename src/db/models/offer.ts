@@ -20,7 +20,8 @@ const OfferModel = Mongoose.model<OfferDoc>('Offer', new Mongoose.Schema({
 }))
 
 export async function createOffer(_id: string, offer: Offer) {
-    await new OfferModel({ _id, ...offer }).save()
+    const { from_id, amount, currency } = offer
+    await new OfferModel({ _id, from_id, amount, currency }).save()
 }
 
 export async function deleteOffer(id: string): Promise<Offer | null> {
