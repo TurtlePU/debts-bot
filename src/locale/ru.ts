@@ -17,8 +17,9 @@ const ru: Locale = {
         }
     },
     offerArticle: (amount: number, currency: string) => {
-        const title = amount > 0 ? `Взять ${amount}${currency}` : `Дать ${amount}${currency}`
-        const text = amount > 0 ? `Я взял ${amount}${currency}.` : `Я дал ${amount}${currency}.`
+        const abs = Math.abs(amount)
+        const title = amount > 0 ? `Взять ${abs}${currency}` : `Дать ${abs}${currency}`
+        const text = amount > 0 ? `Я взял ${abs}${currency}.` : `Я дал ${abs}${currency}.`
         const button_text = 'Ок'
         return { title, text, button_text }
     },
