@@ -8,16 +8,12 @@ declare type InlineCallbackQuery = TelegramBot.CallbackQuery & {
     message: undefined
 }
 
-declare type ChosenInlineResult = TelegramBot.ChosenInlineResult & {
-    inline_message_id: string
-}
-
 declare type ButtonAswer = Partial<TelegramBot.AnswerCallbackQueryOptions>
 
 declare type BindedButtonCallback =
     (query: InlineCallbackQuery, locale: Locale) => Promise<ButtonAswer> | ButtonAswer
 
-declare type BindedResultCallback = (result: ChosenInlineResult) => void
+declare type BindedResultCallback = (result: TelegramBot.ChosenInlineResult) => void
 
 declare type BindedInlineCallback =
     (match: RegExpExecArray, locale: Locale, query: TelegramBot.InlineQuery)

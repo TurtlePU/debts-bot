@@ -32,6 +32,9 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
     matcher: id => !!idParser(id),
     onInlineResult(dataBase) {
         return result => {
+            if (!result.inline_message_id) {
+                throw new Error('Inline message id is missing')
+            }
             const match = idParser(result.result_id)
             if (!match) {
                 throw new Error('Debt article id is in wrong format')

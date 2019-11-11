@@ -3,6 +3,7 @@ import { InlineHandler, FeedbackPiece, ButtonPiece } from './inline_handler'
 const ACCEPT = 'settleUp.accept'
 const DECLINE = 'settleUp.decline'
 const ARTICLE_ID = 'settle-up'
+const CURRENCY = 'settle-up'
 
 const handler: InlineHandler & FeedbackPiece & ButtonPiece = {
     regexp: /.*/u,
@@ -28,10 +29,13 @@ const handler: InlineHandler & FeedbackPiece & ButtonPiece = {
     matcher: id => id == ARTICLE_ID,
     onInlineResult(dataBase) {
         return ({ inline_message_id, from }) => {
+            if (!inline_message_id) {
+                throw new Error('Inline message id is missing')
+            }
             dataBase.createOffer(inline_message_id, {
                 from_id: from.id,
                 amount: 0,
-                currency: 'settle-up'
+                currency: CURRENCY
             })
         }
     },
@@ -45,6 +49,8 @@ const handler: InlineHandler & FeedbackPiece & ButtonPiece = {
                         const text = locale.offer.expired
                         this.editMessageText(text, { inline_message_id })
                         return { text }
+                    } else if (offer.currency != CURRENCY) {
+                        throw new Error('Offer under settle-up message id is not settle-up')
                     } else if (offer.from_id == from.id) {
                         dataBase.createOffer(inline_message_id, offer)
                         return { text: locale.offer.selfAccept }
