@@ -2,13 +2,14 @@ import { InlineHandler, FeedbackPiece, ButtonPiece } from './inline_handler'
 
 const ACCEPT = 'settleUp.accept'
 const DECLINE = 'settleUp.decline'
+const ARTICLE_ID = 'settle-up'
 
 const handler: InlineHandler & FeedbackPiece & ButtonPiece = {
     regexp: /.*/u,
     onInline() {
         return (_, locale) => {
             return [ {
-                id: 'settle-up',
+                id: ARTICLE_ID,
                 type: 'article',
                 title: locale.settleUpArticle.title,
                 input_message_content: {
@@ -24,11 +25,9 @@ const handler: InlineHandler & FeedbackPiece & ButtonPiece = {
             } ]
         }
     },
+    matcher: id => id == ARTICLE_ID,
     onInlineResult(dataBase) {
         return ({ inline_message_id, from }) => {
-            if (!inline_message_id) {
-                throw new Error('Settle-up article message_id is missing')
-            }
             dataBase.createOffer(inline_message_id, {
                 from_id: from.id,
                 amount: 0,

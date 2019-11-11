@@ -3,6 +3,7 @@ import TelegramBot from 'node-telegram-bot-api'
 import { InlineHandler, InlineCallbackQuery, ButtonPiece, FeedbackPiece } from '@inline'
 import { Locale } from '@locale'
 import { DataBase } from '@db'
+import { ChosenInlineResult } from './inline/inline_handler'
 
 export type InlineOptions = {
     bot: TelegramBot
@@ -27,8 +28,8 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
 
     const withFeedback = handlers
         .filter(acceptsFeedback)
-        .map(({ regexp, onInlineResult }) => {
-            return { regexp, callback: onInlineResult.call(bot, dataBase) }
+        .map(({ matcher, onInlineResult }) => {
+            return { matcher, callback: onInlineResult.call(bot, dataBase) }
         })
 
     bot.on('inline_query', onInlineBase)
@@ -52,8 +53,11 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
 
     function onInlineResultBase(result: TelegramBot.ChosenInlineResult) {
         dataBase.updateUser(result.from)
-        for (const { regexp, callback } of withFeedback) {
-            if (regexp.exec(result.query)) {
+        if (!hasId(result)) {
+            return
+        }
+        for (const { matcher, callback } of withFeedback) {
+            if (matcher(result.inline_message_id)) {
                 callback(result)
                 break
             }
@@ -83,4 +87,8 @@ function hasButtons(handler: InlineHandler): handler is InlineHandler & ButtonPi
 
 function acceptsFeedback(handler: InlineHandler): handler is InlineHandler & FeedbackPiece {
     return !!(handler as InlineHandler & FeedbackPiece).onInlineResult
+}
+
+function hasId(result: TelegramBot.ChosenInlineResult): result is ChosenInlineResult {
+    return !!result.inline_message_id
 }

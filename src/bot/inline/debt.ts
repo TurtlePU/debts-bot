@@ -29,12 +29,10 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             })
         }
     },
+    matcher: id => !!idParser(id),
     onInlineResult(dataBase) {
         return result => {
-            if (!result.inline_message_id) {
-                throw new Error('Debt article message_id is missing')
-            }
-            const match = /^(-?\d+)([^\d])$/u.exec(result.result_id)
+            const match = idParser(result.result_id)
             if (!match) {
                 throw new Error('Debt article id is in wrong format')
             }
@@ -84,3 +82,7 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
 }
 
 export default handler
+
+function idParser(id: string) {
+    return /^(-?\d+)([^\d])$/u.exec(id)
+}
