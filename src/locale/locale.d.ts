@@ -3,13 +3,15 @@ import { OutDebt } from '@db'
 declare type Locale = {
     currency: string
     anon: string
+    buttons: {
+        accept: string
+        reject: string
+    }
     hi(name: string): string
     debts(debts: OutDebt[]): string
     offerArticle(amount: number, currency: string): {
         title: string
         text: string
-        button_accept: string
-        button_reject: string
     }
     offer: {
         expired: string
@@ -17,4 +19,9 @@ declare type Locale = {
         declined(by: string): string
         saved(from: string, to: string, amount: number, currency: string): string
     }
+    settleUpArticle: {
+        title: string
+        text: string
+    }
+    settleUp(first: string, second: string): string
 }

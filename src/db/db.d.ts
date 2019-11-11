@@ -10,6 +10,7 @@ declare type DataBase = {
     deleteOffer(id: string): Promise<Offer | null>
     createDebt(from: number, to: number, amount: number, currency: string): Promise<void>
     getDebts(id: number): Promise<OutDebt[]>
+    clearDebts(first_id: number, second_id: number): Promise<void>
 }
 
 declare type OutDebt = {

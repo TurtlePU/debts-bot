@@ -5,6 +5,10 @@ import { OutDebt } from '@db'
 const ru: Locale = {
     currency: '₽',
     anon: 'Прости, я не знаю, кто ты.',
+    buttons: {
+        accept: 'Ок 👍',
+        reject: 'Не 👎'
+    },
     hi: name =>
         `Привет, ${name}!\n` +
         '_i_. Напиши /debts, чтобы посмотреть список долгов и расходов.\n' +
@@ -23,7 +27,7 @@ const ru: Locale = {
         const shielded = shieldMarkdown(currency)
         const title = amount > 0 ? `Взять ${abs}${currency}` : `Дать ${abs}${currency}`
         const text = amount > 0 ? `Я взял ${abs}${shielded}.` : `Я дал ${abs}${shielded}.`
-        return { title, text, button_accept: 'Ок 👍', button_reject: 'Не 👎' }
+        return { title, text }
     },
     offer: {
         expired: 'Простите, но время действия предложения истекло.',
@@ -38,7 +42,12 @@ const ru: Locale = {
                     [ to_name, from_name, -amnt ]
             return `${from} получил ${amount}${currency} от ${to}.`
         }
-    }
+    },
+    settleUpArticle: {
+        title: 'Обнулить долги',
+        text: 'Обнулим долги?'
+    },
+    settleUp: (first, second) => `Долги между ${first} и ${second} обнулены.`
 }
 
 export default ru

@@ -1,7 +1,7 @@
 import { InlineHandler, ButtonPiece, FeedbackPiece } from './inline_handler'
 
-const ACCEPT = 'accept_offer'
-const DECLINE = 'decline_offer'
+const ACCEPT = 'offer.accept'
+const DECLINE = 'offer.decline'
 
 const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
     regexp: /^(-?\d{1,9})\s*([^\s\d])?$/u,
@@ -21,8 +21,8 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
                     },
                     reply_markup: {
                         inline_keyboard: [ [
-                            { text: article.button_accept, callback_data: ACCEPT },
-                            { text: article.button_reject, callback_data: DECLINE }
+                            { text: locale.buttons.accept, callback_data: ACCEPT },
+                            { text: locale.buttons.reject, callback_data: DECLINE }
                         ] ]
                     }
                 }

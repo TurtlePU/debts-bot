@@ -34,6 +34,12 @@ export async function createDebt(from_id: number, to_id: number, amnt: number, c
     }
 }
 
+export async function clearDebts(first_id: number, second_id: number) {
+    const [ from, to ] =
+        first_id < second_id ? [ first_id, second_id ] : [ second_id, first_id ]
+    await DebtModel.deleteMany({ from, to })
+}
+
 type Debt = {
     from: number
     to: number
