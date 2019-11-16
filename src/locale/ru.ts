@@ -25,8 +25,8 @@ const ru: Locale = {
     offerArticle: (amount: number, currency: string) => {
         const abs = Math.abs(amount)
         const shielded = shieldMarkdown(currency)
-        const title = amount > 0 ? `Взять ${abs}${currency}` : `Дать ${abs}${currency}`
-        const text = amount > 0 ? `Я взял ${abs}${shielded}.` : `Я дал ${abs}${shielded}.`
+        const title = amount > 0 ? `Взять ${abs} ${currency}` : `Дать ${abs} ${currency}`
+        const text = amount > 0 ? `Я взял ${abs} ${shielded}.` : `Я дал ${abs} ${shielded}.`
         return { title, text }
     },
     offer: {
@@ -57,7 +57,7 @@ function reduce(debts: OutDebt[], title: string): string | null {
         return null
     } else {
         return debts
-            .map(({ to_name, amount, currency }) => `${to_name}: ${Math.abs(amount)}${currency}`)
+            .map(({ to_name, amount, currency }) => `${to_name}: ${Math.abs(amount)} ${currency}`)
             .reduce((acc, cur) => acc + '\n' + cur, title + '\n')
     }
 }

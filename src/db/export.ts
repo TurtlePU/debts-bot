@@ -19,7 +19,8 @@ export default function DB(url: string): DataBase {
         await Mongoose.connect(url, {
             useFindAndModify: true,
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useCreateIndex: true
         })
     }
 }

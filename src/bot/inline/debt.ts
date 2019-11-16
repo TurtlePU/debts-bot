@@ -2,9 +2,10 @@ import { InlineHandler, ButtonPiece, FeedbackPiece } from './inline_handler'
 
 const ACCEPT = 'offer.accept'
 const DECLINE = 'offer.decline'
+const regexp = /^(-?\d{1,9})\s*([^\s\d][^\s]{0,99})?$/u
 
 const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
-    regexp: /^(-?\d{1,9})\s*([^\s\d])?$/u,
+    regexp,
     onInline() {
         return (match, locale) => {
             const amount = +match[1]
@@ -29,13 +30,13 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             })
         }
     },
-    matcher: id => !!idParser(id),
+    matcher: id => !!regexp.exec(id),
     onInlineResult(dataBase) {
         return result => {
             if (!result.inline_message_id) {
                 throw new Error('Inline message id is missing')
             }
-            const match = idParser(result.result_id)
+            const match = regexp.exec(result.result_id)
             if (!match) {
                 throw new Error('Debt article id is in wrong format')
             }
@@ -85,7 +86,3 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
 }
 
 export default handler
-
-function idParser(id: string) {
-    return /^(-?\d+)([^\d])$/u.exec(id)
-}
