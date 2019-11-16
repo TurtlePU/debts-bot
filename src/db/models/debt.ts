@@ -1,6 +1,7 @@
 import Mongoose from 'mongoose'
 import { OutDebt } from '@db'
 import { getNameById } from './user'
+import { shieldMarkdown } from '@util'
 
 export async function getDebts(id: number): Promise<OutDebt[]> {
     const result = await Promise.all([
@@ -16,11 +17,12 @@ export async function getDebts(id: number): Promise<OutDebt[]> {
     })))
 }
 
-export async function createDebt(from_id: number, to_id: number, amnt: number, currency: string) {
+export async function createDebt(from_id: number, to_id: number, amnt: number, cncy: string) {
     const [ from, to, amount ] =
         from_id < to_id ?
             [ from_id, to_id, +amnt ] :
             [ to_id, from_id, -amnt ]
+    const currency = shieldMarkdown(cncy)
     const older = await DebtModel.findOne({ from, to, currency })
     if (!older) {
         new DebtModel({ from, to, amount, currency }).save()
