@@ -53,14 +53,14 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             matcher: data => data == ACCEPT,
             onClick(dataBase) {
                 return async ({ inline_message_id, from }, locale) => {
-                    const offer = await dataBase.deleteOffer(inline_message_id)
+                    const offer = await dataBase.getOffer(inline_message_id)
                     if (!offer) {
                         this.editMessageText(locale.offer.expired, { inline_message_id })
                         return { text: locale.offer.expired }
                     } else if (from.id == offer.from_id) {
-                        dataBase.createOffer(inline_message_id, offer)
                         return { text: locale.offer.selfAccept }
                     } else {
+                        offer.remove()
                         dataBase.createDebt(offer.from_id, from.id, offer.amount, offer.currency)
                         const text = locale.offer.saved(
                             await dataBase.getNameById(offer.from_id), dataBase.getName(from),

@@ -44,7 +44,7 @@ const handler: InlineHandler & FeedbackPiece & ButtonPiece = {
             matcher: data => data == ACCEPT,
             onClick(dataBase) {
                 return async ({ inline_message_id, from }, locale) => {
-                    const offer = await dataBase.deleteOffer(inline_message_id)
+                    const offer = await dataBase.getOffer(inline_message_id)
                     if (!offer) {
                         const text = locale.offer.expired
                         this.editMessageText(text, { inline_message_id })
@@ -52,11 +52,11 @@ const handler: InlineHandler & FeedbackPiece & ButtonPiece = {
                     } else if (offer.currency != CURRENCY) {
                         throw new Error('Offer under settle-up message id is not settle-up')
                     } else if (offer.from_id == from.id) {
-                        dataBase.createOffer(inline_message_id, offer)
                         return { text: locale.offer.selfAccept }
                     } else {
                         const text = locale.settleUp(
                             await dataBase.getNameById(offer.from_id), dataBase.getName(from))
+                        offer.remove()
                         dataBase.clearDebts(offer.from_id, from.id)
                         this.editMessageText(text, { inline_message_id })
                         return { text }

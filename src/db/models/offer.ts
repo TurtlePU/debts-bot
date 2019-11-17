@@ -7,7 +7,7 @@ export type Offer = {
     created?: Date
 }
 
-type OfferDoc = Mongoose.Document & Offer & {
+export type OfferDoc = Mongoose.Document & Offer & {
     _id: string
     created: Date
 }
@@ -23,6 +23,10 @@ const OfferModel = Mongoose.model<OfferDoc>('Offer', new Mongoose.Schema({
 export async function createOffer(_id: string, offer: Offer) {
     const { from_id, amount, currency, created } = offer
     await new OfferModel({ _id, from_id, amount, currency, created }).save()
+}
+
+export async function getOffer(id: string): Promise<OfferDoc | null> {
+    return await OfferModel.findById(id)
 }
 
 export async function deleteOffer(id: string): Promise<Offer | null> {
