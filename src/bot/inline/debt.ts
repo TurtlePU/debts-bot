@@ -2,7 +2,7 @@ import { InlineHandler, ButtonPiece, FeedbackPiece } from './inline_handler'
 
 const ACCEPT = 'offer.accept'
 const DECLINE = 'offer.decline'
-const regexp = /^(-?\d{1,9})\s*([^\s\d][^\s]{0,99})?$/u
+const regexp = /^(-?\d{1,9})\s*([^\s\d].{0,99})?$/u
 
 const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
     regexp,
@@ -13,7 +13,7 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             return [ amount, -amount ].map(amnt => {
                 const article = locale.offerArticle(amnt, currency)
                 return {
-                    id: amnt + currency,
+                    id: amnt + currency.substring(0, 1),
                     type: 'article',
                     title: article.title,
                     input_message_content: {
@@ -36,7 +36,7 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             if (!result.inline_message_id) {
                 throw new Error('Inline message id is missing')
             }
-            const match = regexp.exec(result.result_id)
+            const match = regexp.exec(result.query)
             if (!match) {
                 throw new Error('Debt article id is in wrong format')
             }
