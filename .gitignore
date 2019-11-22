@@ -1,3 +1,4 @@
 .vscode
+.vimrc
 build
 node_modules
