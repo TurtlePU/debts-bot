@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "lint": "eslint 'src/**' --fix",
+    "lint": "eslint \"src/**\" --fix",
     "build": "tsc",
     "start": "node build/server.js"
   },
