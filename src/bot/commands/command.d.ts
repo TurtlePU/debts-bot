@@ -11,7 +11,9 @@ declare type Context<MType = {}> = {
 
 declare type CommandProto<MType = {}> = {
     regexp: RegExp
-    callback(this: TelegramBot, dataBase: DataBase): (ctx: Context<MType>) => void
+    callback(
+        this: TelegramBot, dataBase: DataBase, getMe: () => TelegramBot.User
+    ): (ctx: Context<MType>) => void
 }
 
 declare type Command<MType = {}> = CommandProto<MType> & {

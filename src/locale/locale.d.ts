@@ -1,4 +1,8 @@
-import { OutDebt } from '@db'
+import { DebtInfo } from '@db'
+
+declare type FormattedDebt = DebtInfo & {
+    to: string
+}
 
 declare type Locale = {
     currency: string
@@ -8,7 +12,7 @@ declare type Locale = {
         reject: string
     }
     hi(name: string): string
-    debts(debts: OutDebt[]): string
+    debts(debts: FormattedDebt[]): string
     offerArticle(amount: number, currency: string): {
         title: string
         text: string

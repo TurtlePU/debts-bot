@@ -10,10 +10,10 @@ const url = process.env.URL || 'none'
 const token = process.env.TOKEN || 'none'
 const mongo_url = process.env.MONGODB_URI || 'none'
 
-const db = DB(mongo_url)
-const bot = Bot(token, port, db)
+const { db, connect } = DB(mongo_url)
+const { postInit } = Bot(url, token, port, db)
 
-db.connect().then(() => bot.setWebHook(`${url}/bot${token}`))
+connect().then(postInit)
 
 const msInSec = 1000
 const secInMin = 60

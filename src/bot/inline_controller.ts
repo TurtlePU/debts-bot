@@ -6,29 +6,34 @@ import { DataBase } from '@db'
 
 export type InlineOptions = {
     bot: TelegramBot
-    getLocale(code?: string): Locale
     handlers: InlineHandler[]
     dataBase: DataBase
+    getLocale(code?: string): Locale
+    getMe(): TelegramBot.User
 }
 
-export default function ConnectInline({ bot, handlers, getLocale, dataBase }: InlineOptions) {
+export default function ConnectInline(
+        { bot, handlers, getLocale, dataBase, getMe }: InlineOptions
+) {
     const binded = handlers
         .map(({ regexp, onInline }) => {
-            return { regexp, callback: onInline.call(bot, dataBase) }
+            return { regexp, callback: onInline.call(bot, dataBase, getMe) }
         })
 
     const buttonCallbacks = handlers
         .filter(hasButtons)
         .map(({ buttons }) => {
             return buttons
-                .map(({ matcher, onClick }) => ({ matcher, onClick: onClick.call(bot, dataBase) }))
+                .map(({ matcher, onClick }) => ({
+                    matcher, onClick: onClick.call(bot, dataBase, getMe)
+                }))
         })
         .flat()
 
     const withFeedback = handlers
         .filter(acceptsFeedback)
         .map(({ matcher, onInlineResult }) => {
-            return { matcher, callback: onInlineResult.call(bot, dataBase) }
+            return { matcher, callback: onInlineResult.call(bot, dataBase, getMe) }
         })
 
     bot.on('inline_query', onInlineBase)
@@ -41,7 +46,7 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
     })
 
     async function onInlineBase(query: TelegramBot.InlineQuery) {
-        dataBase.updateUser(query.from)
+        dataBase.userPiece.updateUser(query.from)
         const pending = binded.map(({ regexp, callback }) => {
             const match = regexp.exec(query.query)
             return match ? callback(match, getLocale(query.from.language_code), query) : []
@@ -51,7 +56,7 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
     }
 
     function onInlineResultBase(result: TelegramBot.ChosenInlineResult) {
-        dataBase.updateUser(result.from)
+        dataBase.userPiece.updateUser(result.from)
         for (const { matcher, callback } of withFeedback) {
             if (matcher(result.result_id)) {
                 callback(result)
@@ -61,7 +66,7 @@ export default function ConnectInline({ bot, handlers, getLocale, dataBase }: In
     }
 
     async function onInlineCallbackQueryBase(query: InlineCallbackQuery) {
-        dataBase.updateUser(query.from)
+        dataBase.userPiece.updateUser(query.from)
         if (!query.data) {
             return
         }

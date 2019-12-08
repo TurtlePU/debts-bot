@@ -9,14 +9,17 @@ export type ConnectionOptions = {
     dataBase: DataBase
     commands: Command<any>[]
     getLocale(code?: string): Locale
+    getMe(): TelegramBot.User
 }
 
-export default function ConnectCommands({ bot, dataBase, commands, getLocale }: ConnectionOptions) {
+export default function ConnectCommands(
+        { bot, dataBase, commands, getLocale, getMe }: ConnectionOptions
+) {
     for (const { regexp, requirements, callback } of commands) {
-        const clb = callback.call(bot, dataBase)
+        const clb = callback.call(bot, dataBase, getMe)
         bot.onText(regexp, (msg, _match) => {
             if (msg.from) {
-                dataBase.updateUser(msg.from)
+                dataBase.userPiece.updateUser(msg.from)
             }
             if (requirements.from && !msg.from) {
                 bot.sendMessage(msg.chat.id, getLocale().anon)

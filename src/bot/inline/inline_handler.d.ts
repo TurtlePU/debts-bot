@@ -21,7 +21,9 @@ declare type BindedInlineCallback =
 
 declare type ButtonCallback = {
     matcher(data: string): boolean
-    onClick(this: TelegramBot, dataBase: DataBase): BindedButtonCallback
+    onClick(
+        this: TelegramBot, dataBase: DataBase, getMe: () => TelegramBot.User
+    ): BindedButtonCallback
 }
 
 declare type ButtonPiece = {
@@ -30,10 +32,14 @@ declare type ButtonPiece = {
 
 declare type FeedbackPiece = {
     matcher(id: string): boolean
-    onInlineResult(this: TelegramBot, dataBase: DataBase): BindedResultCallback
+    onInlineResult(
+        this: TelegramBot, dataBase: DataBase, getMe: () => TelegramBot.User
+    ): BindedResultCallback
 }
 
 declare type InlineHandler = {
     regexp: RegExp
-    onInline(this: TelegramBot, dataBase: DataBase): BindedInlineCallback
+    onInline(
+        this: TelegramBot, dataBase: DataBase, getMe: () => TelegramBot.User
+    ): BindedInlineCallback
 }

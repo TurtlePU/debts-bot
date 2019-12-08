@@ -1,6 +1,5 @@
-import { Locale } from './locale'
+import { Locale, FormattedDebt } from './locale'
 import { shieldMarkdown } from '@util'
-import { OutDebt } from '@db'
 
 const ru: Locale = {
     currency: '₽',
@@ -52,12 +51,12 @@ const ru: Locale = {
 
 export default ru
 
-function reduce(debts: OutDebt[], title: string): string | null {
+function reduce(debts: FormattedDebt[], title: string): string | null {
     if (debts.length == 0) {
         return null
     } else {
         return debts
-            .map(({ to_name, amount, currency }) => `${to_name}: ${Math.abs(amount)} ${currency}`)
+            .map(({ to, amount, currency }) => `${to}: ${Math.abs(amount)} ${currency}`)
             .reduce((acc, cur) => acc + '\n' + cur, title + '\n')
     }
 }

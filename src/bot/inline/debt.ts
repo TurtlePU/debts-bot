@@ -1,4 +1,5 @@
 import { InlineHandler, ButtonPiece, FeedbackPiece } from './inline_handler'
+import { getUserName } from '@util'
 
 const ACCEPT = 'offer.accept'
 const DECLINE = 'offer.decline'
@@ -31,7 +32,7 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
         }
     },
     matcher: id => !!regexp.exec(id),
-    onInlineResult(dataBase) {
+    onInlineResult({ offerPiece }) {
         return result => {
             if (!result.inline_message_id) {
                 throw new Error('Inline message id is missing')
@@ -42,7 +43,7 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             }
             const amount = +match[1]
             const currency = match[2]
-            dataBase.createOffer(result.inline_message_id, {
+            offerPiece.createOffer(result.inline_message_id, {
                 from_id: result.from.id,
                 amount, currency
             })
@@ -53,7 +54,7 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
             matcher: data => data == ACCEPT,
             onClick(dataBase) {
                 return async ({ inline_message_id, from }, locale) => {
-                    const offer = await dataBase.getOffer(inline_message_id)
+                    const offer = await dataBase.offerPiece.getOffer(inline_message_id)
                     if (!offer) {
                         this.editMessageText(locale.offer.expired, { inline_message_id })
                         return { text: locale.offer.expired }
@@ -61,9 +62,18 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
                         return { text: locale.offer.selfAccept }
                     } else {
                         offer.remove()
-                        dataBase.createDebt(offer.from_id, from.id, offer.amount, offer.currency)
+                        dataBase.debtPiece.saveDebt({
+                            from: offer.from_id,
+                            to: from.id,
+                            amount: offer.amount,
+                            currency: offer.currency
+                        })
+                        const offerFrom = await dataBase.userPiece.getUser(offer.from_id)
+                        if (!offerFrom) {
+                            throw new Error('Bot user not found')
+                        }
                         const text = locale.offer.saved(
-                            await dataBase.getNameById(offer.from_id), dataBase.getName(from),
+                            offerFrom.name, getUserName(from),
                             offer.amount, offer.currency)
                         this.editMessageText(text, { inline_message_id })
                         return { text }
@@ -73,10 +83,10 @@ const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
         },
         {
             matcher: data => data == DECLINE,
-            onClick(dataBase) {
+            onClick({ offerPiece }) {
                 return ({ inline_message_id, from }, locale) => {
-                    dataBase.deleteOffer(inline_message_id)
-                    const text = locale.offer.declined(dataBase.getName(from))
+                    offerPiece.deleteOffer(inline_message_id)
+                    const text = locale.offer.declined(getUserName(from))
                     this.editMessageText(text, { inline_message_id })
                     return { text }
                 }

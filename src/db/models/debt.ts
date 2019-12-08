@@ -1,55 +1,35 @@
 import Mongoose from 'mongoose'
-import { OutDebt } from '@db'
-import { getNameById } from './user'
 import { shieldMarkdown } from '@util'
 
-export async function getDebts(id: number): Promise<OutDebt[]> {
-    const result = await Promise.all([
-        DebtModel.find({ from: id }),
-        DebtModel.find({ to: id })
-    ])
-    const debts = [
-        ...result[0].map(({ to, amount, currency }) => ({ to, amount, currency })),
-        ...result[1].map(({ from, amount, currency }) => ({ to: from, amount: -amount, currency }))
-    ]
-    return Promise.all(debts.map(async ({ to, ...tail }) => ({
-        to_name: await getNameById(to), ...tail
-    })))
+export type DebtInfo = {
+    amount: number
+    currency: string
 }
 
-export async function createDebt(from_id: number, to_id: number, amnt: number, cncy: string) {
-    const [ from, to, amount ] =
-        from_id < to_id ?
-            [ from_id, to_id, +amnt ] :
-            [ to_id, from_id, -amnt ]
-    const currency = shieldMarkdown(cncy)
-    const older = await DebtModel.findOne({ from, to, currency })
-    if (!older) {
-        new DebtModel({ from, to, amount, currency }).save()
-    } else {
-        older.amount += amount
-        if (older.amount == 0) {
-            older.remove()
-        } else {
-            older.save()
-        }
-    }
+export type InnerDebt = DebtInfo & {
+    to: number
 }
 
-export async function clearDebts(first_id: number, second_id: number) {
-    const [ from, to ] =
-        first_id < second_id ? [ first_id, second_id ] : [ second_id, first_id ]
-    await DebtModel.deleteMany({ from, to })
-}
-
-type Debt = {
+export type Debt = {
     from: number
     to: number
     amount: number
     currency: string
 }
 
-type DebtDoc = Mongoose.Document & Debt
+export type DebtDoc = Mongoose.Document & Debt
+
+export type DebtPiece = {
+    saveDebt(debt: Debt): Promise<DebtDoc>
+    getDebts(id: number): Promise<InnerDebt[]>
+    clearDebts(first: number, second: number): Promise<void>
+}
+
+const debtPiece: DebtPiece = {
+    saveDebt, getDebts, clearDebts
+}
+
+export default debtPiece
 
 const DebtModel = Mongoose.model<DebtDoc>('Debt', new Mongoose.Schema({
     from: { type: Number, required: true },
@@ -57,3 +37,39 @@ const DebtModel = Mongoose.model<DebtDoc>('Debt', new Mongoose.Schema({
     amount: { type: Number, required: true },
     currency: { type: String, required: true }
 }))
+
+async function saveDebt(debt: Debt) {
+    const [ from, to, amount ] =
+        debt.from < debt.to ?
+            [ debt.from, debt.to, +debt.amount ] :
+            [ debt.to, debt.from, -debt.amount ]
+    const currency = shieldMarkdown(debt.currency)
+    const older = await DebtModel.findOne({ from, to, currency })
+    if (!older) {
+        return new DebtModel({ from, to, amount, currency }).save()
+    } else {
+        older.amount += amount
+        if (older.amount == 0) {
+            return older.remove()
+        } else {
+            return older.save()
+        }
+    }
+}
+
+async function getDebts(id: number) {
+    const result = await Promise.all([
+        DebtModel.find({ from: id }),
+        DebtModel.find({ to: id })
+    ])
+    return [
+        ...result[0].map(({ to, amount, currency }) => ({ to, amount, currency })),
+        ...result[1].map(({ from, amount, currency }) => ({ to: from, amount: -amount, currency }))
+    ]
+}
+
+async function clearDebts(first: number, second: number) {
+    const [ from, to ] =
+        first < second ? [ first, second ] : [ second, first ]
+    await DebtModel.deleteMany({ from, to })
+}

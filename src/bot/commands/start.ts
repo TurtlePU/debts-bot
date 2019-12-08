@@ -1,6 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api'
 
 import { command } from './helper'
+import { getUserName } from '@util'
 
 export default command(
     {
@@ -8,9 +9,9 @@ export default command(
     },
     {
         regexp: /\/start/u,
-        callback(dataBase) {
+        callback() {
             return ({ msg, locale }) =>
-                this.sendMessage(msg.chat.id, locale.hi(dataBase.getName(msg.from)))
+                this.sendMessage(msg.chat.id, locale.hi(getUserName(msg.from)))
         }
     }
 )

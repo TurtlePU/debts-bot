@@ -4,12 +4,17 @@ export type Offer = {
     from_id: number
     amount: number
     currency: string
-    created?: Date
 }
 
 export type OfferDoc = Mongoose.Document & Offer & {
     _id: string
     created: Date
+}
+
+export type OfferPiece = {
+    createOffer(id: string, offer: Offer): Promise<OfferDoc>
+    getOffer(id: string): PromiseLike<OfferDoc | null>
+    deleteOffer(id: string): PromiseLike<OfferDoc | null>
 }
 
 const OfferModel = Mongoose.model<OfferDoc>('Offer', new Mongoose.Schema({
@@ -20,15 +25,13 @@ const OfferModel = Mongoose.model<OfferDoc>('Offer', new Mongoose.Schema({
     created: { type: Date, expires: 3600, default: Date.now }
 }))
 
-export async function createOffer(_id: string, offer: Offer) {
-    const { from_id, amount, currency, created } = offer
-    await new OfferModel({ _id, from_id, amount, currency, created }).save()
+const offerPiece: OfferPiece = {
+    createOffer(_id, offer) {
+        const { from_id, amount, currency } = offer
+        return new OfferModel({ _id, from_id, amount, currency }).save()
+    },
+    getOffer: OfferModel.findById.bind(OfferModel),
+    deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
 }
 
-export async function getOffer(id: string): Promise<OfferDoc | null> {
-    return await OfferModel.findById(id)
-}
-
-export async function deleteOffer(id: string): Promise<Offer | null> {
-    return await OfferModel.findByIdAndRemove(id)
-}
+export default offerPiece
