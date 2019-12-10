@@ -18,6 +18,7 @@
     "typescript": "^3.7.3"
   },
   "_moduleAliases": {
+    "@": "build",
     "@bot": "build/bot/bot.js",
     "@locale": "build/locale/export.js",
     "@commands": "build/bot/commands/export.js",

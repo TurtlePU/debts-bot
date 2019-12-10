@@ -1,4 +1,4 @@
-import { ButtonCallback } from '../../inline_handler'
+import { ButtonCallback } from '@/bot/inline/inline_handler'
 
 import { getUserName } from '@util'
 
