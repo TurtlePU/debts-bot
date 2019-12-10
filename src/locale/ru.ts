@@ -1,4 +1,4 @@
-import { shieldMarkdown } from '#/util/string_utils'
+import { shieldMarkdown } from '#/util/StringUtils'
 
 const ru: Locale = {
     currency: '₽',

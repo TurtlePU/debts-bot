@@ -1,5 +1,5 @@
-import requestPiece from './OnInline'
 import resultPiece from './OnChosenResult'
+import requestPiece from './OnInline'
 
 import accept from './keyboard/accept'
 import decline from './keyboard/decline'

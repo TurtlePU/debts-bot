@@ -1,4 +1,4 @@
-import { ACCEPT, DECLINE, regexp } from './constants'
+import { ACCEPT, DECLINE, regexp } from './Constants'
 
 const handler: Inline.OnInline = {
     regexp,

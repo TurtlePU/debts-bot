@@ -1,6 +1,6 @@
-import { getUserName } from '#/util/string_utils'
+import { getUserName } from '#/util/StringUtils'
 
-import { DECLINE } from '../constants'
+import { DECLINE } from '../Constants'
 
 const button: Inline.OnClick = {
     key: DECLINE,

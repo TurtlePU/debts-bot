@@ -1,6 +1,6 @@
-import { getUserName } from '#/util/string_utils'
+import { getUserName } from '#/util/StringUtils'
 
-import { ACCEPT, CURRENCY } from '../constants'
+import { ACCEPT, CURRENCY } from '../Constants'
 
 const button: Inline.OnClick = {
     key: ACCEPT,

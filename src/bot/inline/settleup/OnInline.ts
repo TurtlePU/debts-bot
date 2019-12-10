@@ -1,4 +1,4 @@
-import { ARTICLE_ID, ACCEPT, DECLINE } from './constants'
+import { ARTICLE_ID, ACCEPT, DECLINE } from './Constants'
 
 const handler: Inline.OnInline = {
     regexp: /.*/u,

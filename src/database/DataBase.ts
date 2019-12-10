@@ -1,10 +1,10 @@
 import Mongoose from 'mongoose'
 
-import userPiece from './models/user'
-import debtPiece from './models/debt'
-import offerPiece from './models/offer'
+import userPiece from './models/UserModel'
+import debtPiece from './models/DebtModel'
+import offerPiece from './models/OfferModel'
 
-export default function DB(url: string): { db: DataBase, connect: () => Promise<void> } {
+export default function DataBase(url: string): { db: DataBase, connect: () => Promise<void> } {
     return {
         db: {
             userPiece,

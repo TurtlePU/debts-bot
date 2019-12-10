@@ -1,21 +1,20 @@
 import TelegramBot from 'node-telegram-bot-api'
 
-import getLocale from '#/locale/export'
+import getLocale from '#/locale/Locale'
 
-import ConnectCommands from './command_controller'
-import ConnectInline from './inline_controller'
-import UseMarkdown from './message_decorator'
+import ConnectCommands from './ConnectCommands'
+import ConnectInline from './ConnectInline'
+import UseMarkdown from './MessageDecorator'
 import { getMe, connect } from './PostInit'
 
-const commands = [
-    require('./commands/start').default,
-    require('./commands/debts').default
-]
+import debts from './commands/debts'
+import start from './commands/start'
 
-const handlers = [
-    require('./inline/debt/export').default,
-    require('./inline/settle_up/export').default
-]
+import debt from './inline/debt/export'
+import settleUp from './inline/settleup/export'
+
+const commands = [ debts, start ]
+const handlers = [ debt, settleUp ]
 
 export default function Bot(url: string, token: string, port: number, dataBase: DataBase) {
     const bot = new TelegramBot(token, { webHook: { port } })

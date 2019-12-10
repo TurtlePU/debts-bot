@@ -1,4 +1,4 @@
-import { regexp } from './constants'
+import { regexp } from './Constants'
 
 const feedbackPiece: Inline.OnChosenResult = {
     key: regexp,

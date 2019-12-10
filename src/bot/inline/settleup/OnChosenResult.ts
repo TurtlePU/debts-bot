@@ -1,4 +1,4 @@
-import { ARTICLE_ID, CURRENCY } from './constants'
+import { ARTICLE_ID, CURRENCY } from './Constants'
 
 const feedbackPiece: Inline.OnChosenResult = {
     key: ARTICLE_ID,
