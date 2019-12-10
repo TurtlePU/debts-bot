@@ -41,6 +41,9 @@
             {
                 "multiline": {
                     "delimiter": "none"
+                },
+                "singleline": {
+                    "delimiter": "comma"
                 }
             }
         ],

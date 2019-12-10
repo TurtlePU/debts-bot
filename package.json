@@ -6,16 +6,16 @@
   },
   "dependencies": {
     "module-alias": "^2.2.2",
-    "mongoose": "^5.7.9",
+    "mongoose": "^5.8.0",
     "node-telegram-bot-api": "^0.40.0"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.5.30",
+    "@types/mongoose": "^5.5.32",
     "@types/node-telegram-bot-api": "^0.31.1",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
-    "@typescript-eslint/parser": "^2.6.1",
-    "eslint": "^6.6.0",
-    "typescript": "^3.6.4"
+    "@typescript-eslint/eslint-plugin": "^2.11.0",
+    "@typescript-eslint/parser": "^2.11.0",
+    "eslint": "^6.7.2",
+    "typescript": "^3.7.3"
   },
   "_moduleAliases": {
     "@bot": "build/bot/bot.js",
