@@ -2,6 +2,6 @@ import { InlineHandler } from './inline_handler'
 export * from './inline_handler'
 
 import debt from './debt/export'
-import settleUp from './settle_up'
+import settleUp from './settle_up/export'
 
 export default <InlineHandler[]> [ debt, settleUp ]
