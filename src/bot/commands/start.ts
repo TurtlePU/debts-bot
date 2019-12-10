@@ -1,6 +1,5 @@
 import { getUserName } from '#/util/string_utils'
-
-import { command } from './helper'
+import { command } from '#/util/CommandBuilder'
 
 export default command(
     {
