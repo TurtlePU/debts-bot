@@ -1,10 +1,8 @@
-import TelegramBot from 'node-telegram-bot-api'
-
 import { command } from './helper'
 
 export default command(
     {
-        from: {} as TelegramBot.User
+        from: {} as import('node-telegram-bot-api').User
     },
     {
         regexp: /\/debts/u,

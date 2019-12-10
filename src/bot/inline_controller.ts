@@ -1,4 +1,4 @@
-import { isDefined, matches, isInlineKeyboardEvent } from '@/util/Predicates'
+import { isDefined, isInlineKeyboardEvent, matches } from '#/util/Predicates'
 
 export type InlineOptions = {
     bot: import('node-telegram-bot-api')

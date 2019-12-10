@@ -1,11 +1,10 @@
-import TelegramBot from 'node-telegram-bot-api'
+import { getUserName } from '#/util/string_utils'
 
 import { command } from './helper'
-import { getUserName } from '@/util/string_utils'
 
 export default command(
     {
-        from: {} as TelegramBot.User
+        from: {} as import('node-telegram-bot-api').User
     },
     {
         regexp: /\/start/u,

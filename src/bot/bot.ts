@@ -1,8 +1,9 @@
 import TelegramBot from 'node-telegram-bot-api'
 
-import commands from '@commands'
-import getLocale from '@locale'
-import handlers from '@inline'
+import getLocale from '#/locale/export'
+
+import commands from './commands/export'
+import handlers from './inline/export'
 
 import ConnectCommands from './command_controller'
 import ConnectInline from './inline_controller'

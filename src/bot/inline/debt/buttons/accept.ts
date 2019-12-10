@@ -1,4 +1,4 @@
-import { getUserName } from '@/util/string_utils'
+import { getUserName } from '#/util/string_utils'
 
 import { ACCEPT } from '../constants'
 

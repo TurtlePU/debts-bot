@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose'
 
-import { getUserName } from '@/util/string_utils'
+import { getUserName } from '#/util/string_utils'
 
 const UserModel = Mongoose.model<UserDoc>('User', new Mongoose.Schema({
     _id: { type: Number, required: true },

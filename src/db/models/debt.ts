@@ -1,5 +1,6 @@
 import Mongoose from 'mongoose'
-import { shieldMarkdown } from '@/util/string_utils'
+
+import { shieldMarkdown } from '#/util/string_utils'
 
 const debtPiece: DebtPiece = {
     saveDebt, getDebts, clearDebts

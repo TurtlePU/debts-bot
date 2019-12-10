@@ -2,8 +2,8 @@ import 'module-alias/register'
 
 import https from 'https'
 
-import Bot from '@bot'
-import DB from '@db'
+import Bot from '#/bot/bot'
+import DB from '#/db/export'
 
 const port = +(process.env.PORT || '8080')
 const url = process.env.URL || 'none'

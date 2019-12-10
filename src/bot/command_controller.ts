@@ -1,11 +1,9 @@
-import TelegramBot from 'node-telegram-bot-api'
-
 export type ConnectionOptions = {
-    bot: TelegramBot
+    bot: import('node-telegram-bot-api')
     dataBase: DataBase
     commands: Command<any>[]
     getLocale(code?: string): Locale
-    getMe(): TelegramBot.User
+    getMe(): import('node-telegram-bot-api').User
 }
 
 export default function ConnectCommands(
