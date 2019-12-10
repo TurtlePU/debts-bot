@@ -1,15 +1,13 @@
-import { InlineHandler, ButtonPiece, FeedbackPiece } from '../inline_handler'
-
-import inlineHandler from './handler'
-import feedbackPiece from './feedback'
+import requestPiece from './handler'
+import resultPiece from './feedback'
 
 import accept from './buttons/accept'
 import decline from './buttons/decline'
 
-const handler: InlineHandler & ButtonPiece & FeedbackPiece = {
-    ...inlineHandler,
-    ...feedbackPiece,
-    buttons: [ accept, decline ]
+const handler: Inline.Handler = {
+    requestPiece,
+    resultPiece,
+    keyboard: [ accept, decline ]
 }
 
 export default handler

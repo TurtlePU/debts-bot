@@ -1,29 +1,5 @@
 import Mongoose from 'mongoose'
-import { shieldMarkdown } from '@util'
-
-export type DebtInfo = {
-    amount: number
-    currency: string
-}
-
-export type InnerDebt = DebtInfo & {
-    to: number
-}
-
-export type Debt = {
-    from: number
-    to: number
-    amount: number
-    currency: string
-}
-
-export type DebtDoc = Mongoose.Document & Debt
-
-export type DebtPiece = {
-    saveDebt(debt: Debt): Promise<DebtDoc>
-    getDebts(id: number): Promise<InnerDebt[]>
-    clearDebts(first: number, second: number): Promise<void>
-}
+import { shieldMarkdown } from '@/util/string_utils'
 
 const debtPiece: DebtPiece = {
     saveDebt, getDebts, clearDebts

@@ -1,11 +1,9 @@
-import { ButtonCallback } from 'bot/inline/inline_handler'
-
-import { getUserName } from '@util'
+import { getUserName } from '@/util/string_utils'
 
 import { DECLINE } from '../constants'
 
-const button: ButtonCallback = {
-    matcher: data => data == DECLINE,
+const button: Inline.OnClick = {
+    key: DECLINE,
     onClick({ offerPiece }) {
         return ({ inline_message_id, from }, locale) => {
             offerPiece.deleteOffer(inline_message_id)

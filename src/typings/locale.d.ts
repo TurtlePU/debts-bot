@@ -1,5 +1,3 @@
-import { DebtInfo } from '@db'
-
 declare type FormattedDebt = DebtInfo & {
     to: string
 }

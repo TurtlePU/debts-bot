@@ -1,6 +1,3 @@
-import { Locale } from './locale'
-export * from './locale'
-
 import ru from './ru'
 
 const locales = new Map([ [ 'ru', ru ] ])

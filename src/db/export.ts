@@ -1,8 +1,5 @@
 import Mongoose from 'mongoose'
 
-import { DataBase } from './db'
-export * from './db'
-
 import userPiece from './models/user'
 import debtPiece from './models/debt'
 import offerPiece from './models/offer'

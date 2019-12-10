@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api'
 
 import { command } from './helper'
-import { getUserName } from '@util'
+import { getUserName } from '@/util/string_utils'
 
 export default command(
     {

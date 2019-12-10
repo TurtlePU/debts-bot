@@ -1,5 +1,3 @@
-import TelegramBot from 'node-telegram-bot-api'
-
 export function shieldMarkdown(str: string) {
     const control_symbols = [ '*', '_', '(', ')', '[', ']', '`', '\\' ]
     let result = str
@@ -9,7 +7,8 @@ export function shieldMarkdown(str: string) {
     return result
 }
 
-export function getUserName({ first_name, last_name, username }: TelegramBot.User) {
+export function getUserName({
+    first_name, last_name, username }: import('node-telegram-bot-api').User) {
     if (username) {
         return '@' + username
     } else if (last_name) {

@@ -1,5 +1,4 @@
-import { Locale, FormattedDebt } from './locale'
-import { shieldMarkdown } from '@util'
+import { shieldMarkdown } from '@/util/string_utils'
 
 const ru: Locale = {
     currency: '₽',

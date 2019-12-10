@@ -1,8 +1,6 @@
-import { InlineHandler } from '../inline_handler'
-
 import { ARTICLE_ID, ACCEPT, DECLINE } from './constants'
 
-const handler: InlineHandler = {
+const handler: Inline.OnInline = {
     regexp: /.*/u,
     onInline() {
         return (_, locale) => {

@@ -1,11 +1,9 @@
-import { ButtonCallback } from '@/bot/inline/inline_handler'
-
-import { getUserName } from '@util'
+import { getUserName } from '@/util/string_utils'
 
 import { ACCEPT } from '../constants'
 
-const button: ButtonCallback = {
-    matcher: data => data == ACCEPT,
+const button: Inline.OnClick = {
+    key: ACCEPT,
     onClick(dataBase) {
         return async ({ inline_message_id, from }, locale) => {
             const offer = await dataBase.offerPiece.getOffer(inline_message_id)

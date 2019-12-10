@@ -1,9 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api'
 
-import { Command } from '@commands'
-import { DataBase } from '@db'
-import { Locale } from '@locale'
-
 export type ConnectionOptions = {
     bot: TelegramBot
     dataBase: DataBase

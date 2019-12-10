@@ -1,7 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api'
 
 import { command } from './helper'
-import { DataBase, InnerDebt, UserPiece } from '@db'
 
 export default command(
     {

@@ -1,10 +1,8 @@
-import { FeedbackPiece } from '../inline_handler'
-
 import { regexp } from './constants'
 
-const feedbackPiece: FeedbackPiece = {
-    matcher: id => !!regexp.exec(id),
-    onInlineResult({ offerPiece }) {
+const feedbackPiece: Inline.OnChosenResult = {
+    key: regexp,
+    onChosenResult({ offerPiece }) {
         return result => {
             if (!result.inline_message_id) {
                 throw new Error('Inline message id is missing')

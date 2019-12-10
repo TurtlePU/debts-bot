@@ -1,19 +1,6 @@
 import Mongoose from 'mongoose'
-import TelegramBot from 'node-telegram-bot-api'
 
-import { getUserName } from '@util'
-
-type User = {
-    _id: number
-    name: string
-}
-
-export type UserDoc = Mongoose.Document & User
-
-export type UserPiece = {
-    updateUser(user: TelegramBot.User): Promise<UserDoc>
-    getUser(id: number): PromiseLike<UserDoc | null>
-}
+import { getUserName } from '@/util/string_utils'
 
 const UserModel = Mongoose.model<UserDoc>('User', new Mongoose.Schema({
     _id: { type: Number, required: true },
@@ -27,7 +14,7 @@ const userPiece: UserPiece = {
 
 export default userPiece
 
-async function updateUser(user: TelegramBot.User) {
+async function updateUser(user: import('node-telegram-bot-api').User) {
     const userDoc = await UserModel.findById(user.id)
     if (userDoc) {
         userDoc.name = getUserName(user)
