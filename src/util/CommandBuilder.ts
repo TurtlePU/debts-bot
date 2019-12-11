@@ -1,7 +1,7 @@
-export function simple(commandProto: CommandProto): Command {
+export function simple(commandProto: Command.Proto): Command {
     return command({}, commandProto)
 }
 
-export function command<MType>(requirements: MType, cmnd: CommandProto<MType>): Command<MType> {
+export function command<MType>(requirements: MType, cmnd: Command.Proto<MType>): Command<MType> {
     return { ...cmnd, requirements }
 }

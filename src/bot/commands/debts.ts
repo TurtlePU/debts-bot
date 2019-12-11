@@ -22,8 +22,8 @@ function getFormattedDebts({ debtPiece, userPiece }: DataBase) {
     }
 }
 
-function fromInnerToFormatted(userPiece: UserPiece) {
-    return async ({ to, ...info }: InnerDebt) => {
+function fromInnerToFormatted(userPiece: DataBase.User.Piece) {
+    return async ({ to, ...info }: DataBase.Debt.Value) => {
         const toUser = await userPiece.getUser(to)
         if (!toUser) {
             throw new Error('Name of bot user not found in database')

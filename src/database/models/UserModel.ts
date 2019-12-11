@@ -2,12 +2,12 @@ import Mongoose from 'mongoose'
 
 import { getUserName } from '#/util/StringUtils'
 
-const UserModel = Mongoose.model<UserDoc>('User', new Mongoose.Schema({
+const UserModel = Mongoose.model<DataBase.User.Doc>('User', new Mongoose.Schema({
     _id: { type: Number, required: true },
     name: { type: String, required: true }
 }))
 
-const userPiece: UserPiece = {
+const userPiece: DataBase.User.Piece = {
     updateUser,
     getUser: UserModel.findById.bind(UserModel)
 }

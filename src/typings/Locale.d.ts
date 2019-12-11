@@ -1,5 +1,7 @@
-declare type FormattedDebt = DebtInfo & {
-    to: string
+declare namespace Locale {
+    type Debt = DataBase.Debt.Info & {
+        to: string
+    }    
 }
 
 declare type Locale = {
@@ -10,7 +12,7 @@ declare type Locale = {
         reject: string
     }
     hi(name: string): string
-    debts(debts: FormattedDebt[]): string
+    debts(debts: Locale.Debt[]): string
     offerArticle(amount: number, currency: string): {
         title: string
         text: string

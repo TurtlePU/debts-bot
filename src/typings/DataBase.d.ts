@@ -1,5 +1,5 @@
 declare type DataBase = {
-    userPiece: UserPiece
-    offerPiece: OfferPiece
-    debtPiece: DebtPiece
+    userPiece: DataBase.User.Piece
+    offerPiece: DataBase.Offer.Piece
+    debtPiece: DataBase.Debt.Piece
 }

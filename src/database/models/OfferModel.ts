@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose'
 
-const OfferModel = Mongoose.model<OfferDoc>('Offer', new Mongoose.Schema({
+const OfferModel = Mongoose.model<DataBase.Offer.Doc>('Offer', new Mongoose.Schema({
     _id: { type: String, required: true },
     from_id: { type: Number, required: true },
     amount: { type: Number, required: true },
@@ -8,7 +8,7 @@ const OfferModel = Mongoose.model<OfferDoc>('Offer', new Mongoose.Schema({
     created: { type: Date, expires: 3600, default: Date.now }
 }))
 
-const offerPiece: OfferPiece = {
+const offerPiece: DataBase.Offer.Piece = {
     createOffer(_id, offer) {
         const { from_id, amount, currency } = offer
         return new OfferModel({ _id, from_id, amount, currency }).save()
