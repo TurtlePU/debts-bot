@@ -8,11 +8,11 @@ import settleUpCommand from './commands/settleup'
 import debtChoice from './choices/debt'
 import settleUpChoice from './choices/settleup'
 
-export default function(enhancer: Enhancer, database: DataBase) {
-    ConnectButtons(enhancer, database)
+export default function(enhancer: Enhancer) {
+    ConnectButtons(enhancer)
     enhancer
         .inlineCommand(debtCommand)
         .inlineCommand(settleUpCommand)
-        .inlineChoiceConsumer(debtChoice(database.offerPiece))
-        .inlineChoiceConsumer(settleUpChoice(database.offerPiece))
+        .inlineChoiceConsumer(debtChoice)
+        .inlineChoiceConsumer(settleUpChoice)
 }
