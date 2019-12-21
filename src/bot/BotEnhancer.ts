@@ -17,10 +17,10 @@ export function connectBot(bot: TelegramBot, url: string, token: string) {
 }
 
 export function enhanceBot(bot: TelegramBot) {
-    const enhancer = new Enhancer(bot)
+    new Enhancer(bot)
         .command(debts)
         .command(start)
         .enhance(alwaysUseMarkdown)
         .enhance(alwaysUpdateUser)
-    ConnectInline(enhancer)
+        .inject(ConnectInline)
 }

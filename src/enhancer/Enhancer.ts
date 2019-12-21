@@ -24,6 +24,11 @@ export default class Enhancer {
         return this
     }
 
+    public inject(injector: (this: Enhancer) => any): this {
+        injector.call(this)
+        return this
+    }
+
     public command({ key, callback }: Enhancer.Command): this {
         this.bot.onText(key, (msg, match) => {
             if (match == null) {
