@@ -1,7 +1,10 @@
 import userPiece from '#/database/models/UserModel'
 import debtPiece from '#/database/models/DebtModel'
 import getLocale from '#/locale/Locale'
-import { noUserResponse } from '#/util/FallbackAnswers'
+
+import {
+    noUserResponse
+} from '#/util/FallbackAnswers'
 
 const command: Enhancer.Command = {
     key: /\/debts/u,

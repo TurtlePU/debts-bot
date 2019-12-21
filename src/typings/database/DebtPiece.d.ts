@@ -1,20 +1,14 @@
-declare namespace DataBase {
-    type Debt = Debt.Value & {
-        from: number
-    }
-    namespace Debt {
-        type Info = {
-            amount: number
-            currency: string
-        }
-        type Value = Info & {
-            to: number
-        }
-        type Doc = import('mongoose').Document & Debt
-        type Piece = {
-            saveDebt(debt: Debt): Promise<Doc>
-            getDebts(id: number): Promise<Value[]>
-            clearDebts(first: number, second: number): Promise<void>
-        }
-    }
+declare type DebtInfo = {
+    amount: number
+    currency: string
+}
+declare type InnerDebt = DebtInfo & { to: number }
+declare type Debt = InnerDebt & { from: number }
+
+declare type DebtDoc = import('mongoose').Document & Debt
+
+declare type DebtPiece = {
+    saveDebt(debt: Debt): Promise<DebtDoc>
+    getDebts(id: number): Promise<InnerDebt[]>
+    clearDebts(first: number, second: number): Promise<void>
 }

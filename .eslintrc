@@ -102,6 +102,9 @@
         "no-multi-spaces": [
             "error",
             {
+                "exceptions": {
+                    "ImportDeclaration": true
+                },
                 "ignoreEOLComments": true
             }
         ],

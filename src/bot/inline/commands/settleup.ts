@@ -1,6 +1,9 @@
 import getLocale from '#/locale/Locale'
+
 import {
-    inline_settleup_article_id, inline_settleup_accept, inline_settleup_decline
+    inline_settleup_article_id,
+    inline_settleup_accept,
+    inline_settleup_decline
 } from '#/bot/Constants'
 
 const command: Enhancer.Inline.RegExpCommand = {

@@ -1,12 +1,16 @@
 import TelegramBot from 'node-telegram-bot-api'
 
-import { alwaysUseMarkdown, alwaysUpdateUser } from './Enhancers'
+import Enhancer from '#/enhancer/Enhancer'
 
 import debts from './commands/debts'
 import start from './commands/start'
 
-import Enhancer from '#/enhancer/Enhancer'
 import ConnectInline from './inline/ConnectInline'
+
+import {
+    alwaysUpdateUser,
+    alwaysUseMarkdown
+} from './Enhancers'
 
 export function makeBot(token: string, port: number) {
     return new TelegramBot(token, { webHook: { port } })

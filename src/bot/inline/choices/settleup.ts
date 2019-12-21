@@ -1,5 +1,9 @@
-import { inline_settleup_article_id, inline_settleup_currency } from '#/bot/Constants'
 import offerPiece from '#/database/models/OfferModel'
+
+import {
+    inline_settleup_article_id,
+    inline_settleup_currency
+} from '#/bot/Constants'
 
 const consumer: Enhancer.Inline.StrictChoiceConsumer = {
     key: inline_settleup_article_id,

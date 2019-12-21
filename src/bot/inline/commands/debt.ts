@@ -1,5 +1,10 @@
 import getLocale from '#/locale/Locale'
-import { inline_debt_regexp, inline_debt_accept, inline_debt_decline } from '#/bot/Constants'
+
+import {
+    inline_debt_accept,
+    inline_debt_decline,
+    inline_debt_regexp
+} from '#/bot/Constants'
 
 const parser: Enhancer.Inline.Command = {
     key: inline_debt_regexp,

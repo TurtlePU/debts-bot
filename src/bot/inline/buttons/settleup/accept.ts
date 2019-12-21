@@ -1,9 +1,16 @@
-import { inline_settleup_accept, inline_settleup_currency } from '#/bot/Constants'
-import debtPiece from '#/database/models/DebtModel'
+import debtPiece  from '#/database/models/DebtModel'
 import offerPiece from '#/database/models/OfferModel'
-import userPiece from '#/database/models/UserModel'
-import getLocale from '#/locale/Locale'
-import { getUserName } from '#/util/StringUtils'
+import userPiece  from '#/database/models/UserModel'
+import getLocale  from '#/locale/Locale'
+
+import {
+    inline_settleup_accept,
+    inline_settleup_currency
+} from '#/bot/Constants'
+
+import {
+    getUserName
+} from '#/util/StringUtils'
 
 const onClick: Enhancer.Inline.OnClick = {
     key: inline_settleup_accept,

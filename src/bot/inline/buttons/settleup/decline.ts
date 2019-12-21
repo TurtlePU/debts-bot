@@ -1,7 +1,13 @@
-import { inline_settleup_decline } from '#/bot/Constants'
 import offerPiece from '#/database/models/OfferModel'
-import getLocale from '#/locale/Locale'
-import { getUserName } from '#/util/StringUtils'
+import getLocale  from '#/locale/Locale'
+
+import {
+    inline_settleup_decline
+} from '#/bot/Constants'
+
+import {
+    getUserName
+} from '#/util/StringUtils'
 
 const onClick: Enhancer.Inline.OnClick = {
     key: inline_settleup_decline,

@@ -1,5 +1,8 @@
-import { inline_debt_regexp } from '#/bot/Constants'
 import offerPiece from '#/database/models/OfferModel'
+
+import {
+    inline_debt_regexp
+} from '#/bot/Constants'
 
 const consumer: Enhancer.Inline.ChoiceConsumer = {
     key: inline_debt_regexp,

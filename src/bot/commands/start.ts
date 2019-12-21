@@ -1,6 +1,12 @@
-import { noUserResponse } from '#/util/FallbackAnswers'
 import getLocale from '#/locale/Locale'
-import { getUserName } from '#/util/StringUtils'
+
+import {
+    noUserResponse
+} from '#/util/FallbackAnswers'
+
+import {
+    getUserName
+} from '#/util/StringUtils'
 
 const command: Enhancer.Command = {
     key: /\/start/u,

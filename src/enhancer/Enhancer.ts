@@ -1,4 +1,9 @@
-import { matches, isClickEvent, isSimpleClick, isStrict } from './Predicates'
+import {
+    matches,
+    isClickEvent,
+    isSimpleClick,
+    isStrict
+} from './Predicates'
 
 export default class Enhancer {
     public readonly bot: Enhancer.TelegramBot
