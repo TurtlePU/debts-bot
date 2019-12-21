@@ -10,14 +10,14 @@ const ru: Locale = {
         reject: 'Не 👎'
     },
     hi: name =>
-        `Привет, ${name}!\n` +
+        `Привет, ${shieldMarkdown(name)}!\n` +
         '_i_. Напиши /debts, чтобы посмотреть список долгов и расходов.\n' +
         '_ii_. Напиши мне в беседе с другим человеком количество денег, и я оформлю новый долг.',
     debts: debts => {
         const deb = reduce(debts.filter(({ amount }) => amount > 0), 'Вы должны:')
         const owe = reduce(debts.filter(({ amount }) => amount < 0), 'Вам должны:')
         if (!deb || !owe) {
-            return deb || owe || 'Долгов нет!'
+            return deb ?? owe ?? 'Долгов нет!'
         } else {
             return deb + '\n\n' + owe
         }
@@ -32,7 +32,7 @@ const ru: Locale = {
     offer: {
         expired: 'Простите, но время действия предложения истекло.',
         declined(by) {
-            return `Предложение отклонено ${by}`
+            return `Предложение отклонено ${shieldMarkdown(by)}`
         },
         selfAccept: 'Нельзя принять своё же предложение!',
         saved(from_name, to_name, amnt, currency) {
@@ -40,21 +40,23 @@ const ru: Locale = {
                 amnt > 0 ?
                     [ from_name, to_name, amnt ] :
                     [ to_name, from_name, -amnt ]
-            return `${from} получил ${amount}${currency} от ${to}.`
+            const [ shFrom, shCur, shTo ] = [ from, currency, to ].map(shieldMarkdown)
+            return `${shFrom} получил ${amount}${shCur} от ${shTo}.`
         }
     },
     settleUpArticle: {
         title: 'Обнулить долги',
         text: 'Обнулим долги?'
     },
-    settleUp: (first, second) => `Долги между ${first} и ${second} обнулены.`
+    settleUp: (first, second) =>
+        `Долги между ${shieldMarkdown(first)} и ${shieldMarkdown(second)} обнулены.`
 }
 
 export default ru
 
-function reduce(debts: Locale.Debt[], title: string): string | null {
+function reduce(debts: FormattedDebt[], title: string): string | undefined {
     if (debts.length == 0) {
-        return null
+        return undefined
     } else {
         return debts
             .map(({ to, amount, currency }) => `${to}: ${Math.abs(amount)} ${currency}`)
