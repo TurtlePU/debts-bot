@@ -1,6 +1,7 @@
-import { noUserResponse } from '#/util/FallbackAnswers'
+import userPiece from '#/database/models/UserModel'
+import debtPiece from '#/database/models/DebtModel'
 import getLocale from '#/locale/Locale'
-import dataBase from '#/database/DataBase'
+import { noUserResponse } from '#/util/FallbackAnswers'
 
 const command: Enhancer.Command = {
     key: /\/debts/u,
@@ -17,7 +18,7 @@ const command: Enhancer.Command = {
 export default command
 
 async function formatter({ to, ...info }: InnerDebt) {
-    const toUser = await dataBase.userPiece.getUser(to)
+    const toUser = await userPiece.getUser(to)
     if (!toUser) {
         throw new Error('Name of bot user not found in database')
     }
@@ -27,6 +28,6 @@ async function formatter({ to, ...info }: InnerDebt) {
 }
 
 async function getFormattedDebts(id: number) {
-    const debts = await dataBase.debtPiece.getDebts(id)
+    const debts = await debtPiece.getDebts(id)
     return Promise.all(debts.map(formatter))
 }

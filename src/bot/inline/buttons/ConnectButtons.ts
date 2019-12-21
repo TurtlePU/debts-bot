@@ -1,4 +1,4 @@
-import Enhancer from '#/bot-kit/Enhancer'
+import Enhancer from '#/enhancer/Enhancer'
 
 import debtAccept from './debt/accept'
 import debtDecline from './debt/decline'

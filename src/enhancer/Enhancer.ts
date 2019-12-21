@@ -69,7 +69,7 @@ export default class Enhancer {
                 .filter(({ key }) => key == query.query)
                 .map(({ callback }) => callback.call(this.bot, query))
         )).flat()
-        const resultTemp: MaybePromise<Enhancer.Inline.Result[]>[] = []
+        const resultTemp: Enhancer.MaybePromise<Enhancer.Inline.Result[]>[] = []
         for (const { key, callback } of this.inlineRegExpCommands) {
             const exec = key.exec(query.query)
             if (exec) {

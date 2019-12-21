@@ -1,5 +1,5 @@
 import { inline_debt_regexp } from '#/bot/Constants'
-import dataBase from '#/database/DataBase'
+import offerPiece from '#/database/models/OfferModel'
 
 const consumer: Enhancer.Inline.ChoiceConsumer = {
     key: inline_debt_regexp,
@@ -9,7 +9,7 @@ const consumer: Enhancer.Inline.ChoiceConsumer = {
         }
         const amount = +match[1]
         const currency = match[2]
-        dataBase.offerPiece.createOffer(result.inline_message_id, {
+        offerPiece.createOffer(result.inline_message_id, {
             from_id: result.from.id,
             amount, currency
         })

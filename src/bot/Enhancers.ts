@@ -1,4 +1,4 @@
-import dataBase from '#/database/DataBase'
+import userPiece from '#/database/models/UserModel'
 
 export function alwaysUseMarkdown(this: Enhancer.TelegramBot) {
     const oldSendMessage = this.sendMessage.bind(this)
@@ -7,13 +7,13 @@ export function alwaysUseMarkdown(this: Enhancer.TelegramBot) {
 }
 
 function updateUser({ from }: { from: import('node-telegram-bot-api').User }) {
-    dataBase.userPiece.updateUser(from)
+    userPiece.updateUser(from)
 }
 
 export function alwaysUpdateUser(this: Enhancer.TelegramBot) {
     this.on('message', ({ from }) => {
         if (from) {
-            dataBase.userPiece.updateUser(from)
+            userPiece.updateUser(from)
         }
     })
     this.on('inline_query', updateUser)

@@ -1,13 +1,15 @@
 import { inline_debt_accept } from '#/bot/Constants'
+import debtPiece from '#/database/models/DebtModel'
+import offerPiece from '#/database/models/OfferModel'
+import userPiece from '#/database/models/UserModel'
 import getLocale from '#/locale/Locale'
 import { getUserName } from '#/util/StringUtils'
-import dataBase from '#/database/DataBase'
 
 const onClick: Enhancer.Inline.OnClick = {
     key: inline_debt_accept,
     async callback({ inline_message_id, from }) {
         const locale = getLocale(from.language_code)
-        const offer = await dataBase.offerPiece.getOffer(inline_message_id)
+        const offer = await offerPiece.getOffer(inline_message_id)
         if (!offer) {
             this.editMessageText(locale.offer.expired, { inline_message_id })
             return { text: locale.offer.expired }
@@ -15,13 +17,13 @@ const onClick: Enhancer.Inline.OnClick = {
             return { text: locale.offer.selfAccept }
         } else {
             offer.remove()
-            dataBase.debtPiece.saveDebt({
+            debtPiece.saveDebt({
                 from: offer.from_id,
                 to: from.id,
                 amount: offer.amount,
                 currency: offer.currency
             })
-            const offerFrom = await dataBase.userPiece.getUser(offer.from_id)
+            const offerFrom = await userPiece.getUser(offer.from_id)
             if (!offerFrom) {
                 throw new Error('Bot user not found')
             }
