@@ -19,20 +19,22 @@ const onClick: Enhancer.Inline.OnClick = {
     callback: acceptOffer(isDebtOffer, getText, act)
 }
 
-function isDebtOffer(offer: DataBase.Offer.Doc): offer is DataBase.Offer.Doc & DataBase.DebtOffer {
+function isDebtOffer(
+        offer: DataBase.Offer.Document
+): offer is DataBase.Offer.Document & DataBase.Offer.DebtType {
     return offer.type == 'debt'
 }
 
 
 function getText(
-        locale: Locale, offer: DataBase.DebtOffer, offerFrom: DataBase.User, from: Enhancer.User) {
+        locale: Locale, offer: DataBase.Offer.DebtType, from: DataBase.User, to: Enhancer.User) {
     return locale.offer.saved(
-        offerFrom.name, getUserName(from),
+        from.name, getUserName(to),
         offer.debt.amount, offer.debt.currency
     )
 }
 
-function act(offer: DataBase.DebtOffer, from: Enhancer.User) {
+function act(offer: DataBase.Offer.DebtType, from: Enhancer.User) {
     return debtPiece.saveDebt({
         amount: offer.debt.amount,
         currency: offer.debt.currency,

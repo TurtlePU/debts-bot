@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose'
 
-const OfferModel = Mongoose.model<DataBase.Offer.Doc>('Offer', new Mongoose.Schema({
+const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose.Schema({
     _id: String,
     from_id: Number,
     type: String,
@@ -9,7 +9,7 @@ const OfferModel = Mongoose.model<DataBase.Offer.Doc>('Offer', new Mongoose.Sche
             amount: Number,
             currency: Number
         },
-        required(this: DataBase.Offer) {
+        required(this: DataBase.Offer.InDataBase) {
             return this.type == 'debt'
         }
     },

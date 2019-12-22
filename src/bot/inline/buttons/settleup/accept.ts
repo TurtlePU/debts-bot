@@ -20,7 +20,8 @@ const onClick: Enhancer.Inline.OnClick = {
 }
 
 function isSettleUpOffer(
-        offer: DataBase.Offer.Doc): offer is DataBase.Offer.Doc & DataBase.OfferBase<'settleup'> {
+        offer: DataBase.Offer.Document
+): offer is DataBase.Offer.Document & DataBase.Offer.Base<'settleup'> {
     return offer.type == 'settleup'
 }
 

@@ -1,26 +1,26 @@
 declare namespace DataBase {
-    type OfferBase<T> = {
-        from_id: number
-        type: T
-    }
-    type DebtPart = {
-        debt: {
-            amount: number
-            currency: string
-        }
-    }
-    type DebtOffer = OfferBase<'debt'> & DebtPart
-    type Offer = DebtOffer | OfferBase<'settleup'>
-    type SavedOffer = OfferBase<'debt' | 'settleup'> & Partial<DebtPart>
+    type Offer = Offer.DebtType | Offer.Base<'settleup'>
     namespace Offer {
-        type Doc = import('mongoose').Document & SavedOffer & {
+        type Base<T> = {
+            from_id: number
+            type: T
+        }
+        type DebtPart = {
+            debt: {
+                amount: number
+                currency: string
+            }
+        }
+        type DebtType = Base<'debt'> & DebtPart
+        type InDataBase = Base<'debt' | 'settleup'> & Partial<DebtPart>
+        type Document = DataBase.Document & InDataBase & {
             _id: string
             created: Date
         }
         type Piece = {
-            createOffer(id: string, offer: Offer): Promise<Doc>
-            getOffer(id: string): PromiseLike<Doc | null>
-            deleteOffer(id: string): PromiseLike<Doc | null>
+            createOffer(id: string, offer: Offer): Promise<Document>
+            getOffer(id: string): PromiseLike<Document | null>
+            deleteOffer(id: string): PromiseLike<Document | null>
         }
     }
 }

@@ -37,8 +37,8 @@ export function declineOffer(
  * @param act should execute offered action
  * @returns built callback
  */
-export function acceptOffer<T extends DataBase.Offer.Doc>(
-        checker: (offer: DataBase.Offer.Doc) => offer is T,
+export function acceptOffer<T extends DataBase.Offer.Document>(
+        checker: (offer: DataBase.Offer.Document) => offer is T,
         getText: (locale: Locale, offer: T, from: DataBase.User, to: Enhancer.User) => string,
         act: (offer: T, to: Enhancer.User) => any
 ): Enhancer.Inline.OnClick['callback'] {
