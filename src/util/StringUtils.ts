@@ -18,11 +18,3 @@ export function getUserName(
         return first_name
     }
 }
-
-export function matches(matcher: string | RegExp, value: string) {
-    if (typeof matcher == 'string') {
-        return matcher == value
-    } else {
-        return matcher.test(value)
-    }
-}
