@@ -14,6 +14,9 @@ import {
     getUserName
 } from '#/util/StringUtils'
 
+/**
+ * Accepts debt offer on click
+ */
 const onClick: Enhancer.Inline.OnClick = {
     key: inline_debt_accept,
     callback: acceptOffer(isDebtOffer, getText, act)

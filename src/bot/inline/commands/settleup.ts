@@ -6,6 +6,9 @@ import {
     inline_settleup_decline
 } from '#/bot/Constants'
 
+/**
+ * Prepares settle-up offer inline article
+ */
 const command: Enhancer.Inline.RegExpCommand = {
     key: /.*/u,
     callback(query) {

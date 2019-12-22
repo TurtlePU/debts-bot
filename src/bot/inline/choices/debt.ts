@@ -6,6 +6,9 @@ import {
     inline_debt_regexp
 } from '#/bot/Constants'
 
+/**
+ * Saves chosen debt offer to Offer model
+ */
 const consumer: Enhancer.Inline.ChoiceConsumer = {
     key: inline_debt_regexp,
     callback(result, match) {

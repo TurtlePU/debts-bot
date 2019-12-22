@@ -6,6 +6,9 @@ import {
     inline_debt_regexp
 } from '#/bot/Constants'
 
+/**
+ * Prepares debt offer inline articles (2 options)
+ */
 const parser: Enhancer.Inline.Command = {
     key: inline_debt_regexp,
     callback(query, match) {

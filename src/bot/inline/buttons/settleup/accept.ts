@@ -14,6 +14,9 @@ import {
     getUserName
 } from '#/util/StringUtils'
 
+/**
+ * Accepts settle-up offer on click
+ */
 const onClick: Enhancer.Inline.OnClick = {
     key: inline_settleup_accept,
     callback: acceptOffer(isSettleUpOffer, getText, act)

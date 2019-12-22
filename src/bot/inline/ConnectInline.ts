@@ -8,6 +8,9 @@ import debtCommand from './commands/debt'
 import settleUpChoice  from './choices/settleup'
 import settleUpCommand from './commands/settleup'
 
+/**
+ * Connects bot enhancements related to inline mode
+ */
 export default function(this: Enhancer) {
     this.inlineCommand(debtCommand)
         .inlineCommand(settleUpCommand)

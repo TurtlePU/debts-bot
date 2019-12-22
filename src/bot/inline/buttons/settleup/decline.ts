@@ -6,6 +6,9 @@ import {
     declineOffer
 } from '#/util/FallbackAnswers'
 
+/**
+ * Declines settle-up offer on click
+ */
 const onClick: Enhancer.Inline.OnClick = {
     key: inline_settleup_decline,
     callback: declineOffer

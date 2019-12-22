@@ -6,6 +6,9 @@ import {
     noUserResponse
 } from '#/util/FallbackAnswers'
 
+/**
+ * Responds with list of debts in which user is involved
+ */
 const command: Enhancer.Command = {
     key: /\/debts/u,
     async callback(msg) {

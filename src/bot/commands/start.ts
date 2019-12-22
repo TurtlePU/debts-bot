@@ -8,6 +8,9 @@ import {
     getUserName
 } from '#/util/StringUtils'
 
+/**
+ * Shows basic help message on /start command
+ */
 const command: Enhancer.Command = {
     key: /\/start/u,
     callback(msg) {

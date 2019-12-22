@@ -6,6 +6,9 @@ import {
     inline_settleup_article_id
 } from '#/bot/Constants'
 
+/**
+ * Saves chosen settle-up offer to Offer model
+ */
 const consumer: Enhancer.Inline.StrictChoiceConsumer = {
     key: inline_settleup_article_id,
     callback({ inline_message_id, from }) {
