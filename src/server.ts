@@ -13,7 +13,6 @@ import {
 } from '#/database/ConnectToDataBase'
 
 (async function() {
-    // eslint-disable-next-line @typescript-eslint/no-extra-parens
     const port = +(process.env.PORT ?? '8080')
     const url = process.env.URL ?? 'none'
     const token = process.env.TOKEN ?? 'none'
