@@ -1,5 +1,6 @@
 declare namespace Enhancer {
     type TelegramBot = import('node-telegram-bot-api')
+    type User = import('node-telegram-bot-api').User
     type Message = import('node-telegram-bot-api').Message
     type CallbackQuery = import('node-telegram-bot-api').CallbackQuery
     type ClickResult = Partial<import('node-telegram-bot-api').AnswerCallbackQueryOptions>
