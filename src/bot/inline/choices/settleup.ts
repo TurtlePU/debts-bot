@@ -1,5 +1,7 @@
 import offerPiece from '#/database/models/OfferModel'
 
+import log from '#/util/Log'
+
 import {
     inline_settleup_article_id
 } from '#/bot/Constants'
@@ -13,7 +15,7 @@ const consumer: Enhancer.Inline.StrictChoiceConsumer = {
         offerPiece.createOffer(inline_message_id, {
             from_id: from.id,
             type: 'settleup'
-        })
+        }).catch(log)
     }
 }
 

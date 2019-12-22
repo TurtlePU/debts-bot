@@ -1,5 +1,7 @@
 import debtPiece  from '#/database/models/DebtModel'
 
+import log from '#/util/Log'
+
 import {
     inline_settleup_accept
 } from '#/bot/Constants'
@@ -27,7 +29,7 @@ function getText(locale: Locale, _: any, offerFrom: DataBase.User, from: Enhance
 }
 
 function act(offer: DataBase.Offer, from: Enhancer.User) {
-    return debtPiece.clearDebts(offer.from_id, from.id)
+    return debtPiece.clearDebts(offer.from_id, from.id).catch(log)
 }
 
 export default onClick

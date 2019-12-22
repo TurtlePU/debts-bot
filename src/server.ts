@@ -2,6 +2,8 @@ import 'module-alias/register'
 
 import https from 'https'
 
+import log from '#/util/Log'
+
 import {
     connectBot,
     enhanceBot,
@@ -31,4 +33,4 @@ import {
         connectBot(bot, url, token)
     ])
     return enhanceBot(bot)
-})()
+})().catch(log)

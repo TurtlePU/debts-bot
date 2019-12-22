@@ -15,7 +15,7 @@ const parser: Enhancer.Inline.Command = {
         return [ amount, -amount ].map(amnt => {
             const article = locale.offerArticle(amnt, currency)
             return {
-                id: amnt + currency.substring(0, 1),
+                id: amnt + currency,
                 type: 'article',
                 title: article.title,
                 input_message_content: {

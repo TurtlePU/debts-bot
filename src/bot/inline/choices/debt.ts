@@ -1,5 +1,7 @@
 import offerPiece from '#/database/models/OfferModel'
 
+import log from '#/util/Log'
+
 import {
     inline_debt_regexp
 } from '#/bot/Constants'
@@ -16,7 +18,7 @@ const consumer: Enhancer.Inline.ChoiceConsumer = {
             from_id: result.from.id,
             type: 'debt',
             debt: { amount, currency }
-        })
+        }).catch(log)
     }
 }
 

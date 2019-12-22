@@ -2,19 +2,21 @@ import offerPiece from '#/database/models/OfferModel'
 import userPiece  from '#/database/models/UserModel'
 import getLocale  from '#/locale/Locale'
 
+import log from './Log'
+
 import {
     getUserName
 } from './StringUtils'
 
 export function noUserResponse(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
-    return this.sendMessage(msg.chat.id, getLocale().anon)
+    return this.sendMessage(msg.chat.id, getLocale().anon).catch(log)
 }
 
 export function declineOffer(
         this: Enhancer.TelegramBot, { inline_message_id, from }: Enhancer.Inline.Click) {
-    offerPiece.deleteOffer(inline_message_id)
+    offerPiece.deleteOffer(inline_message_id).catch(log)
     const text = getLocale(from.language_code).offer.declined(getUserName(from))
-    this.editMessageText(text, { inline_message_id })
+    this.editMessageText(text, { inline_message_id }).catch(log)
     return { text }
 }
 
@@ -30,7 +32,7 @@ export function acceptOffer<T extends DataBase.Offer.Doc>(
         const offer = await offerPiece.getOffer(inline_message_id)
         if (!offer || !checker(offer)) {
             const text = locale.offer.expired
-            this.editMessageText(text, { inline_message_id })
+            this.editMessageText(text, { inline_message_id }).catch(log)
             return { text }
         } else if (offer.from_id == from.id) {
             return { text: locale.offer.selfAccept }
@@ -39,10 +41,10 @@ export function acceptOffer<T extends DataBase.Offer.Doc>(
             if (!offerFrom) {
                 throw new Error('Bot user not found')
             }
-            offer.remove()
+            offer.remove().catch(log)
             act(offer, from)
             const text = getText(locale, offer, offerFrom, from)
-            this.editMessageText(text, { inline_message_id })
+            this.editMessageText(text, { inline_message_id }).catch(log)
             return { text }
         }
     }

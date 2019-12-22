@@ -1,5 +1,7 @@
 import debtPiece  from '#/database/models/DebtModel'
 
+import log from '#/util/Log'
+
 import {
     inline_debt_accept
 } from '#/bot/Constants'
@@ -36,7 +38,7 @@ function act(offer: DataBase.DebtOffer, from: Enhancer.User) {
         currency: offer.debt.currency,
         to: from.id,
         from: offer.from_id
-    })
+    }).catch(log)
 }
 
 export default onClick
