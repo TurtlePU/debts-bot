@@ -4,8 +4,7 @@ import userPiece  from '#/database/models/UserModel'
 import getLocale  from '#/locale/Locale'
 
 import {
-    inline_settleup_accept,
-    inline_settleup_currency
+    inline_settleup_accept
 } from '#/bot/Constants'
 
 import {
@@ -17,12 +16,10 @@ const onClick: Enhancer.Inline.OnClick = {
     async callback({ inline_message_id, from }) {
         const locale = getLocale(from.language_code)
         const offer = await offerPiece.getOffer(inline_message_id)
-        if (!offer) {
+        if (!offer || offer.type != 'settleup') {
             const text = locale.offer.expired
             this.editMessageText(text, { inline_message_id })
             return { text }
-        } else if (offer.currency != inline_settleup_currency) {
-            throw new Error('Offer under settle-up message id is not settle-up')
         } else if (offer.from_id == from.id) {
             return { text: locale.offer.selfAccept }
         } else {

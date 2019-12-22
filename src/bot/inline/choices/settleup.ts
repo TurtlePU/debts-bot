@@ -1,8 +1,7 @@
 import offerPiece from '#/database/models/OfferModel'
 
 import {
-    inline_settleup_article_id,
-    inline_settleup_currency
+    inline_settleup_article_id
 } from '#/bot/Constants'
 
 const consumer: Enhancer.Inline.StrictChoiceConsumer = {
@@ -13,8 +12,7 @@ const consumer: Enhancer.Inline.StrictChoiceConsumer = {
         }
         offerPiece.createOffer(inline_message_id, {
             from_id: from.id,
-            amount: 0,
-            currency: inline_settleup_currency
+            type: 'settleup'
         })
     }
 }

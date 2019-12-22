@@ -14,7 +14,8 @@ const consumer: Enhancer.Inline.ChoiceConsumer = {
         const currency = match[2]
         offerPiece.createOffer(result.inline_message_id, {
             from_id: result.from.id,
-            amount, currency
+            type: 'debt',
+            debt: { amount, currency }
         })
     }
 }

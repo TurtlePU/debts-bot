@@ -8,6 +8,10 @@ import {
 } from '#/bot/Constants'
 
 import {
+    isDebtOffer
+} from '#/util/Predicates'
+
+import {
     getUserName
 } from '#/util/StringUtils'
 
@@ -16,7 +20,7 @@ const onClick: Enhancer.Inline.OnClick = {
     async callback({ inline_message_id, from }) {
         const locale = getLocale(from.language_code)
         const offer = await offerPiece.getOffer(inline_message_id)
-        if (!offer) {
+        if (!offer || !isDebtOffer(offer)) {
             this.editMessageText(locale.offer.expired, { inline_message_id })
             return { text: locale.offer.expired }
         } else if (from.id == offer.from_id) {
@@ -26,8 +30,8 @@ const onClick: Enhancer.Inline.OnClick = {
             debtPiece.saveDebt({
                 from: offer.from_id,
                 to: from.id,
-                amount: offer.amount,
-                currency: offer.currency
+                amount: offer.debt.amount,
+                currency: offer.debt.currency
             })
             const offerFrom = await userPiece.getUser(offer.from_id)
             if (!offerFrom) {
@@ -35,7 +39,7 @@ const onClick: Enhancer.Inline.OnClick = {
             }
             const text = locale.offer.saved(
                 offerFrom.name, getUserName(from),
-                offer.amount, offer.currency)
+                offer.debt.amount, offer.debt.currency)
             this.editMessageText(text, { inline_message_id })
             return { text }
         }
