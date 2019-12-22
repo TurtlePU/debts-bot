@@ -1,4 +1,4 @@
-import offerPiece from '#/database/models/OfferModel'
+import offerPiece from '#/database/models/Offer'
 import userPiece  from '#/database/models/UserModel'
 import getLocale  from '#/locale/Locale'
 

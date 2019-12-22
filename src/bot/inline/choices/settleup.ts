@@ -1,4 +1,4 @@
-import offerPiece from '#/database/models/OfferModel'
+import offerPiece from '#/database/models/Offer'
 
 import log from '#/util/Log'
 

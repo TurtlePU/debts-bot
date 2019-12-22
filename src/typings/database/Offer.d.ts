@@ -17,10 +17,10 @@ declare namespace DataBase {
             _id: string
             created: Date
         }
-        type Piece = {
+        type Model = {
             createOffer(id: string, offer: Offer): Promise<Document>
-            getOffer(id: string): PromiseLike<Document | null>
-            deleteOffer(id: string): PromiseLike<Document | null>
+            getOffer(id: string): DocumentQuery<Document | null, Document>
+            deleteOffer(id: string): DocumentQuery<Document | null, Document>
         }
     }
 }

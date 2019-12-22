@@ -20,10 +20,12 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
     }
 }))
 
-export default {
+const methods: DataBase.Offer.Model = {
     createOffer(_id: string, offer: DataBase.Offer) {
         return new OfferModel({ _id, ...offer }).save()
     },
     getOffer: OfferModel.findById.bind(OfferModel),
     deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
 }
+
+export default methods
