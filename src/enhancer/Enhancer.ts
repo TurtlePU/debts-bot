@@ -5,18 +5,43 @@ import {
     isStrict
 } from './Predicates'
 
+/**
+ * Injects functionality into supplied bot
+ */
 export default class Enhancer {
-    public readonly bot: Enhancer.TelegramBot
-
+    /**
+     * Bot to enhance
+     */
+    private readonly bot: Enhancer.TelegramBot
+    /**
+     * List of OnInline listeners identifiable by string key
+     */
     private readonly inlineStrictCommands: Enhancer.Inline.StrictCommand[] = []
+    /**
+     * List of OnInline listeners identifiable by RegExp
+     */
     private readonly inlineRegExpCommands: Enhancer.Inline.RegExpCommand[] = []
-
+    /**
+     * List of ChosenInlineResult listeners identifiable by string key
+     */
     private readonly inlineStrictConsumers: Enhancer.Inline.StrictChoiceConsumer[] = []
+    /**
+     * List of ChosenInlineResult listeners identifiable by RegExp
+     */
     private readonly inlineRegExpConsumers: Enhancer.Inline.RegExpChoiceConsumer[] = []
-
+    /**
+     * List of CallbackQuery listeners for buttons below usual messages
+     */
     private readonly onClickListeners: Enhancer.OnClick[] = []
+    /**
+     * List of CallbackQuery listeners for buttons below inline messages
+     */
     private readonly onInlineClickListeners: Enhancer.Inline.OnClick[] = []
 
+    /**
+     * Constructs new Enhancer
+     * @param bot bot to enhance
+     */
     public constructor(bot: Enhancer.TelegramBot) {
         this.bot = bot
         this.bot.on('inline_query', this.onInlineQuery.bind(this))
@@ -24,17 +49,28 @@ export default class Enhancer {
         this.bot.on('callback_query', this.onCallbackQuery.bind(this))
     }
 
+    /**
+     * @param enhancer function to apply to bot being enhanced
+     */
     public enhance(enhancer: (this: Enhancer.TelegramBot) => any): this {
         enhancer.call(this.bot)
         return this
     }
 
+    /**
+     * @param injector function to utilize Enhancer in its own way
+     */
     public inject(injector: (this: Enhancer) => any): this {
         injector.call(this)
         return this
     }
 
-    public command({ key, callback }: Enhancer.Command): this {
+    /**
+     * Adds new command to bot
+     * @param command command to add
+     */
+    public command(command: Enhancer.Command): this {
+        const { key, callback } = command
         this.bot.onText(key, (msg, match) => {
             if (match == null) {
                 throw new Error('Match is empty')
@@ -45,6 +81,10 @@ export default class Enhancer {
         return this
     }
 
+    /**
+     * Adds new OnInlineQuery listener to bot
+     * @param command OnInlineQuery listener to add
+     */
     public inlineCommand(command: Enhancer.Inline.Command): this {
         if (isStrict(command)) {
             this.inlineStrictCommands.push(command)
@@ -54,6 +94,10 @@ export default class Enhancer {
         return this
     }
 
+    /**
+     * Adds new ChosenInlineResult listener to bot
+     * @param consumer ChosenInlineResult listener to add
+     */
     public inlineChoiceConsumer(consumer: Enhancer.Inline.ChoiceConsumer): this {
         if (isStrict(consumer)) {
             this.inlineStrictConsumers.push(consumer)
@@ -63,16 +107,28 @@ export default class Enhancer {
         return this
     }
 
+    /**
+     * Adds new OnClick listener (for buttons below usual messages) to bot
+     * @param onClick OnClick listener to add
+     */
     public onClick(onClick: Enhancer.OnClick): this {
         this.onClickListeners.push(onClick)
         return this
     }
 
+    /**
+     * Adds new OnClick listener (for buttons below inline messages) to bot
+     * @param onClick OnClick listener to add
+     */
     public onInlineClick(onClick: Enhancer.Inline.OnClick): this {
         this.onInlineClickListeners.push(onClick)
         return this
     }
 
+    /**
+     * Collects `InlineQueryResult`s from listener whose keys fit the query
+     * @param query query itself
+     */
     private async onInlineQuery(query: Enhancer.Inline.Query) {
         const result = (await Promise.all(
             this.inlineStrictCommands
@@ -90,6 +146,10 @@ export default class Enhancer {
         this.bot.answerInlineQuery(query.id, result)
     }
 
+    /**
+     * Routes ChosenInlineResult to listeners whose keys fit
+     * @param result ChosenInlineResult itself
+     */
     private onChosenInlineResult(result: Enhancer.Inline.Choice) {
         for (const { key, callback } of this.inlineStrictConsumers) {
             if (key == result.result_id) {
@@ -104,6 +164,10 @@ export default class Enhancer {
         }
     }
 
+    /**
+     * Routes CallbackQuery (OnClick) to listeners whose keys fit
+     * @param query CallbackQuery itself
+     */
     private async onCallbackQuery(query: import('node-telegram-bot-api').CallbackQuery) {
         if (isClickEvent(query)) {
             const listeners: Enhancer.OnClickBase<any>[] = isSimpleClick(query)
