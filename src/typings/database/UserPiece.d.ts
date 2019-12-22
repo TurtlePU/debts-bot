@@ -4,10 +4,10 @@ declare namespace DataBase {
         name: string
     }
     namespace User {
-        type Doc = import('mongoose').Document & User
-        type Piece = {
-            updateUser(user: import('node-telegram-bot-api').User): Promise<Doc>
-            getUser(id: number): PromiseLike<Doc | null>
+        type Document = DataBase.Document & User
+        type Model = {
+            updateUser(user: Enhancer.User): Promise<Document>
+            getUser(id: number): PromiseLike<Document | null>
         }
     }
 }

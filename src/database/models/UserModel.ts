@@ -4,17 +4,19 @@ import {
     getUserName
 } from '#/util/StringUtils'
 
-const UserModel = Mongoose.model<DataBase.User.Doc>('User', new Mongoose.Schema({
+const UserModel = Mongoose.model<DataBase.User.Document>('User', new Mongoose.Schema({
     _id: { type: Number, required: true },
     name: { type: String, required: true }
 }))
 
-export default {
+const methods: DataBase.User.Model = {
     updateUser,
     getUser: UserModel.findById.bind(UserModel)
 }
 
-async function updateUser(user: import('node-telegram-bot-api').User) {
+export default methods
+
+async function updateUser(user: Enhancer.User) {
     const userDoc = await UserModel.findById(user.id)
     if (userDoc) {
         userDoc.name = getUserName(user)
