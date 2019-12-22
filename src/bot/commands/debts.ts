@@ -1,4 +1,4 @@
-import userPiece from '#/database/models/UserModel'
+import userPiece from '#/database/models/User'
 import debtPiece from '#/database/models/DebtModel'
 import getLocale from '#/locale/Locale'
 
