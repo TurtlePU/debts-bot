@@ -1,7 +1,7 @@
 declare namespace Locale {
-    type Debt = DataBase.Debt.Info & {
+    type Debt = DebtInfo & {
         to: string
-    }    
+    }
 }
 
 declare type Locale = {

@@ -1,18 +1,18 @@
 import Mongoose from 'mongoose'
 
-import { getUserName } from '#/util/StringUtils'
+import {
+    getUserName
+} from '#/util/StringUtils'
 
 const UserModel = Mongoose.model<DataBase.User.Doc>('User', new Mongoose.Schema({
     _id: { type: Number, required: true },
     name: { type: String, required: true }
 }))
 
-const userPiece: DataBase.User.Piece = {
+export default {
     updateUser,
     getUser: UserModel.findById.bind(UserModel)
 }
-
-export default userPiece
 
 async function updateUser(user: import('node-telegram-bot-api').User) {
     const userDoc = await UserModel.findById(user.id)

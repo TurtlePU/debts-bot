@@ -8,13 +8,11 @@ const OfferModel = Mongoose.model<DataBase.Offer.Doc>('Offer', new Mongoose.Sche
     created: { type: Date, expires: 3600, default: Date.now }
 }))
 
-const offerPiece: DataBase.Offer.Piece = {
-    createOffer(_id, offer) {
+export default {
+    createOffer(_id: string, offer: DataBase.Offer) {
         const { from_id, amount, currency } = offer
         return new OfferModel({ _id, from_id, amount, currency }).save()
     },
     getOffer: OfferModel.findById.bind(OfferModel),
     deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
 }
-
-export default offerPiece

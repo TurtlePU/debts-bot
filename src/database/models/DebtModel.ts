@@ -1,26 +1,20 @@
 import Mongoose from 'mongoose'
 
-import { shieldMarkdown } from '#/util/StringUtils'
+export default { saveDebt, getDebts, clearDebts }
 
-const debtPiece: DataBase.Debt.Piece = {
-    saveDebt, getDebts, clearDebts
-}
-
-export default debtPiece
-
-const DebtModel = Mongoose.model<DataBase.Debt.Doc>('Debt', new Mongoose.Schema({
+const DebtModel = Mongoose.model<DebtDoc>('Debt', new Mongoose.Schema({
     from: { type: Number, required: true },
     to: { type: Number, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true }
 }))
 
-async function saveDebt(debt: DataBase.Debt) {
+async function saveDebt(debt: Debt) {
     const [ from, to, amount ] =
         debt.from < debt.to ?
             [ debt.from, debt.to, +debt.amount ] :
             [ debt.to, debt.from, -debt.amount ]
-    const currency = shieldMarkdown(debt.currency)
+    const currency = debt.currency
     const older = await DebtModel.findOne({ from, to, currency })
     if (!older) {
         return new DebtModel({ from, to, amount, currency }).save()

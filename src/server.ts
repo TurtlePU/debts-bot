@@ -2,21 +2,33 @@ import 'module-alias/register'
 
 import https from 'https'
 
-import Bot from '#/bot/Bot'
-import DataBase from '#/database/DataBase'
+import {
+    connectBot,
+    enhanceBot,
+    makeBot
+} from '#/bot/BotEnhancer'
 
-const port = +(process.env.PORT || '8080')
-const url = process.env.URL || 'none'
-const token = process.env.TOKEN || 'none'
-const mongo_url = process.env.MONGODB_URI || 'none'
+import {
+    connectToDataBase
+} from '#/database/ConnectToDataBase'
 
-const { db, connect } = DataBase(mongo_url)
-const { postInit } = Bot(url, token, port, db)
+(async function() {
+    // eslint-disable-next-line @typescript-eslint/no-extra-parens
+    const port = +(process.env.PORT ?? '8080')
+    const url = process.env.URL ?? 'none'
+    const token = process.env.TOKEN ?? 'none'
+    const mongo_url = process.env.MONGODB_URI ?? 'none'
 
-connect().then(postInit)
+    const msInSec = 1000
+    const secInMin = 60
+    const keepAwakeMinutes = 15
 
-const msInSec = 1000
-const secInMin = 60
-const keepAwakeMinutes = 15
+    setInterval(() => https.get(url), msInSec * secInMin * keepAwakeMinutes)
 
-setInterval(() => https.get(url), msInSec * secInMin * keepAwakeMinutes)
+    const bot = makeBot(token, port)    
+    await Promise.all([
+        connectToDataBase(mongo_url),
+        connectBot(bot, url, token)
+    ])
+    return enhanceBot(bot)
+})()

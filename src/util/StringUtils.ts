@@ -7,8 +7,9 @@ export function shieldMarkdown(str: string) {
     return result
 }
 
-export function getUserName({
-    first_name, last_name, username }: import('node-telegram-bot-api').User) {
+export function getUserName(
+        { first_name, last_name, username }: import('node-telegram-bot-api').User
+) {
     if (username) {
         return '@' + username
     } else if (last_name) {
