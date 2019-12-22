@@ -54,7 +54,7 @@ const ru: Locale = {
 
 export default ru
 
-function reduce(debts: FormattedDebt[], title: string): string | undefined {
+function reduce(debts: Locale.Debt[], title: string): string | undefined {
     if (debts.length == 0) {
         return undefined
     } else {

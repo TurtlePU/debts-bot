@@ -9,7 +9,7 @@ const OfferModel = Mongoose.model<DataBase.Offer.Doc>('Offer', new Mongoose.Sche
 }))
 
 export default {
-    createOffer(_id: string, offer: Offer) {
+    createOffer(_id: string, offer: DataBase.Offer) {
         const { from_id, amount, currency } = offer
         return new OfferModel({ _id, from_id, amount, currency }).save()
     },
