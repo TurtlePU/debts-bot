@@ -1,15 +1,16 @@
 import Mongoose from 'mongoose'
 
-export default { saveDebt, getDebts, clearDebts }
+const methods: DataBase.Debt.Model = { saveDebt, getDebts, clearDebts }
+export default methods
 
-const DebtModel = Mongoose.model<DebtDoc>('Debt', new Mongoose.Schema({
+const DebtModel = Mongoose.model<DataBase.Debt.Document>('Debt', new Mongoose.Schema({
     from: { type: Number, required: true },
     to: { type: Number, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true }
 }))
 
-async function saveDebt(debt: Debt) {
+async function saveDebt(debt: DataBase.Debt) {
     const [ from, to, amount ] =
         debt.from < debt.to ?
             [ debt.from, debt.to, +debt.amount ] :

@@ -1,4 +1,4 @@
-import debtPiece  from '#/database/models/DebtModel'
+import debtPiece  from '#/database/models/Debt'
 
 import log from '#/util/Log'
 

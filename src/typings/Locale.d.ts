@@ -2,7 +2,7 @@ declare namespace Locale {
     /**
      * Format used in `Locale.debts` method
      */
-    type Debt = DebtInfo & {
+    type Debt = DataBase.Debt.Info & {
         to: string
     }
 }

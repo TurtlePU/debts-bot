@@ -1,4 +1,4 @@
-import debtPiece  from '#/database/models/DebtModel'
+import debtPiece  from '#/database/models/Debt'
 
 import log from '#/util/Log'
 
@@ -24,7 +24,6 @@ function isDebtOffer(
 ): offer is DataBase.Offer.Document & DataBase.Offer.DebtType {
     return offer.type == 'debt'
 }
-
 
 function getText(
         locale: Locale, offer: DataBase.Offer.DebtType, from: DataBase.User, to: Enhancer.User) {

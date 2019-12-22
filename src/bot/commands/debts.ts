@@ -1,5 +1,5 @@
 import userPiece from '#/database/models/User'
-import debtPiece from '#/database/models/DebtModel'
+import debtPiece from '#/database/models/Debt'
 import getLocale from '#/locale/Locale'
 
 import {
@@ -20,7 +20,7 @@ const command: Enhancer.Command = {
 
 export default command
 
-async function formatter({ to, ...info }: InnerDebt) {
+async function formatter({ to, ...info }: DataBase.Debt.InDataBase) {
     const toUser = await userPiece.getUser(to)
     if (!toUser) {
         throw new Error('Name of bot user not found in database')
