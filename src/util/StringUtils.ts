@@ -1,3 +1,8 @@
+/**
+ * Prepends unintended markdown control symbols with single inverse slash
+ * @param str source string
+ * @returns resulting string
+ */
 export function shieldMarkdown(str: string) {
     const control_symbols = [ '*', '_', '(', ')', '[', ']', '`', '\\' ]
     let result = str
@@ -7,9 +12,12 @@ export function shieldMarkdown(str: string) {
     return result
 }
 
-export function getUserName(
-        { first_name, last_name, username }: import('node-telegram-bot-api').User
-) {
+/**
+ * @param user Telegram user whose name we should get
+ * @returns name of user which is used for this bot
+ */
+export function getUserName(user: Enhancer.User) {
+    const { first_name, last_name, username } = user
     if (username) {
         return '@' + username
     } else if (last_name) {
