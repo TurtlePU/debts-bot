@@ -14,7 +14,7 @@ const parser: Enhancer.Inline.Command = {
     callback(query, match) {
         const locale = getLocale(query.from.language_code)
         const amount = +match[1]
-        const currency = match[2] || locale.currency
+        const currency = match[2] ?? locale.currency
         return [ amount, -amount ].map(amnt => {
             const article = locale.offerArticle(amnt, currency)
             return {
