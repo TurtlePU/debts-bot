@@ -8,7 +8,7 @@ declare namespace DataBase {
     namespace Group {
         type Document = DataBase.Document & Group
         type Model = {
-            makeGroup(id: number, message_id: number, locale_code?: string): Promise<Document>
+            makeGroup(id: number, message_id: number, locale: string | undefined): Promise<Document>
             getGroup(id: number): DocumentQuery<Document>
         }
     }
