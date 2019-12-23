@@ -5,6 +5,7 @@ import getLocale from '#/locale/Locale'
  */
 export default function(this: Enhancer.TelegramBot) {
     this.on('new_chat_members', onNewChatMembers.bind(this))
+    this.on('group_chat_created', onNewChatMembers.bind(this))
 }
 
 async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
