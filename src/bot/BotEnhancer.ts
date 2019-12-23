@@ -9,8 +9,8 @@ import start from './commands/start'
 
 import alwaysUseMarkdown from './enhancers/UseMarkdown'
 import alwaysUpdateUser  from './enhancers/UpdateUser'
-
 import greetNewUsers from './enhancers/GreetNewGroup'
+import deleteLeftUser from './enhancers/DeleteLeft'
 
 import ConnectInline from './inline/ConnectInline'
 
@@ -45,5 +45,6 @@ export function enhanceBot(bot: TelegramBot) {
         .enhance(alwaysUseMarkdown)
         .enhance(alwaysUpdateUser)
         .enhance(greetNewUsers)
+        .enhance(deleteLeftUser)
         .inject(ConnectInline)
 }
