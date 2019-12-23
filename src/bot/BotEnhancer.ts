@@ -2,6 +2,8 @@ import TelegramBot from 'node-telegram-bot-api'
 
 import Enhancer from '#/enhancer/Enhancer'
 
+import joinGroup from './buttons/join_group'
+
 import debts from './commands/debts'
 import start from './commands/start'
 
@@ -39,6 +41,7 @@ export function enhanceBot(bot: TelegramBot) {
     new Enhancer(bot)
         .command(debts)
         .command(start)
+        .onClick(joinGroup)
         .enhance(alwaysUseMarkdown)
         .enhance(alwaysUpdateUser)
         .enhance(greetNewUsers)

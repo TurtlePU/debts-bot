@@ -1,5 +1,9 @@
 import getLocale from '#/locale/Locale'
 
+import {
+    group_join
+} from '#/bot/Constants'
+
 /**
  * Greets new group with 'new group' message
  */
@@ -23,17 +27,12 @@ function onGroupCreated(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     return onNewChat(this, msg, getLocale())
 }
 
-async function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, locale: Locale) {
-    const { message_id } = await bot.sendMessage(msg.chat.id, locale.newGroup)
-    return pin(bot, msg.chat.id, message_id, locale)
-}
-
-async function pin(bot: Enhancer.TelegramBot, chat_id: number, message_id: number, locale: Locale) {
-    try {
-        if (!await bot.pinChatMessage(chat_id, '' + message_id)) {
-            return bot.sendMessage(chat_id, locale.pinFailed)
+function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, locale: Locale) {
+    return bot.sendMessage(msg.chat.id, locale.newGroup, {
+        reply_markup: {
+            inline_keyboard: [
+                [ { text: locale.buttons.join, callback_data: group_join } ]
+            ]
         }
-    } catch {
-        return bot.sendMessage(chat_id, locale.pinFailed)
-    }
+    })
 }

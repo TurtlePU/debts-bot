@@ -10,3 +10,5 @@ export const inline_settleup_accept = 'settleUp.accept'
 export const inline_settleup_decline = 'settleUp.decline'
 /** Article ID of settleup offers */
 export const inline_settleup_article_id = 'settle-up'
+/** Key of a 'join' button of group main message */
+export const group_join = 'group.join'

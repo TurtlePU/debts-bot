@@ -31,6 +31,10 @@ declare type Locale = {
          * Text on 'decline' button
          */
         reject: string
+        /**
+         * Text on 'join' button
+         */
+        join: string
     }
     /**
      * @param name of user
@@ -101,7 +105,12 @@ declare type Locale = {
      */
     newGroup: string
     /**
-     * Sent if 'pin greeting message' has failed
+     * OnClick responses to click on 'join'
      */
-    pinFailed: string
+    join: {
+        /**
+         * Response on success
+         */
+        success: string
+    }
 }
