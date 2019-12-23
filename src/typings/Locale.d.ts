@@ -100,4 +100,8 @@ declare type Locale = {
      * Greeting for a new group
      */
     newGroup: string
+    /**
+     * Sent if 'pin greeting message' has failed
+     */
+    pinFailed: string
 }

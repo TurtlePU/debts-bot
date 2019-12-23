@@ -52,7 +52,8 @@ const ru: Locale = {
     },
     settleUp: (first, second) =>
         `Долги между ${shieldMarkdown(first)} и ${shieldMarkdown(second)} обнулены.`,
-    newGroup: 'Всем привет! Сейчас это сообщение обновится'
+    newGroup: 'Всем привет! Сейчас это сообщение обновится',
+    pinFailed: 'Я не смог закрепить своё сообщение. Закрепите сами: так будет удобнее, правда!'
 }
 
 export default ru
