@@ -2,15 +2,6 @@ import userPiece from '#/database/models/User'
 
 import log from '#/util/Log'
 
-/**
- * Switches parse mode of all bot messages to Markdown
- */
-export function alwaysUseMarkdown(this: Enhancer.TelegramBot) {
-    const oldSendMessage = this.sendMessage.bind(this)
-    this.sendMessage = (chatId, text, options) =>
-        oldSendMessage(chatId, text, { ...options, parse_mode: 'Markdown' })
-}
-
 function updateUser({ from }: { from: import('node-telegram-bot-api').User }) {
     userPiece.updateUser(from).catch(log)
 }
@@ -18,7 +9,7 @@ function updateUser({ from }: { from: import('node-telegram-bot-api').User }) {
 /**
  * Forces bot to update user in database on each interaction of Telegram user with a bot
  */
-export function alwaysUpdateUser(this: Enhancer.TelegramBot) {
+export default function(this: Enhancer.TelegramBot) {
     this.on('message', ({ from }) => {
         if (from) {
             userPiece.updateUser(from).catch(log)

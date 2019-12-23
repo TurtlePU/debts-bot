@@ -5,12 +5,10 @@ import Enhancer from '#/enhancer/Enhancer'
 import debts from './commands/debts'
 import start from './commands/start'
 
-import ConnectInline from './inline/ConnectInline'
+import alwaysUseMarkdown from './enhancers/UseMarkdown'
+import alwaysUpdateUser  from './enhancers/UpdateUser'
 
-import {
-    alwaysUpdateUser,
-    alwaysUseMarkdown
-} from './Enhancers'
+import ConnectInline from './inline/ConnectInline'
 
 /**
  * Makes bot with given config
