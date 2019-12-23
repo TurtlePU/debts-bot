@@ -6,6 +6,6 @@ declare namespace DataBase {
     /**
      * Plain Mongoose document query
      */
-    type DocumentQuery<T, DocType, QueryHelpers = {}> =
-        import('mongoose').DocumentQuery<T, DocType, QueryHelpers>
+    type DocumentQuery<T> = import('mongoose').DocumentQuery<T | null, T>
+    type MongoArray<T> = import('mongoose').Types.Array<T>
 }

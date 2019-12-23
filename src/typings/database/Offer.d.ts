@@ -55,12 +55,12 @@ declare namespace DataBase {
              * @param id of an offer
              * @returns props of offer how they are stored in DataBase (if present)
              */
-            getOffer(id: string): DocumentQuery<Document | null, Document>
+            getOffer(id: string): DocumentQuery<Document>
             /**
              * Deletes an offer by given id
              * @param id of an offer
              */
-            deleteOffer(id: string): DocumentQuery<Document | null, Document>
+            deleteOffer(id: string): DocumentQuery<Document>
         }
     }
 }
