@@ -29,7 +29,11 @@ async function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, local
 }
 
 async function pin(bot: Enhancer.TelegramBot, chat_id: number, message_id: number, locale: Locale) {
-    if (!await bot.pinChatMessage(chat_id, '' + message_id)) {
+    try {
+        if (!await bot.pinChatMessage(chat_id, '' + message_id)) {
+            return bot.sendMessage(chat_id, locale.pinFailed)
+        }
+    } catch {
         return bot.sendMessage(chat_id, locale.pinFailed)
     }
 }
