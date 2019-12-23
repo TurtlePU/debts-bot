@@ -5,11 +5,12 @@ import getLocale from '#/locale/Locale'
  */
 export default function(this: Enhancer.TelegramBot) {
     this.on('new_chat_members', onNewChatMembers.bind(this))
-    this.on('group_chat_created', onNewChatMembers.bind(this))
+    this.on('group_chat_created', ({ chat }) => this.sendMessage(chat.id, getLocale().newGroup))
 }
 
 async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     const me = await this.getMe()
+    console.log(me)
     const new_members = msg.new_chat_members ?? []
     console.log(new_members)
     const me_index = new_members.indexOf(me)
