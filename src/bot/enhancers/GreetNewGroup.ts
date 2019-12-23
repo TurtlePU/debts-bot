@@ -29,8 +29,7 @@ async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Messag
         }
         group = tgroup
     }
-    group.member_ids.concat(new_members.map(({ id }) => id))
-    group.markModified('member_ids')
+    group.member_ids.nonAtomicPush(...new_members.map(({ id }) => id))
     return group.save()
 }
 
