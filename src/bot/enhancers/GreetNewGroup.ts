@@ -10,6 +10,7 @@ export default function(this: Enhancer.TelegramBot) {
 async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     const me = await this.getMe()
     const new_members = msg.new_chat_members ?? []
+    console.log(new_members)
     const me_index = new_members.indexOf(me)
     if (me_index != -1) {
         const not_me = me_index == 0 ? 1 : me_index - 1
