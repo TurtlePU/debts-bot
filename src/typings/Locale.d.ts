@@ -96,4 +96,8 @@ declare type Locale = {
      * @returns text to show after the settle-up offer was accepted
      */
     settleUp(first: string, second: string): string
+    /**
+     * Greeting for a new group
+     */
+    newGroup: string
 }

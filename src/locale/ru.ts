@@ -51,7 +51,8 @@ const ru: Locale = {
         text: 'Обнулим долги?'
     },
     settleUp: (first, second) =>
-        `Долги между ${shieldMarkdown(first)} и ${shieldMarkdown(second)} обнулены.`
+        `Долги между ${shieldMarkdown(first)} и ${shieldMarkdown(second)} обнулены.`,
+    newGroup: 'Всем привет! Сейчас это сообщение обновится'
 }
 
 export default ru
