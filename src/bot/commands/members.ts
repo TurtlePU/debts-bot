@@ -7,17 +7,28 @@ import {
     isDefined
 } from '#/util/Predicates'
 
+import {
+    group_join
+} from '#/bot/Constants'
+
 const command: Enhancer.Command = {
     key: /\/members/u,
     async callback(msg) {
         const locale = getLocale(msg.from?.language_code)
-        let message: string
         if (msg.chat.type == 'group' || msg.chat.type == 'supergroup') {
-            message = locale.group.members(await getNames(msg.chat.id))
+            return this.sendMessage(msg.chat.id,
+                locale.group.members(await getNames(msg.chat.id)),
+                {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [ { text: locale.buttons.join, callback_data: group_join } ]
+                        ]
+                    }
+                }
+            )
         } else {
-            message = locale.group.notGroup
+            return this.sendMessage(msg.chat.id, locale.group.notGroup)
         }
-        return this.sendMessage(msg.chat.id, message)
     }
 }
 
