@@ -18,7 +18,7 @@ const methods: DataBase.Group.Model = {
     getGroup: GroupModel.findById.bind(GroupModel),
     addMembers(group, members) {
         for (const { id } of members) {
-            if (!group.members.has('' + id)) {
+            if (!group.members.get('' + id)) {
                 group.members.set('' + id, new Mongoose.Types.Map())
             }
         }
