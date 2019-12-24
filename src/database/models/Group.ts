@@ -1,11 +1,9 @@
 import Mongoose from 'mongoose'
 
 const BalanceSchema = new Mongoose.Schema({
-    _id: {
+    currency: {
         type: String,
-        required: true,
-        unique: true,
-        alias: 'currency'
+        required: true
     },
     amount: {
         type: Number,
@@ -14,7 +12,7 @@ const BalanceSchema = new Mongoose.Schema({
 })
 
 const MemberSchema = new Mongoose.Schema({
-    _id: {
+    id: {
         type: Number,
         required: true
     },
@@ -22,10 +20,7 @@ const MemberSchema = new Mongoose.Schema({
 })
 
 const GroupModel = Mongoose.model<DataBase.Group.Document>('Group', new Mongoose.Schema({
-    _id: {
-        type: Number,
-        required: true
-    },
+    _id: Number,
     members: [ MemberSchema ]
 }))
 
