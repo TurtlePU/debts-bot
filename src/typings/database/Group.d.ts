@@ -1,14 +1,44 @@
 declare namespace DataBase {
+    /**
+     * Group how it is stored in database
+     */
     type Group = {
         _id: number
+        /**
+         * (member id) => (currency) => (amount)
+         */
         members: MongoMap<MongoMap<number>>
     }
     namespace Group {
+        /**
+         * Mongoose document on top of group
+         */
         type Document = DataBase.Document & Group
+        /**
+         * Collection of useful methods to work with Group model
+         */
         type Model = {
+            /**
+             * Tries to get group; if not found, creates new and returns it
+             * @param id of a group
+             */
             makeOrGetGroup(id: number): Promise<Document>
+            /**
+             * Tries to get group; returns null if not found
+             * @param id of a group
+             */
             getGroup(id: number): DocumentQuery<Document>
+            /**
+             * Adds new members to group (if some are found, they are not added)
+             * @param group to add members to
+             * @param members to add
+             */
             addMembers(group: Document, members: Enhancer.User[]): Promise<Document>
+            /**
+             * Removes member from group (if not found, does nothing)
+             * @param group to remove member from
+             * @param member_id ID of a member to remove
+             */
             removeMember(group: Document, member_id?: number): Promise<Document>
         }
     }

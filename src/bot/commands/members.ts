@@ -11,6 +11,9 @@ import {
     group_join
 } from '#/bot/Constants'
 
+/**
+ * Responds with list of group members stored in database
+ */
 const command: Enhancer.Command = {
     key: /\/members/u,
     async callback(msg) {

@@ -5,6 +5,9 @@ import {
     group_join
 } from '#/bot/Constants'
 
+/**
+ * Adds user to group document on click
+ */
 const listener: Enhancer.OnClick = {
     key: group_join,
     callback(query) {
