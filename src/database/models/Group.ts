@@ -30,11 +30,11 @@ const methods: DataBase.Group.Model = {
     },
     getGroup: GroupModel.findById.bind(GroupModel),
     addMembers(group, members) {
-        group.members.addToSet(...members.map(({ id }) => ({ _id: id })))
+        group.members.addToSet(...members.map(({ id }) => ({ id })))
         return group.save()
     },
     removeMember(group, member_id) {
-        group.members.pull(member_id)
+        group.members.pull({ id: member_id })
         return group.save()
     }
 }
