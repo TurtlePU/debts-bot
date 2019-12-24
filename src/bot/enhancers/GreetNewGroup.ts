@@ -16,20 +16,10 @@ export default function(this: Enhancer.TelegramBot) {
 
 async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     const me = await this.getMe()
-    let new_members = msg.new_chat_members ?? []
-    const me_index = new_members.findIndex(({ id }) => id == me.id)
-    let group: DataBase.Group.Document
-    if (me_index != -1) {
-        new_members.splice(me_index, 1)
-        group = await onNewChat(this, msg, new_members[0]?.language_code)
-    } else {
-        let tgroup = await groupModel.getGroup(msg.chat.id)
-        if (!tgroup) {
-            throw new Error('Group with bot not found in database')
-        }
-        group = tgroup
-    }
-    group.member_ids.nonAtomicPush(...new_members.map(({ id }) => id))
+    const new_members = (msg.new_chat_members ?? []).filter(({ id }) => id != me.id)
+    const group = await groupModel.getGroup(msg.chat.id)
+                  ?? await onNewChat(this, msg, new_members[0]?.language_code)
+    group.member_ids.addToSet(...new_members.map(({ id }) => id))
     return group.save()
 }
 
