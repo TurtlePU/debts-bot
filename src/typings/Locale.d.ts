@@ -101,9 +101,23 @@ declare type Locale = {
      */
     settleUp(first: string, second: string): string
     /**
-     * Greeting for a new group
+     * Group-related strings
      */
-    newGroup: string
+    group: {
+        /**
+         * Greeting for a new group
+         */
+        hi: string
+        /**
+         * Sent if request can be fulfilled only for a group
+         */
+        notGroup: string
+        /**
+         * Formats a list of names
+         * @param names members' names
+         */
+        members(names: string[]): string
+    }
     /**
      * OnClick responses to click on 'join'
      */

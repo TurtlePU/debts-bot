@@ -9,14 +9,6 @@ import {
 } from './StringUtils'
 
 /**
- * Default reply if `msg.from` field is missing
- * @param msg message to reply to
- */
-export function noUserResponse(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
-    return this.sendMessage(msg.chat.id, getLocale().anon).catch(log)
-}
-
-/**
  * Callback for 'decline offer' buttons
  * @param clickEvent 'decline offer' button click event
  * @returns a `ClickResult` to respond with

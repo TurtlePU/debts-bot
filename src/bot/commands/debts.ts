@@ -2,22 +2,20 @@ import userPiece from '#/database/models/User'
 import debtPiece from '#/database/models/Debt'
 import getLocale from '#/locale/Locale'
 
-import {
-    noUserResponse
-} from '#/util/FallbackAnswers'
-
 /**
  * Responds with list of debts in which user is involved
  */
 const command: Enhancer.Command = {
     key: /\/debts/u,
     async callback(msg) {
+        const locale = getLocale(msg.from?.language_code)
+        let message: string
         if (!msg.from) {
-            return noUserResponse.call(this, msg)
+            message = locale.anon
         } else {
-            return this.sendMessage(msg.chat.id,
-                getLocale(msg.from.language_code).debts(await getFormattedDebts(msg.from.id)))
+            message = locale.debts(await getFormattedDebts(msg.from.id))
         }
+        return this.sendMessage(msg.chat.id, message)
     }
 }
 

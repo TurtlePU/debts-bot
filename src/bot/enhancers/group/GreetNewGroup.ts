@@ -1,4 +1,6 @@
 import groupModel from '#/database/models/Group'
+import userModel from '#/database/models/User'
+
 import getLocale from '#/locale/Locale'
 
 import {
@@ -18,6 +20,9 @@ export default function(this: Enhancer.TelegramBot) {
 async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     const me = await this.getMe()
     const new_members = (msg.new_chat_members ?? []).filter(({ id }) => id != me.id)
+    for (const member of new_members) {
+        userModel.updateUser(member)
+    }
     const group = await groupModel.getGroup(msg.chat.id)
                   ?? await onNewChat(this, msg, new_members[0]?.language_code)
     return groupModel.addMembers(group, new_members)
@@ -29,7 +34,7 @@ function onGroupCreated(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
 
 function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, code?: string) {
     const locale = getLocale(code)
-    bot.sendMessage(msg.chat.id, locale.newGroup, {
+    bot.sendMessage(msg.chat.id, locale.group.hi, {
         reply_markup: {
             inline_keyboard: [
                 [ { text: locale.buttons.join, callback_data: group_join } ]

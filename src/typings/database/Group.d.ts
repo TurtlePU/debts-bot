@@ -9,7 +9,7 @@ declare namespace DataBase {
             currency: string
         }
         type Member = {
-            id: number
+            _id: number
             balance: MongoArray<Balance>
         }
         type Document = DataBase.Document & Group

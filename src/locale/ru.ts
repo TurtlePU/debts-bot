@@ -56,7 +56,19 @@ const ru: Locale = {
     },
     settleUp: (first, second) =>
         `Долги между ${shieldMarkdown(first)} и ${shieldMarkdown(second)} обнулены.`,
-    newGroup: 'Всем привет! Сейчас это сообщение обновится'
+    group: {
+        hi: 'Всем привет!\n' +
+            '\n' +
+            '*i*. Напишите /members, чтобы посмотреть список участников.',
+        notGroup: 'Мы не в группе, я не могу выполнить такой запрос.',
+        members(names) {
+            if (names.length == 0) {
+                return 'Участников почему-то нет :('
+            } else {
+                return names.reduce((prev, name) => `${prev}\n${name}`, 'Участники:\n')
+            }
+        }
+    }
 }
 
 export default ru
