@@ -7,10 +7,7 @@ import joinGroup from './buttons/join_group'
 import debts from './commands/debts'
 import start from './commands/start'
 
-import alwaysUseMarkdown from './enhancers/UseMarkdown'
-import alwaysUpdateUser  from './enhancers/UpdateUser'
-import greetNewUsers from './enhancers/GreetNewGroup'
-import deleteLeftUser from './enhancers/DeleteLeft'
+import ConnectEnhancers from './enhancers/ConnectEnhancements'
 
 import ConnectInline from './inline/ConnectInline'
 
@@ -42,9 +39,6 @@ export function enhanceBot(bot: TelegramBot) {
         .command(debts)
         .command(start)
         .onClick(joinGroup)
-        .enhance(alwaysUseMarkdown)
-        .enhance(alwaysUpdateUser)
-        .enhance(greetNewUsers)
-        .enhance(deleteLeftUser)
+        .inject(ConnectEnhancers)
         .inject(ConnectInline)
 }

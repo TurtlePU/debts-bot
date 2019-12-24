@@ -66,7 +66,3 @@ export function acceptOffer<T extends DataBase.Offer.Document>(
         }
     }
 }
-
-export function deleteUser(group: DataBase.Group | null, id: number | undefined) {
-    return group?.member_ids.pull(id)
-}
