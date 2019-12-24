@@ -1,27 +1,14 @@
 import Mongoose from 'mongoose'
 
-const BalanceSchema = new Mongoose.Schema({
-    currency: {
-        type: String,
-        required: true
-    },
-    amount: {
-        type: Number,
-        required: true
-    }
-})
-
-const MemberSchema = new Mongoose.Schema({
-    id: {
-        type: Number,
-        required: true
-    },
-    balance: [ BalanceSchema ]
-})
-
 const GroupModel = Mongoose.model<DataBase.Group.Document>('Group', new Mongoose.Schema({
     _id: Number,
-    members: [ MemberSchema ]
+    members: {
+        type: Map,
+        of: {
+            type: Map,
+            of: Number
+        }
+    }
 }))
 
 const methods: DataBase.Group.Model = {
@@ -30,11 +17,16 @@ const methods: DataBase.Group.Model = {
     },
     getGroup: GroupModel.findById.bind(GroupModel),
     addMembers(group, members) {
-        group.members.addToSet(...members.map(({ id }) => ({ id })))
+        for (const { id } of members) {
+            if (!group.members.has('' + id)) {
+                group.members.set('' + id, new Mongoose.Types.Map())
+            }
+        }
         return group.save()
     },
     removeMember(group, member_id) {
-        group.members.pull({ id: member_id })
+        // TODO: move debts to personal debts
+        group.members.delete('' + member_id)
         return group.save()
     }
 }

@@ -36,6 +36,6 @@ export default command
 
 async function getNames(group_id: number) {
     const group = await groupModel.makeOrGetGroup(group_id)
-    const users = await Promise.all(group.members.map(({ id }) => userModel.getUser(id)))
+    const users = await Promise.all([ ...group.members.keys() ].map(id => userModel.getUser(+id)))
     return users.filter(isDefined).map(({ name }) => name)
 }

@@ -1,17 +1,9 @@
 declare namespace DataBase {
     type Group = {
         _id: number
-        members: MongoArray<Group.Member>
+        members: MongoMap<MongoMap<number>>
     }
     namespace Group {
-        type Balance = {
-            amount: number
-            currency: string
-        }
-        type Member = {
-            id: number
-            balance: MongoArray<Balance>
-        }
         type Document = DataBase.Document & Group
         type Model = {
             makeOrGetGroup(id: number): Promise<Document>
