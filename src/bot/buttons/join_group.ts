@@ -17,7 +17,6 @@ const listener: Enhancer.OnClick = {
 export default listener
 
 async function pushUser(query: Enhancer.ClickEvent) {
-    const group = await groupModel.getGroup(query.message.chat.id)
-    group?.member_ids.push(query.from.id)
-    group?.save()
+    const group = await groupModel.makeOrGetGroup(query.message.chat.id)
+    return groupModel.addMembers(group, [ query.from ])
 }

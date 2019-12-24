@@ -6,7 +6,8 @@ import {
 } from '#/bot/Constants'
 
 /**
- * Greets new group with 'new group' message
+ * Greets new group with 'new group' message;
+ * Writes new members to group document in database
  */
 export default function(this: Enhancer.TelegramBot) {
     this.on('new_chat_members', onNewChatMembers.bind(this))
@@ -19,22 +20,21 @@ async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Messag
     const new_members = (msg.new_chat_members ?? []).filter(({ id }) => id != me.id)
     const group = await groupModel.getGroup(msg.chat.id)
                   ?? await onNewChat(this, msg, new_members[0]?.language_code)
-    group.member_ids.addToSet(...new_members.map(({ id }) => id))
-    return group.save()
+    return groupModel.addMembers(group, new_members)
 }
 
 function onGroupCreated(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     return onNewChat(this, msg)
 }
 
-async function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, code?: string) {
+function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, code?: string) {
     const locale = getLocale(code)
-    const { message_id } = await bot.sendMessage(msg.chat.id, locale.newGroup, {
+    bot.sendMessage(msg.chat.id, locale.newGroup, {
         reply_markup: {
             inline_keyboard: [
                 [ { text: locale.buttons.join, callback_data: group_join } ]
             ]
         }
     })
-    return groupModel.makeGroup(msg.chat.id, message_id, code)
+    return groupModel.makeOrGetGroup(msg.chat.id)
 }
