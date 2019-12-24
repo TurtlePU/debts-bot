@@ -4,6 +4,7 @@ const GroupModel = Mongoose.model<DataBase.Group.Document>('Group', new Mongoose
     _id: Number,
     members: {
         type: Map,
+        required: true,
         of: {
             type: Map,
             of: Number
@@ -13,7 +14,7 @@ const GroupModel = Mongoose.model<DataBase.Group.Document>('Group', new Mongoose
 
 const methods: DataBase.Group.Model = {
     async makeOrGetGroup(_id) {
-        return await this.getGroup(_id) ?? new GroupModel({ _id }).save()
+        return await this.getGroup(_id) ?? new GroupModel({ _id, members: {} }).save()
     },
     getGroup: GroupModel.findById.bind(GroupModel),
     addMembers(group, members) {
