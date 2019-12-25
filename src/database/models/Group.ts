@@ -24,11 +24,6 @@ const methods: DataBase.Group.Model = {
             }
         }
         return group.save()
-    },
-    removeMember(group, member_id) {
-        // TODO: move debts to personal debts
-        group.members.delete('' + member_id)
-        return group.save()
     }
 }
 

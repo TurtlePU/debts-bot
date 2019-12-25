@@ -34,12 +34,6 @@ declare namespace DataBase {
              * @param members to add
              */
             addMembers(group: Document, members: Enhancer.User[]): Promise<Document>
-            /**
-             * Removes member from group (if not found, does nothing)
-             * @param group to remove member from
-             * @param member_id ID of a member to remove
-             */
-            removeMember(group: Document, member_id?: number): Promise<Document>
         }
     }
 }
