@@ -35,6 +35,10 @@ declare type Locale = {
          * Text on 'join' button
          */
         join: string
+        /**
+         * Text on 'update members' button
+         */
+        updateMembers: string
     }
     /**
      * @param name of user
@@ -126,5 +130,14 @@ declare type Locale = {
          * Response on success
          */
         success: string
+    }
+    /**
+     * OnClick responses
+     */
+    response: {
+        /**
+         * Response on member list update
+         */
+        membersUpdated: string
     }
 }

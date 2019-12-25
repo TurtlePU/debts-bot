@@ -8,7 +8,7 @@ import {
 } from '#/util/Predicates'
 
 import {
-    group_join
+    group_join, group_update_members
 } from '#/bot/Constants'
 
 /**
@@ -20,12 +20,15 @@ const command: Enhancer.Command = {
         const locale = getLocale(msg.from?.language_code)
         if (msg.chat.type == 'group' || msg.chat.type == 'supergroup') {
             return this.sendMessage(msg.chat.id,
-                locale.group.members(await getNames(msg.chat.id)),
-                {
+                locale.group.members(await getNames(msg.chat.id)), {
                     reply_markup: {
-                        inline_keyboard: [
-                            [ { text: locale.buttons.join, callback_data: group_join } ]
-                        ]
+                        inline_keyboard: [ [ {
+                            text: locale.buttons.join,
+                            callback_data: group_join
+                        }, {
+                            text: locale.buttons.updateMembers,
+                            callback_data: group_update_members
+                        } ] ]
                     }
                 }
             )

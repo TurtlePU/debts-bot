@@ -8,7 +8,8 @@ const ru: Locale = {
     buttons: {
         accept: 'Ок 👍',
         reject: 'Не 👎',
-        join: 'Let me in!'
+        join: 'Let me in!',
+        updateMembers: 'Обновить'
     },
     join: {
         success: 'О\'кей, ты включен'
@@ -68,6 +69,9 @@ const ru: Locale = {
                 return names.reduce((prev, name) => `${prev}\n${name}`, 'Участники:\n')
             }
         }
+    },
+    response: {
+        membersUpdated: 'Список участников обновлен.'
     }
 }
 
