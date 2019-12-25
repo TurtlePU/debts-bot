@@ -3,7 +3,7 @@ declare namespace DataBase {
      * Group how it is stored in database
      */
     type Group = {
-        _id: number
+        id: number
         /**
          * IDs of users present in the group
          */

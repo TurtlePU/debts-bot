@@ -38,7 +38,7 @@ declare namespace DataBase {
          * Mongoose document on top of Offer properties in DataBase
          */
         type Document = DataBase.Document & InDataBase & {
-            _id: string
+            id: string
             created: Date
         }
         /**

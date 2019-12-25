@@ -4,10 +4,22 @@ const methods: DataBase.Debt.Model = { saveDebt, getDebts, clearDebts }
 export default methods
 
 const DebtModel = Mongoose.model<DataBase.Debt.Document>('Debt', new Mongoose.Schema({
-    from: { type: Number, required: true },
-    to: { type: Number, required: true },
-    amount: { type: Number, required: true },
-    currency: { type: String, required: true }
+    from: {
+        type: Number,
+        required: true
+    },
+    to: {
+        type: Number,
+        required: true
+    },
+    amount: {
+        type: Number,
+        required: true
+    },
+    currency: {
+        type: String,
+        required: true
+    }
 }))
 
 async function saveDebt(debt: DataBase.Debt) {

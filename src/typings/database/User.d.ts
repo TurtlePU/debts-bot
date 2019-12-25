@@ -3,7 +3,7 @@ declare namespace DataBase {
      * Properties of User which are stored in DataBase
      */
     type User = {
-        _id: number
+        id: number
         name: string
     }
     namespace User {

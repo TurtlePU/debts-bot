@@ -1,13 +1,28 @@
 import Mongoose from 'mongoose'
 
 const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose.Schema({
-    _id: String,
-    from_id: Number,
-    type: String,
+    _id: {
+        type: String,
+        required: true
+    },
+    from_id: {
+        type: Number,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
     debt: {
         type: {
-            amount: Number,
-            currency: Number
+            amount: {
+                type: Number,
+                required: true
+            },
+            currency: {
+                type: Number,
+                required: true
+            }
         },
         required(this: DataBase.Offer.InDataBase) {
             return this.type == 'debt'

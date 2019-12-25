@@ -1,21 +1,24 @@
 import Mongoose from 'mongoose'
 
 const GroupModel = Mongoose.model<DataBase.Group.Document>('Group', new Mongoose.Schema({
-    _id: Number,
+    _id: {
+        type: Number,
+        required: true
+    },
     here_ids: [ Number ],
     balances: {
         type: Map,
-        required: true,
         of: {
             type: Map,
             of: Number
-        }
+        },
+        default: Mongoose.Types.Map
     }
 }))
 
 const methods: DataBase.Group.Model = {
     async makeOrGetGroup(_id) {
-        return await this.getGroup(_id) ?? new GroupModel({ _id, balances: {} }).save()
+        return await this.getGroup(_id) ?? new GroupModel({ _id }).save()
     },
     getGroup: GroupModel.findById.bind(GroupModel)
 }

@@ -5,8 +5,14 @@ import {
 } from '#/util/StringUtils'
 
 const UserModel = Mongoose.model<DataBase.User.Document>('User', new Mongoose.Schema({
-    _id: { type: Number, required: true },
-    name: { type: String, required: true }
+    _id: {
+        type: Number,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    }
 }))
 
 const methods: DataBase.User.Model = {
