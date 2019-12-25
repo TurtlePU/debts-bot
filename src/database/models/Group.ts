@@ -12,7 +12,7 @@ const GroupModel = Mongoose.model<DataBase.Group.Document>('Group', new Mongoose
             type: Map,
             of: Number
         },
-        default: Mongoose.Types.Map
+        default: () => new Mongoose.Types.Map()
     }
 }))
 
