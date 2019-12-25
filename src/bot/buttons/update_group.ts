@@ -1,7 +1,6 @@
 import groupModel from '#/database/models/Group'
 
 import membersReplyMarkup from '#/helpers/MembersReplyMarkup'
-import deleteUsers        from '#/helpers/DeleteUsers'
 import getNames           from '#/helpers/GetNames'
 
 import getLocale from '#/locale/Locale'
@@ -33,10 +32,11 @@ const listener: Enhancer.OnClick = {
 export default listener
 
 async function deleteKicked(bot: Enhancer.TelegramBot, group: DataBase.Group.Document) {
-    if (await bot.getChatMembersCount(group.id) != group.members.size) {
-        const members = await Promise.all(
-            [ ...group.members.keys() ].map(id => bot.getChatMember(group.id, id)))
-        return deleteUsers(
-            group, members.filter(({ status }) => status == 'kicked').map(({ user }) => user.id))
+    if (await bot.getChatMembersCount(group.id) != group.here_ids.length) {
+        const here = await Promise.all(
+            group.here_ids.map(id => bot.getChatMember(group.id, '' + id)))
+        group.here_ids.pull(
+            ...here.filter(({ status }) => status == 'kicked').map(({ user }) => user.id))
+        return group.save()
     }
 }

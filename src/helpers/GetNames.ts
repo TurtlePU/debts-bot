@@ -9,6 +9,6 @@ import {
  * @param group 
  */
 export default async function(group: DataBase.Group.Document) {
-    const users = await Promise.all([ ...group.members.keys() ].map(id => userModel.getUser(+id)))
+    const users = await Promise.all(group.here_ids.map(userModel.getUser))
     return users.filter(isDefined).map(({ name }) => name)
 }

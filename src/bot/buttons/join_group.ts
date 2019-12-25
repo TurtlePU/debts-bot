@@ -22,5 +22,6 @@ export default listener
 
 async function pushUser(query: Enhancer.ClickEvent) {
     const group = await groupModel.makeOrGetGroup(query.message.chat.id)
-    return groupModel.addMembers(group, [ query.from ])
+    group.here_ids.addToSet(query.from.id)
+    return group.save()
 }

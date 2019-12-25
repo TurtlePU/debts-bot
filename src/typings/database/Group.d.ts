@@ -5,9 +5,14 @@ declare namespace DataBase {
     type Group = {
         _id: number
         /**
+         * IDs of users present in the group
+         */
+        here_ids: MongoArray<number>
+        /**
+         * Nonzero balances of all users who once been in this group
          * (member id) => (currency) => (amount)
          */
-        members: MongoMap<MongoMap<number>>
+        balances: MongoMap<MongoMap<number>>
     }
     namespace Group {
         /**
@@ -28,12 +33,6 @@ declare namespace DataBase {
              * @param id of a group
              */
             getGroup(id: number): DocumentQuery<Document>
-            /**
-             * Adds new members to group (if some are found, they are not added)
-             * @param group to add members to
-             * @param members to add
-             */
-            addMembers(group: Document, members: Enhancer.User[]): Promise<Document>
         }
     }
 }
