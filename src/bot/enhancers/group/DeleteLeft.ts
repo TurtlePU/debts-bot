@@ -10,6 +10,7 @@ export default function(this: Enhancer.TelegramBot) {
 async function deleteLeftUser(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     if (msg.left_chat_member) {
         const group = await groupModel.makeOrGetGroup(msg.chat.id)
-        return group.here_ids.pull(msg.left_chat_member.id)
+        group.here_ids.pull(msg.left_chat_member.id)
+        return group.save()
     }
 }

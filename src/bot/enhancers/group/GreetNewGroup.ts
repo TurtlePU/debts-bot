@@ -25,7 +25,8 @@ async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Messag
     }
     const group = await groupModel.getGroup(msg.chat.id)
                   ?? await onNewChat(this, msg, new_members[0]?.language_code)
-    return group.here_ids.addToSet(...new_members.map(({ id }) => id))
+    group.here_ids.addToSet(...new_members.map(({ id }) => id))
+    return group.save()
 }
 
 function onGroupCreated(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
