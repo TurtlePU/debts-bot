@@ -4,10 +4,12 @@ import userPiece from '#/database/models/User'
 import getLocale from '#/locale/Locale'
 
 /**
- * Responds with list of debts in which user is involved
+ * 1. Responds with list of debts/groups in which user is involved
+ * TODO:
+ * 2. Responds with nonzero balances in group
  */
 const command: Enhancer.Command = {
-    key: /\/debts/u,
+    key: /\/balance/u,
     async callback(msg) {
         const locale = getLocale(msg.from?.language_code)
         let message: string

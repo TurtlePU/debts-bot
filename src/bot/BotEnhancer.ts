@@ -5,7 +5,7 @@ import Enhancer from '#/enhancer/Enhancer'
 import joinGroup   from './buttons/join_group'
 import updateGroup from './buttons/update_group'
 
-import debts   from './commands/debts'
+import balance from './commands/balance'
 import members from './commands/members'
 import start   from './commands/start'
 
@@ -38,7 +38,7 @@ export function connectBot(bot: TelegramBot, url: string, token: string) {
  */
 export function enhanceBot(bot: TelegramBot) {
     new Enhancer(bot)
-        .command(debts)
+        .command(balance)
         .command(members)
         .command(start)
         .onClick(joinGroup)
