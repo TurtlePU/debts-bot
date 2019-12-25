@@ -1,5 +1,5 @@
 import groupModel from '#/database/models/Group'
-import userModel from '#/database/models/User'
+import userModel  from '#/database/models/User'
 
 import getLocale from '#/locale/Locale'
 

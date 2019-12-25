@@ -1,8 +1,8 @@
-import membersReplyMarkup from '#/bot/helpers/MembersReplyMarkup'
-import deleteUsers        from '#/bot/helpers/DeleteUsers'
-import getNames           from '#/bot/helpers/GetNames'
-
 import groupModel from '#/database/models/Group'
+
+import membersReplyMarkup from '#/helpers/MembersReplyMarkup'
+import deleteUsers        from '#/helpers/DeleteUsers'
+import getNames           from '#/helpers/GetNames'
 
 import getLocale from '#/locale/Locale'
 

@@ -1,7 +1,7 @@
-import membersReplyMarkup from '#/bot/helpers/MembersReplyMarkup'
-import getNames           from '#/bot/helpers/GetNames'
-
 import groupModel from '#/database/models/Group'
+
+import membersReplyMarkup from '#/helpers/MembersReplyMarkup'
+import getNames           from '#/helpers/GetNames'
 
 import getLocale from '#/locale/Locale'
 

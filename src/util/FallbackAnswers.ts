@@ -1,6 +1,7 @@
 import offerPiece from '#/database/models/Offer'
 import userPiece  from '#/database/models/User'
-import getLocale  from '#/locale/Locale'
+
+import getLocale from '#/locale/Locale'
 
 import log from './Log'
 

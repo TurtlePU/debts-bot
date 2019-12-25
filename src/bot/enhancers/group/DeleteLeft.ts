@@ -1,6 +1,6 @@
-import deleteUsers from '#/bot/helpers/DeleteUsers'
-
 import groupModel from '#/database/models/Group'
+
+import deleteUsers from '#/helpers/DeleteUsers'
 
 /**
  * Deletes users who have left the group from group document in database
