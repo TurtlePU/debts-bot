@@ -1,5 +1,10 @@
 import Mongoose from 'mongoose'
 
+const GroupSchema = new Mongoose.Schema({
+    payer_ids: [ Number ],
+    member_ids: [ Number ]
+})
+
 const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose.Schema({
     _id: {
         type: String,
@@ -29,10 +34,7 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
         }
     },
     group: {
-        type: {
-            payer_ids: [ Number ],
-            member_ids: [ Number ]
-        },
+        type: GroupSchema,
         required(this: DataBase.Offer.InDataBase) {
             return this.type == 'group'
         }
@@ -51,20 +53,7 @@ const methods: DataBase.Offer.Model = {
 }
 
 function createOffer(_id: string, offer: DataBase.Offer.InputType) {
-    if (offer.type == 'group') {
-        return new OfferModel({
-            _id,
-            group: {
-                payer_ids: [],
-                member_ids: []
-            },
-            ...offer
-        }).save()
-    } else {
-        return new OfferModel({
-            _id, ...offer
-        }).save()
-    }
+    return new OfferModel({ _id, ...offer }).save()
 }
 
 export default methods

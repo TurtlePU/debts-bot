@@ -41,12 +41,18 @@ declare namespace DataBase {
                 member_ids: MongoArray<number>
             }
         }
+        type GroupInputPart = {
+            group: {
+                payer_ids: number[]
+                member_ids: number[]
+            }
+        }
         /**
          * Type of debt offer
          */
         type DebtType = Base<'debt'> & DebtPart
         type SettleUpType = Base<'settleup'>
-        type GroupInputType = Base<'group'> & DebtPart
+        type GroupInputType = Base<'group'> & DebtPart & GroupInputPart
         /**
          * Type of group debt offer
          */

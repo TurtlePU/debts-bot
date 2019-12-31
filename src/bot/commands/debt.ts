@@ -31,11 +31,12 @@ const command: Enhancer.Command = {
                     debt: {
                         amount,
                         currency
+                    },
+                    group: {
+                        payer_ids: [ from_id ],
+                        member_ids: group.here_ids
                     }
                 })
-            offer.group.payer_ids.push(from_id)
-            offer.group.member_ids.push(...group.here_ids)
-            offer.save()
             return updateGroupDebtOfferMessage(this, chat.id, sent_message_id, offer, locale)
         } else {
             return this.sendMessage(chat.id, locale.wrongChatForDebt)
