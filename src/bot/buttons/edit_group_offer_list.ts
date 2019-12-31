@@ -17,7 +17,7 @@ const button: Enhancer.OnClick = {
         ) as DataBase.Offer.Document & DataBase.Offer.GroupType
         const list = match[1] == 'payers' ? offer.group.payer_ids : offer.group.member_ids
         if (match[2] == 'join') {
-            list.push(query.from.id)
+            list.addToSet(query.from.id)
         } else {
             list.pull(query.from.id)
         }
