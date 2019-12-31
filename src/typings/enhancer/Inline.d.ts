@@ -52,5 +52,6 @@ declare namespace Enhancer {
          */
         type OnClickStrict = OnClickBaseStrict<Click>
         type OnClickRegExp = OnClickBaseRegExp<Click>
+        type OnClick = OnClickStrict | OnClickRegExp
     }
 }
