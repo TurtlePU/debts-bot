@@ -1,6 +1,6 @@
 declare namespace DataBase {
     /**
-     * Properties of User which are stored in DataBase
+     * How User is returned from Model
      */
     type User = {
         id: number
@@ -11,6 +11,10 @@ declare namespace DataBase {
         debt_holder_in: MongoArray<number>
     }
     namespace User {
+        /**
+         * How User is supplied to Model
+         */
+        type Input = Enhancer.User
         /**
          * Mongoose document on top of User type
          */
@@ -23,7 +27,7 @@ declare namespace DataBase {
              * Updates properties of user in database
              * @param user Telegram user
              */
-            updateUser(user: Enhancer.User): Promise<Document>
+            updateUser(user: Input): Promise<Document>
             /**
              * @param id of a user
              * @returns Promise which resolves with properties of user with given ID (if present)
