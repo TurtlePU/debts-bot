@@ -39,6 +39,14 @@ declare type Locale = {
          * Text on 'update members' button
          */
         updateMembers: string
+        /**
+         * Buttons for keyboard below group debt offer
+         */
+        joinPayers: string
+        leavePayers: string
+        joinMembers: string
+        leaveMembers: string
+        lockOffer: string
     }
     /**
      * @param name of user
@@ -140,6 +148,10 @@ declare type Locale = {
          */
         membersUpdated: string
     }
+    /**
+     * Placeholder for message which will soon update
+     */
+    toUpdate: string
     /**
      * Sent if debt is requested not in group / inline mode
      */

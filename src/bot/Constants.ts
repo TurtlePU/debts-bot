@@ -16,3 +16,5 @@ export const group_join = 'group.join'
 export const group_update_members = 'group.updateMembers'
 /** 'Debt' command */
 export const group_debt_regexp = inline_debt_regexp
+/** RegExp for buttons below group debt offer message */
+export const group_debt_button_regexp = /^group\.debt\.(payers|members)\.(join|leave)$/u
