@@ -17,7 +17,7 @@ import {
 /**
  * Accepts debt offer on click
  */
-const onClick: Enhancer.Inline.OnClick = {
+const onClick: Enhancer.Inline.OnClickStrict = {
     key: inline_debt_accept,
     callback: acceptOffer(isDebtOffer, getText, act)
 }

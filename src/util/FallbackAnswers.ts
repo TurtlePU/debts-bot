@@ -34,7 +34,7 @@ export function acceptOffer<T extends DataBase.Offer.Document>(
         checker: (offer: DataBase.Offer.Document) => offer is T,
         getText: (locale: Locale, offer: T, from: DataBase.User, to: Enhancer.User) => string,
         act: (offer: T, to: Enhancer.User) => any
-): Enhancer.Inline.OnClick['callback'] {
+): Enhancer.Inline.OnClickStrict['callback'] {
     return async function(
         this: Enhancer.TelegramBot, { inline_message_id, from: to }: Enhancer.Inline.Click
     ) {

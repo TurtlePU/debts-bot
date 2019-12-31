@@ -17,7 +17,7 @@ import {
 /**
  * Accepts settle-up offer on click
  */
-const onClick: Enhancer.Inline.OnClick = {
+const onClick: Enhancer.Inline.OnClickStrict = {
     key: inline_settleup_accept,
     callback: acceptOffer(isSettleUpOffer, getText, act)
 }

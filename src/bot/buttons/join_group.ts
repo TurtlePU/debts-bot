@@ -9,7 +9,7 @@ import {
 /**
  * Adds user to group document on click
  */
-const listener: Enhancer.OnClick = {
+const listener: Enhancer.OnClickStrict = {
     key: group_join,
     callback(query) {
         pushUser(query)

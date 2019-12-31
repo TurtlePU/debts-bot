@@ -12,7 +12,7 @@ import {
 /**
  * Removes kicked members from list saved in group document
  */
-const listener: Enhancer.OnClick = {
+const listener: Enhancer.OnClickStrict = {
     key: group_update_members,
     async callback(query) {
         const locale = getLocale(query.from.language_code)
