@@ -35,7 +35,7 @@ const command: Enhancer.Command = {
                 }
             )
             offer.group?.payer_ids.push(from_id)
-            offer.group?.member_ids.nonAtomicPush(...group.here_ids)
+            offer.group?.member_ids.push(...group.here_ids)
             offer.save()
             return updateGroupDebtOfferMessage(
                 this, chat.id, sent_message_id, offer as DataBase.Offer.GroupType, locale
