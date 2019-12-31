@@ -14,11 +14,6 @@ declare namespace Enhancer {
         type Choice = import('node-telegram-bot-api').ChosenInlineResult
 
         /**
-         * Listener identifiable with string key
-         */
-        type Strict<T extends any[], U> = UniqueCallback<string, T, U>
-
-        /**
          * On-Inline listener, identifiable with string key
          */
         type StrictCommand = Strict<[Query], Result[] | Promise<Result[]>>
@@ -55,6 +50,7 @@ declare namespace Enhancer {
         /**
          * On-Button-Click listener specific for buttons below inline messages
          */
-        type OnClick = OnClickBase<Click>
+        type OnClickStrict = OnClickBaseStrict<Click>
+        type OnClickRegExp = OnClickBaseRegExp<Click>
     }
 }

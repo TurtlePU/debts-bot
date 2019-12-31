@@ -31,6 +31,10 @@ declare namespace Enhancer {
         key: Key
         callback(this: TelegramBot, ...args: CallbackArguments): CallbackReturn
     }
+    /**
+     * Listener identifiable with string key
+     */
+    type Strict<T extends any[], U> = UniqueCallback<string, T, U>
 
     /**
      * Base type for On-Button-Click events. Just Callback Query with non-optional data
@@ -39,8 +43,9 @@ declare namespace Enhancer {
     /**
      * Base type for On-Button-Click listeners
      */
-    type OnClickBase<ClickEvent> =
-        UniqueCallback<string | RegExp, [ClickEvent], MaybePromise<ClickResult>>
+    type OnClickBaseStrict<ClickEvent> = Strict<[ClickEvent], MaybePromise<ClickResult>>
+    type OnClickBaseRegExp<ClickEvent> =
+        UniqueCallback<RegExp, [ClickEvent, RegExpExecArray], MaybePromise<ClickResult>>
 
     /**
      * On-Text-Listener, a.k.a bot command
@@ -57,5 +62,6 @@ declare namespace Enhancer {
     /**
      * On-Button-Click-Listener, specific for buttons below usual messages
      */
-    type OnClick = OnClickBase<ClickEvent>
+    type OnClickStrict = OnClickBaseStrict<ClickEvent>
+    type OnClickRegExp = OnClickBaseRegExp<ClickEvent>
 }

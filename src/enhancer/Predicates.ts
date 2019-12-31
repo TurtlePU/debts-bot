@@ -1,23 +1,10 @@
 /**
- * Checks if `value` matches the `matcher`
- * @param matcher usually, a key of some listener
- * @param value usually, a Telegram id or data
- */
-export function matches(matcher: string | RegExp, value: string) {
-    if (typeof matcher == 'string') {
-        return matcher == value
-    } else {
-        return matcher.test(value)
-    }
-}
-
-/**
  * Checks if listener is identifiable by string key
  * @param callback listener to check
  */
 export function isStrict(
         callback: Enhancer.UniqueCallback<any, any, any>
-): callback is Enhancer.Inline.Strict<any, any> {
+): callback is Enhancer.Strict<any, any> {
     return typeof callback.key == 'string'
 }
 

@@ -1,5 +1,4 @@
 import {
-    matches,
     isClickEvent,
     isSimpleClick,
     isStrict
@@ -32,11 +31,13 @@ export default class Enhancer {
     /**
      * List of CallbackQuery listeners for buttons below usual messages
      */
-    private readonly onClickListeners: Enhancer.OnClick[] = []
+    private readonly onClickStrictListeners: Enhancer.OnClickStrict[] = []
+    private readonly onClickRegExpListeners: Enhancer.OnClickRegExp[] = []
     /**
      * List of CallbackQuery listeners for buttons below inline messages
      */
-    private readonly onInlineClickListeners: Enhancer.Inline.OnClick[] = []
+    private readonly onInlineClickStrictListeners: Enhancer.Inline.OnClickStrict[] = []
+    private readonly onInlineClickRegExpListeners: Enhancer.Inline.OnClickRegExp[] = []
 
     /**
      * Constructs new Enhancer
@@ -111,8 +112,12 @@ export default class Enhancer {
      * Adds new OnClick listener (for buttons below usual messages) to bot
      * @param onClick OnClick listener to add
      */
-    public onClick(onClick: Enhancer.OnClick): this {
-        this.onClickListeners.push(onClick)
+    public onClick(onClick: Enhancer.OnClickStrict | Enhancer.OnClickRegExp): this {
+        if (isStrict(onClick)) {
+            this.onClickStrictListeners.push(onClick)
+        } else {
+            this.onClickRegExpListeners.push(onClick)
+        }
         return this
     }
 
@@ -120,8 +125,14 @@ export default class Enhancer {
      * Adds new OnClick listener (for buttons below inline messages) to bot
      * @param onClick OnClick listener to add
      */
-    public onInlineClick(onClick: Enhancer.Inline.OnClick): this {
-        this.onInlineClickListeners.push(onClick)
+    public onInlineClick(
+        onClick: Enhancer.Inline.OnClickStrict | Enhancer.Inline.OnClickRegExp
+    ): this {
+        if (isStrict(onClick)) {
+            this.onInlineClickStrictListeners.push(onClick)
+        } else {
+            this.onInlineClickRegExpListeners.push(onClick)
+        }
         return this
     }
 
@@ -170,14 +181,25 @@ export default class Enhancer {
      */
     private async onCallbackQuery(query: import('node-telegram-bot-api').CallbackQuery) {
         if (isClickEvent(query)) {
-            const listeners: Enhancer.OnClickBase<any>[] = isSimpleClick(query)
-                ? this.onClickListeners
-                : this.onInlineClickListeners
-            const result = await listeners.find(
-                ({ key }) => matches(key, query.data)
+            const strictListeners: Enhancer.OnClickBaseStrict<any>[] = isSimpleClick(query)
+                ? this.onClickStrictListeners
+                : this.onInlineClickStrictListeners
+            const strictResult = await strictListeners.find(
+                ({ key }) => key == query.data
             )?.callback.call(this.bot, query)
-            if (result) {
-                this.bot.answerCallbackQuery(query.id, result)
+            if (strictResult) {
+                return this.bot.answerCallbackQuery(query.id, strictResult)
+            }
+            const regExpListeners: Enhancer.OnClickBaseRegExp<any>[] = isSimpleClick(query)
+                ? this.onClickRegExpListeners
+                : this.onInlineClickRegExpListeners
+            for (const listener of regExpListeners) {
+                const match = listener.key.exec(query.data)
+                if (match) {
+                    return this.bot.answerCallbackQuery(query.id,
+                        // eslint-disable-next-line no-await-in-loop
+                        await listener.callback.call(this.bot, query, match))
+                }
             }
         } else {
             throw new Error('No data provided')
