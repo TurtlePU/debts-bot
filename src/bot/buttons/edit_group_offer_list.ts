@@ -11,31 +11,36 @@ import {
 import {
     groupOfferId
 } from '#/helpers/IdGenerator'
-import { isGroupOffer } from '#/util/Predicates'
+
+import {
+    isGroupOffer
+} from '#/util/Predicates'
 
 const button: Enhancer.OnClick = {
     key: group_debt_button_regexp,
-    async callback(query, match) {
+    async callback({ from, message }, match) {
+        const locale = getLocale(from.language_code)
         const offer = await offerModel.getOffer(
-            groupOfferId(query.message.chat.id, query.message.message_id)
+            groupOfferId(message.chat.id, message.message_id)
         )
         if (!offer || !isGroupOffer(offer)) {
-            return {
-                text: 'Fail'
-            }
+            const text = locale.offer.expired
+            this.editMessageText(text, {
+                chat_id: message.chat.id,
+                message_id: message.message_id
+            })
+            return { text }
         }
         const list = match[1] == 'payers' ? offer.group.payer_ids : offer.group.member_ids
         if (match[2] == 'join') {
-            list.addToSet(query.from.id)
+            list.addToSet(from.id)
         } else {
-            list.pull(query.from.id)
+            list.pull(from.id)
         }
         offer.save()
-        UpdateGroupDebtOfferMessage(
-            this, query.message.chat.id, query.message.message_id, offer,
-            getLocale(query.from.language_code))
+        UpdateGroupDebtOfferMessage(this, message.chat.id, message.message_id, offer, locale)
         return {
-            text: 'Success'
+            text: locale.response.membersUpdated
         }
     }
 }
