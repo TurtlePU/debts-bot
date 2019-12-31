@@ -69,17 +69,11 @@ declare namespace DataBase {
          */
         type Model = {
             /**
-             * Creates new inline-mode offer
+             * Creates new offer
              * @param id of new offer
              * @param offer offer object
              */
-            createInlineOffer(id: string, offer: InputType): Promise<Document>
-            /**
-             * Creates new in-group offer
-             * @param id of new offer
-             * @param offer offer object
-             */
-            createGroupOffer(id: string, offer: InputType): Promise<Document>
+            createOffer(id: string, offer: InputType): Promise<Document>
             /**
              * @param id of an offer
              * @returns props of offer how they are stored in DataBase (if present)

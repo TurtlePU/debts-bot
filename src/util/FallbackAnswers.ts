@@ -8,6 +8,7 @@ import log from './Log'
 import {
     getUserName
 } from './StringUtils'
+import { inlineOfferId } from '#/helpers/IdGenerator'
 
 /**
  * Callback for 'decline offer' buttons
@@ -17,7 +18,7 @@ import {
 export function declineOffer(
         this: Enhancer.TelegramBot, clickEvent: Enhancer.Inline.Click): Enhancer.ClickResult {
     const { inline_message_id, from } = clickEvent
-    offerPiece.deleteOffer(inline_message_id).catch(log)
+    offerPiece.deleteOffer(inlineOfferId(inline_message_id)).catch(log)
     const text = getLocale(from.language_code).offer.declined(getUserName(from))
     this.editMessageText(text, { inline_message_id }).catch(log)
     return { text }
@@ -39,7 +40,7 @@ export function acceptOffer<T extends DataBase.Offer.Document>(
         this: Enhancer.TelegramBot, { inline_message_id, from: to }: Enhancer.Inline.Click
     ) {
         const locale = getLocale(to.language_code)
-        const offer = await offerPiece.getOffer(inline_message_id)
+        const offer = await offerPiece.getOffer(inlineOfferId(inline_message_id))
         if (!offer || !checker(offer)) {
             const text = locale.offer.expired
             this.editMessageText(text, { inline_message_id }).catch(log)

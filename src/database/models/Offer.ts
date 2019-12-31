@@ -45,8 +45,7 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
 }))
 
 const methods: DataBase.Offer.Model = {
-    createGroupOffer: (id, offer) => createOffer(`group:${id}`, offer),
-    createInlineOffer: (id, offer) => createOffer(`inline:${id}`, offer),
+    createOffer,
     getOffer: OfferModel.findById.bind(OfferModel),
     deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
 }

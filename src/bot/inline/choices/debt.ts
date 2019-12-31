@@ -5,6 +5,7 @@ import log from '#/util/Log'
 import {
     inline_debt_regexp
 } from '#/bot/Constants'
+import { inlineOfferId } from '#/helpers/IdGenerator'
 
 /**
  * Saves chosen debt offer to Offer model
@@ -17,7 +18,7 @@ const consumer: Enhancer.Inline.ChoiceConsumer = {
         }
         const amount = +match[1]
         const currency = match[2]
-        offerPiece.createInlineOffer(inline_message_id, {
+        offerPiece.createOffer(inlineOfferId(inline_message_id), {
             from_id: from.id,
             type: 'debt',
             debt: { amount, currency }

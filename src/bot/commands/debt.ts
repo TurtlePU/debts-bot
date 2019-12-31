@@ -1,7 +1,7 @@
 import groupModel from '#/database/models/Group'
 import offerModel from '#/database/models/Offer'
 
-import makeOfferId from '#/helpers/MakeOfferId'
+import { groupOfferId } from '#/helpers/IdGenerator'
 import updateGroupDebtOfferMessage from '#/helpers/UpdateGroupDebtOfferMessage'
 
 import getLocale from '#/locale/Locale'
@@ -24,22 +24,19 @@ const command: Enhancer.Command = {
             const { id: from_id } = <Enhancer.User> from
             const group = await groupModel.makeOrGetGroup(chat.id)
             const { message_id: sent_message_id } = await this.sendMessage(chat.id, locale.toUpdate)
-            const offer = await offerModel.createGroupOffer(
-                makeOfferId(chat.id, sent_message_id), {
+            const offer = <DataBase.Offer.GroupType & DataBase.Offer.Document>
+                await offerModel.createOffer(groupOfferId(chat.id, sent_message_id), {
                     from_id,
                     type: 'group',
                     debt: {
                         amount,
                         currency
                     }
-                }
-            )
-            offer.group?.payer_ids.push(from_id)
-            offer.group?.member_ids.push(...group.here_ids)
+                })
+            offer.group.payer_ids.push(from_id)
+            offer.group.member_ids.push(...group.here_ids)
             offer.save()
-            return updateGroupDebtOfferMessage(
-                this, chat.id, sent_message_id, offer as DataBase.Offer.GroupType, locale
-            )
+            return updateGroupDebtOfferMessage(this, chat.id, sent_message_id, offer, locale)
         } else {
             return this.sendMessage(chat.id, locale.wrongChatForDebt)
         }
