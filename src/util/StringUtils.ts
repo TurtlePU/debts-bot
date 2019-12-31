@@ -1,4 +1,4 @@
-const control_symbols = /[*_[\]()`\\]/u
+const control_symbols = /[*_[\]()`\\]/gu
 
 /**
  * Prepends unintended markdown control symbols with single inverse slash
