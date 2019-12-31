@@ -2,7 +2,7 @@ declare namespace DataBase {
     /**
      * TypeScript magic above Offer properties stored in DataBase
      */
-    type Offer = Offer.DebtType | Offer.Base<'settleup'> | Offer.GroupType
+    type Offer = Offer.DebtType | Offer.SettleUpType | Offer.GroupType
     namespace Offer {
         /**
          * Base type for all offers
@@ -45,10 +45,13 @@ declare namespace DataBase {
          * Type of debt offer
          */
         type DebtType = Base<'debt'> & DebtPart
+        type SettleUpType = Base<'settleup'>
+        type GroupInputType = Base<'group'> & DebtPart
         /**
          * Type of group debt offer
          */
-        type GroupType = Base<'group'> & DebtPart & GroupPart
+        type GroupType = GroupInputType & GroupPart
+        type InputType = Offer.DebtType | Offer.SettleUpType | Offer.GroupInputType
         /**
          * Offer properties how they are stored in DataBase
          */
@@ -70,13 +73,13 @@ declare namespace DataBase {
              * @param id of new offer
              * @param offer offer object
              */
-            createInlineOffer(id: string, offer: Offer): Promise<Document>
+            createInlineOffer(id: string, offer: InputType): Promise<Document>
             /**
              * Creates new in-group offer
              * @param id of new offer
              * @param offer offer object
              */
-            createGroupOffer(id: string, offer: Offer): Promise<Document>
+            createGroupOffer(id: string, offer: InputType): Promise<Document>
             /**
              * @param id of an offer
              * @returns props of offer how they are stored in DataBase (if present)

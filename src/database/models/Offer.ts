@@ -51,8 +51,12 @@ const methods: DataBase.Offer.Model = {
     deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
 }
 
-function createOffer(_id: string, offer: DataBase.Offer) {
-    return new OfferModel({ _id, ...offer }).save()
+function createOffer(_id: string, offer: DataBase.Offer.InputType) {
+    return new OfferModel({
+        _id,
+        group: offer.type == 'group' ? {} : undefined,
+        ...offer
+    }).save()
 }
 
 export default methods
