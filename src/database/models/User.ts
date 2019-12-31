@@ -12,7 +12,8 @@ const UserModel = Mongoose.model<DataBase.User.Document>('User', new Mongoose.Sc
     name: {
         type: String,
         required: true
-    }
+    },
+    debt_holder_in: [ Number ]
 }))
 
 const methods: DataBase.User.Model = {
