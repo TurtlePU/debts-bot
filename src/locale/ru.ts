@@ -74,6 +74,17 @@ const ru: Locale = {
             } else {
                 return names.reduce((prev, name) => `${prev}\n${name}`, 'Участники:\n')
             }
+        },
+        offer(amount, currency, payers, members) {
+            return `Сумма долга: ${amount} ${currency}.\n` + (
+                payers.length
+                    ? payers.reduce((str, curr) => `${str}\n${curr}`, '\nКто заплатил:')
+                    : ''
+            ) + (
+                members.length
+                    ? members.reduce((str, curr) => `${str}\n${curr}`, '\nКто теперь должен:')
+                    : ''
+            )
         }
     },
     response: {

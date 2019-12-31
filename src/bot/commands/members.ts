@@ -16,7 +16,7 @@ const command: Enhancer.Command = {
         if (isGroup(msg.chat)) {
             const group = await groupModel.makeOrGetGroup(msg.chat.id)
             console.log(group)
-            const names = await getNames(group)
+            const names = await getNames(group.here_ids)
             console.log(names)
             return this.sendMessage(
                 msg.chat.id,

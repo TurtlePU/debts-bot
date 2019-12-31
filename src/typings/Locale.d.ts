@@ -129,6 +129,14 @@ declare type Locale = {
          * @param names members' names
          */
         members(names: string[]): string
+        /**
+         * Formats a group debt offer current state
+         * @param amount of debt
+         * @param currency of debt
+         * @param payers list of those who pay
+         * @param members list of those who benefited
+         */
+        offer(amount: number, currency: string, payers: string[], members: string[]): string
     }
     /**
      * OnClick responses to click on 'join'

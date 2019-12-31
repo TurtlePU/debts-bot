@@ -5,10 +5,10 @@ import {
 } from '#/util/Predicates'
 
 /**
- * Gets names of users saved in group document
- * @param group 
+ * Gets names of users by their ids
+ * @param ids list of IDs of users
  */
-export default async function(group: DataBase.Group.Document) {
-    const users = await Promise.all(group.here_ids.map(id => userModel.getUser(id)))
+export default async function(ids: number[]) {
+    const users = await Promise.all(ids.map(id => userModel.getUser(id)))
     return users.filter(isDefined).map(({ name }) => name)
 }
