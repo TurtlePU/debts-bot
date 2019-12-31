@@ -55,7 +55,10 @@ function createOffer(_id: string, offer: DataBase.Offer.InputType) {
     if (offer.type == 'group') {
         return new OfferModel({
             _id,
-            group: {},
+            group: {
+                payer_ids: [],
+                member_ids: []
+            },
             ...offer
         }).save()
     } else {
