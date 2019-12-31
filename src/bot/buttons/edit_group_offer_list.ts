@@ -1,12 +1,13 @@
 import offerModel from '#/database/models/Offer'
 
 import makeOfferId from '#/helpers/MakeOfferId'
+import UpdateGroupDebtOfferMessage from '#/helpers/UpdateGroupDebtOfferMessage'
+
+import getLocale from '#/locale/Locale'
 
 import {
     group_debt_button_regexp
 } from '#/bot/Constants'
-import UpdateGroupDebtOfferMessage from '#/helpers/UpdateGroupDebtOfferMessage'
-import getLocale from '#/locale/Locale'
 
 const button: Enhancer.OnClick = {
     key: group_debt_button_regexp,
