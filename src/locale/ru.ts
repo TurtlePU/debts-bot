@@ -81,6 +81,8 @@ const ru: Locale = {
                     ? payers.reduce((str, curr) => `${str}\n${curr}`, '\nКто заплатил:')
                     : ''
             ) + (
+                payers.length && members.length ? '\n' : ''
+            ) + (
                 members.length
                     ? members.reduce((str, curr) => `${str}\n${curr}`, '\nКто теперь должен:')
                     : ''
