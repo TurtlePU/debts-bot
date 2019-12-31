@@ -28,6 +28,15 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
             return this.type == 'debt'
         }
     },
+    group: {
+        type: {
+            payer_ids: [ Number ],
+            member_ids: [ Number ]
+        },
+        required(this: DataBase.Offer.InDataBase) {
+            return this.type == 'group'
+        }
+    },
     created: {
         type: Date,
         expires: 3600,
@@ -36,11 +45,14 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
 }))
 
 const methods: DataBase.Offer.Model = {
-    createOffer(_id: string, offer: DataBase.Offer) {
-        return new OfferModel({ _id, ...offer }).save()
-    },
+    createGroupOffer: (id, offer) => createOffer(`group:${id}`, offer),
+    createInlineOffer: (id, offer) => createOffer(`inline:${id}`, offer),
     getOffer: OfferModel.findById.bind(OfferModel),
     deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
+}
+
+function createOffer(_id: string, offer: DataBase.Offer) {
+    return new OfferModel({ _id, ...offer }).save()
 }
 
 export default methods

@@ -2,7 +2,7 @@ declare namespace DataBase {
     /**
      * TypeScript magic above Offer properties stored in DataBase
      */
-    type Offer = Offer.DebtType | Offer.Base<'settleup'>
+    type Offer = Offer.DebtType | Offer.Base<'settleup'> | Offer.GroupType
     namespace Offer {
         /**
          * Base type for all offers
@@ -27,13 +27,33 @@ declare namespace DataBase {
             }
         }
         /**
+         * Part specific for group debt offers
+         */
+        type GroupPart = {
+            group: {
+                /**
+                 * Those who paid
+                 */
+                payer_ids: MongoArray<number>
+                /**
+                 * Those who used money
+                 */
+                member_ids: MongoArray<number>
+            }
+        }
+        /**
          * Type of debt offer
          */
         type DebtType = Base<'debt'> & DebtPart
         /**
+         * Type of group debt offer
+         */
+        type GroupType = Base<'group'> & DebtPart & GroupPart
+        /**
          * Offer properties how they are stored in DataBase
          */
-        type InDataBase = Base<'debt' | 'settleup'> & Partial<DebtPart>
+        type InDataBase =
+            Base<'debt' | 'settleup' | 'group'> & Partial<DebtPart> & Partial<GroupPart>
         /**
          * Mongoose document on top of Offer properties in DataBase
          */
@@ -46,11 +66,17 @@ declare namespace DataBase {
          */
         type Model = {
             /**
-             * Creates new offer
+             * Creates new inline-mode offer
              * @param id of new offer
              * @param offer offer object
              */
-            createOffer(id: string, offer: Offer): Promise<Document>
+            createInlineOffer(id: string, offer: Offer): Promise<Document>
+            /**
+             * Creates new in-group offer
+             * @param id of new offer
+             * @param offer offer object
+             */
+            createGroupOffer(id: string, offer: Offer): Promise<Document>
             /**
              * @param id of an offer
              * @returns props of offer how they are stored in DataBase (if present)

@@ -15,7 +15,7 @@ const consumer: Enhancer.Inline.StrictChoiceConsumer = {
         if (!inline_message_id) {
             throw new Error('Inline message id is missing')
         }
-        offerPiece.createOffer(inline_message_id, {
+        offerPiece.createInlineOffer(inline_message_id, {
             from_id: from.id,
             type: 'settleup'
         }).catch(log)
