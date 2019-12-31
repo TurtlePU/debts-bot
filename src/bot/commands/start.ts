@@ -7,6 +7,7 @@ import {
 import {
     group_join
 } from '#/bot/Constants'
+import { isGroup } from '#/util/Predicates'
 
 /**
  * Shows basic help message on /start command
@@ -15,7 +16,7 @@ const command: Enhancer.Command = {
     key: /\/start/u,
     callback(msg) {
         const locale = getLocale(msg.from?.language_code)
-        if (msg.chat.type == 'group' || msg.chat.type == 'supergroup') {
+        if (isGroup(msg.chat)) {
             return this.sendMessage(msg.chat.id, locale.group.hi, {
                 reply_markup: {
                     inline_keyboard: [
