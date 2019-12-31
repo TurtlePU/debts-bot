@@ -5,7 +5,10 @@ import log from '#/util/Log'
 import {
     inline_debt_regexp
 } from '#/bot/Constants'
-import { inlineOfferId } from '#/helpers/IdGenerator'
+
+import {
+    inlineOfferId
+} from '#/helpers/IdGenerator'
 
 /**
  * Saves chosen debt offer to Offer model

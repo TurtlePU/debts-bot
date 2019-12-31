@@ -29,13 +29,13 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
                 required: true
             }
         },
-        required(this: DataBase.Offer.InDataBase) {
+        required(this: DataBase.Offer.Document) {
             return this.type == 'debt'
         }
     },
     group: {
         type: GroupSchema,
-        required(this: DataBase.Offer.InDataBase) {
+        required(this: DataBase.Offer.Document) {
             return this.type == 'group'
         }
     },
@@ -52,7 +52,7 @@ const methods: DataBase.Offer.Model = {
     deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
 }
 
-function createOffer(_id: string, offer: DataBase.Offer.InputType) {
+function createOffer(_id: string, offer: DataBase.Offer.Input): any {
     return new OfferModel({ _id, ...offer }).save()
 }
 

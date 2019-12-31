@@ -5,7 +5,10 @@ import log from '#/util/Log'
 import {
     inline_settleup_article_id
 } from '#/bot/Constants'
-import { inlineOfferId } from '#/helpers/IdGenerator'
+
+import {
+    inlineOfferId
+} from '#/helpers/IdGenerator'
 
 /**
  * Saves chosen settle-up offer to Offer model

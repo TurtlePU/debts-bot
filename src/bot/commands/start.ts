@@ -1,13 +1,16 @@
 import getLocale from '#/locale/Locale'
 
 import {
-    getUserName
-} from '#/util/StringUtils'
-
-import {
     group_join
 } from '#/bot/Constants'
-import { isGroup } from '#/util/Predicates'
+
+import {
+    isGroup
+} from '#/util/Predicates'
+
+import {
+    getUserName
+} from '#/util/StringUtils'
 
 /**
  * Shows basic help message on /start command

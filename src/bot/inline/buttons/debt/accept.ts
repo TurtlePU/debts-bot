@@ -24,19 +24,19 @@ const onClick: Enhancer.Inline.OnClickStrict = {
 
 function isDebtOffer(
         offer: DataBase.Offer.Document
-): offer is DataBase.Offer.Document & DataBase.Offer.DebtType {
+): offer is DataBase.Offer.Document<DataBase.Offer.Types.Debt> {
     return offer.type == 'debt'
 }
 
 function getText(
-        locale: Locale, offer: DataBase.Offer.DebtType, from: DataBase.User, to: Enhancer.User) {
+        locale: Locale, offer: DataBase.Offer.Types.Debt, from: DataBase.User, to: Enhancer.User) {
     return locale.offer.saved(
         from.name, getUserName(to),
         offer.debt.amount, offer.debt.currency
     )
 }
 
-function act(offer: DataBase.Offer.DebtType, from: Enhancer.User) {
+function act(offer: DataBase.Offer.Types.Debt, from: Enhancer.User) {
     return debtPiece.saveDebt({
         amount: offer.debt.amount,
         currency: offer.debt.currency,

@@ -1,7 +1,6 @@
 import groupModel from '#/database/models/Group'
 import offerModel from '#/database/models/Offer'
 
-import { groupOfferId } from '#/helpers/IdGenerator'
 import updateGroupDebtOfferMessage from '#/helpers/UpdateGroupDebtOfferMessage'
 
 import getLocale from '#/locale/Locale'
@@ -9,6 +8,10 @@ import getLocale from '#/locale/Locale'
 import {
     group_debt_regexp
 } from '#/bot/Constants'
+
+import {
+    groupOfferId
+} from '#/helpers/IdGenerator'
 
 import {
     isGroup
@@ -24,8 +27,8 @@ const command: Enhancer.Command = {
             const { id: from_id } = <Enhancer.User> from
             const group = await groupModel.makeOrGetGroup(chat.id)
             const { message_id: sent_message_id } = await this.sendMessage(chat.id, locale.toUpdate)
-            const offer = <DataBase.Offer.GroupType & DataBase.Offer.Document>
-                await offerModel.createOffer(groupOfferId(chat.id, sent_message_id), {
+            const offer = await offerModel.createOffer(
+                groupOfferId(chat.id, sent_message_id), {
                     from_id,
                     type: 'group',
                     debt: {

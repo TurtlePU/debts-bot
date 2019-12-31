@@ -13,3 +13,9 @@ export function isDefined<T>(obj: T | null | undefined): obj is T {
 export function isGroup(chat: import('node-telegram-bot-api').Chat): boolean {
     return chat.type == 'group' || chat.type == 'supergroup'
 }
+
+export function isGroupOffer(
+        offer: DataBase.Offer.Document
+): offer is DataBase.Offer.Document<DataBase.Offer.Types.Group> {
+    return offer.type == 'group'
+}
