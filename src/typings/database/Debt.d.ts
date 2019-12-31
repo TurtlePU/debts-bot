@@ -1,4 +1,8 @@
 declare namespace DataBase {
+    /**
+     * Debt how it is returned from model
+     */
+    type Debt = Debt.Info & { to: number }
     namespace Debt {
         /**
          * Info about debt; also base class for different implementations
@@ -8,13 +12,9 @@ declare namespace DataBase {
             currency: string
         }
         /**
-         * Debt how it is returned from model
-         */
-        type Output = Info & { to: number }
-        /**
          * Debt how it should be supplied to model
          */
-        type Input = Debt.Output & { from: number }
+        type Input = Debt & { from: number }
         /**
          * Mongoose document on top of debt
          */
@@ -32,7 +32,7 @@ declare namespace DataBase {
              * Gets debts of user how they are stored in database
              * @param id of a user
              */
-            getDebts(id: number): Promise<Output[]>
+            getDebts(id: number): Promise<Debt[]>
             /**
              * Clears all debts between two users
              * @param first ID of a first user

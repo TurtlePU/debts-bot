@@ -24,7 +24,7 @@ const command: Enhancer.Command = {
 
 export default command
 
-async function formatter({ to, ...info }: DataBase.Debt.Output) {
+async function formatter({ to, ...info }: DataBase.Debt) {
     const toUser = await userPiece.getUser(to)
     if (!toUser) {
         throw new Error('Name of bot user not found in database')
