@@ -140,4 +140,8 @@ declare type Locale = {
          */
         membersUpdated: string
     }
+    /**
+     * Sent if debt is requested not in group / inline mode
+     */
+    wrongChatForDebt: string
 }

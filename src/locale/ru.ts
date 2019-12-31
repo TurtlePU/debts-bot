@@ -73,7 +73,10 @@ const ru: Locale = {
     },
     response: {
         membersUpdated: 'Список участников обновлен.'
-    }
+    },
+    wrongChatForDebt:
+        'Здесь нельзя создавать долги!\n' +
+        'Напиши мне либо в inline-режиме для парного долга, либо в группе для группового.'
 }
 
 export default ru

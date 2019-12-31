@@ -6,6 +6,7 @@ import joinGroup   from './buttons/join_group'
 import updateGroup from './buttons/update_group'
 
 import balance from './commands/balance'
+import debt    from './commands/debt'
 import members from './commands/members'
 import start   from './commands/start'
 
@@ -39,6 +40,7 @@ export function connectBot(bot: TelegramBot, url: string, token: string) {
 export function enhanceBot(bot: TelegramBot) {
     new Enhancer(bot)
         .command(balance)
+        .command(debt)
         .command(members)
         .command(start)
         .onClick(joinGroup)

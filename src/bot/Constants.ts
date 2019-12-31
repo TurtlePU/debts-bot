@@ -14,3 +14,5 @@ export const inline_settleup_article_id = 'settle-up'
 export const group_join = 'group.join'
 /** Key of 'update members' button in group */
 export const group_update_members = 'group.updateMembers'
+/** 'Debt' command */
+export const group_debt_regexp = inline_debt_regexp
