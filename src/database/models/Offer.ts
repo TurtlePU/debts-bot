@@ -52,11 +52,17 @@ const methods: DataBase.Offer.Model = {
 }
 
 function createOffer(_id: string, offer: DataBase.Offer.InputType) {
-    return new OfferModel({
-        _id,
-        group: offer.type == 'group' ? {} : undefined,
-        ...offer
-    }).save()
+    if (offer.type == 'group') {
+        return new OfferModel({
+            _id,
+            group: {},
+            ...offer
+        }).save()
+    } else {
+        return new OfferModel({
+            _id, ...offer
+        }).save()
+    }
 }
 
 export default methods
