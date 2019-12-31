@@ -35,7 +35,7 @@ function onGroupCreated(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
 
 function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, code?: string) {
     const locale = getLocale(code)
-    bot.sendMessage(msg.chat.id, locale.group.hi, {
+    bot.sendMessage(msg.chat.id, locale.messageTexts.group.hi, {
         reply_markup: {
             inline_keyboard: [
                 [ { text: locale.buttons.join, callback_data: group_join } ]

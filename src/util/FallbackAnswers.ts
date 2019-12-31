@@ -19,7 +19,7 @@ export function declineOffer(
         this: Enhancer.TelegramBot, clickEvent: Enhancer.Inline.Click): Enhancer.ClickResult {
     const { inline_message_id, from } = clickEvent
     offerPiece.deleteOffer(inlineOfferId(inline_message_id)).catch(log)
-    const text = getLocale(from.language_code).offer.declined(getUserName(from))
+    const text = getLocale(from.language_code).hybrid.offer.declined(getUserName(from))
     this.editMessageText(text, { inline_message_id }).catch(log)
     return { text }
 }
@@ -42,11 +42,11 @@ export function acceptOffer<T extends DataBase.Offer.Document>(
         const locale = getLocale(to.language_code)
         const offer = await offerPiece.getOffer(inlineOfferId(inline_message_id))
         if (!offer || !checker(offer)) {
-            const text = locale.offer.expired
+            const text = locale.hybrid.offer.expired
             this.editMessageText(text, { inline_message_id }).catch(log)
             return { text }
         } else if (offer.from_id == to.id) {
-            return { text: locale.offer.selfAccept }
+            return { text: locale.response.selfAccept }
         } else {
             const from = await userPiece.getUser(offer.from_id)
             if (!from) {

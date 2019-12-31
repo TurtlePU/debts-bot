@@ -29,7 +29,7 @@ function isSettleUpOffer(
 }
 
 function getText(locale: Locale, _: any, offerFrom: DataBase.User, from: Enhancer.User) {
-    return locale.settleUp(offerFrom.name, getUserName(from))
+    return locale.messageTexts.settledUp(offerFrom.name, getUserName(from))
 }
 
 function act(offer: DataBase.Offer, from: Enhancer.User) {

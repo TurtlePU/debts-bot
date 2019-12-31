@@ -14,9 +14,9 @@ const command: Enhancer.Command = {
         const locale = getLocale(msg.from?.language_code)
         let message: string
         if (!msg.from) {
-            message = locale.anon
+            message = locale.messageTexts.anon
         } else {
-            message = locale.debts(await getFormattedDebts(msg.from.id))
+            message = locale.messageTexts.debts(await getFormattedDebts(msg.from.id))
         }
         return this.sendMessage(msg.chat.id, message)
     }

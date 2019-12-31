@@ -24,7 +24,7 @@ const button: Enhancer.OnClick = {
             groupOfferId(message.chat.id, message.message_id)
         )
         if (!offer || !isGroupOffer(offer)) {
-            const text = locale.offer.expired
+            const text = locale.hybrid.offer.expired
             this.editMessageText(text, {
                 chat_id: message.chat.id,
                 message_id: message.message_id

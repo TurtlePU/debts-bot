@@ -18,16 +18,14 @@ const command: Enhancer.Command = {
         const locale = getLocale(msg.from?.language_code)
         if (isGroup(msg.chat)) {
             const group = await groupModel.makeOrGetGroup(msg.chat.id)
-            console.log(group)
             const names = await getNames(group.here_ids)
-            console.log(names)
             return this.sendMessage(
                 msg.chat.id,
-                locale.group.members(names),
+                locale.messageTexts.group.members(names),
                 membersReplyMarkup(locale)
             )
         } else {
-            return this.sendMessage(msg.chat.id, locale.group.notGroup)
+            return this.sendMessage(msg.chat.id, locale.messageTexts.group.notGroup)
         }
     }
 }

@@ -16,9 +16,9 @@ const command: Enhancer.Inline.RegExpCommand = {
         return [ {
             id: inline_settleup_article_id,
             type: 'article',
-            title: locale.settleUpArticle.title,
+            title: locale.articles.settleUp.title,
             input_message_content: {
-                message_text: locale.settleUpArticle.text,
+                message_text: locale.articles.settleUp.text,
                 parse_mode: 'Markdown'
             },
             reply_markup: {

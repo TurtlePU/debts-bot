@@ -20,7 +20,7 @@ const command: Enhancer.Command = {
     callback(msg) {
         const locale = getLocale(msg.from?.language_code)
         if (isGroup(msg.chat)) {
-            return this.sendMessage(msg.chat.id, locale.group.hi, {
+            return this.sendMessage(msg.chat.id, locale.messageTexts.group.hi, {
                 reply_markup: {
                     inline_keyboard: [
                         [ { text: locale.buttons.join, callback_data: group_join } ]
@@ -28,9 +28,9 @@ const command: Enhancer.Command = {
                 }
             })
         } else if (!msg.from) {
-            return this.sendMessage(msg.chat.id, locale.anon)
+            return this.sendMessage(msg.chat.id, locale.messageTexts.anon)
         } else {
-            return this.sendMessage(msg.chat.id, locale.hi(getUserName(msg.from)))
+            return this.sendMessage(msg.chat.id, locale.messageTexts.hi(getUserName(msg.from)))
         }
     }
 }

@@ -13,7 +13,7 @@ const listener: Enhancer.OnClickStrict = {
     key: group_join,
     callback(query) {
         pushUser(query)
-        const text = getLocale(query.from.language_code).join.success
+        const text = getLocale(query.from.language_code).response.joinSuccess
         return { text }
     }
 }

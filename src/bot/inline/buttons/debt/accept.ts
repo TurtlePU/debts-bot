@@ -30,7 +30,7 @@ function isDebtOffer(
 
 function getText(
         locale: Locale, offer: DataBase.Offer.Types.Debt, from: DataBase.User, to: Enhancer.User) {
-    return locale.offer.saved(
+    return locale.messageTexts.offerSaved(
         from.name, getUserName(to),
         offer.debt.amount, offer.debt.currency
     )

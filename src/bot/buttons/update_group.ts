@@ -18,7 +18,7 @@ const listener: Enhancer.OnClickStrict = {
         const locale = getLocale(query.from.language_code)
         const group = await groupModel.makeOrGetGroup(query.message.chat.id)
         await deleteKicked(this, group)
-        this.editMessageText(locale.group.members(await getNames(group.here_ids)), {
+        this.editMessageText(locale.messageTexts.group.members(await getNames(group.here_ids)), {
             chat_id: query.message.chat.id,
             message_id: query.message.message_id,
             reply_markup: membersReplyMarkup(locale).reply_markup

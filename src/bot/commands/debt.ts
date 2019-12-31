@@ -26,7 +26,8 @@ const command: Enhancer.Command = {
             const currency = match[2] ?? locale.currency
             const { id: from_id } = <Enhancer.User> from
             const group = await groupModel.makeOrGetGroup(chat.id)
-            const { message_id: sent_message_id } = await this.sendMessage(chat.id, locale.toUpdate)
+            const { message_id: sent_message_id } =
+                await this.sendMessage(chat.id, locale.messageTexts.toUpdate)
             const offer = await offerModel.createOffer(
                 groupOfferId(chat.id, sent_message_id), {
                     from_id,
@@ -42,7 +43,7 @@ const command: Enhancer.Command = {
                 })
             return updateGroupDebtOfferMessage(this, chat.id, sent_message_id, offer, locale)
         } else {
-            return this.sendMessage(chat.id, locale.wrongChatForDebt)
+            return this.sendMessage(chat.id, locale.messageTexts.wrongChatForDebt)
         }
     }
 }
