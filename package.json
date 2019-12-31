@@ -1,7 +1,7 @@
 {
   "scripts": {
     "lint": "eslint \"src/**\" --fix",
-    "build": "npm run lint && tsc",
+    "build": "tsc",
     "start": "node build/server.js"
   },
   "dependencies": {
