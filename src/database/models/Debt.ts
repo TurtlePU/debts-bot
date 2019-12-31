@@ -22,7 +22,7 @@ const DebtModel = Mongoose.model<DataBase.Debt.Document>('Debt', new Mongoose.Sc
     }
 }))
 
-async function saveDebt(debt: DataBase.Debt) {
+async function saveDebt(debt: DataBase.Debt.Input) {
     const [ from, to, amount ] =
         debt.from < debt.to ?
             [ debt.from, debt.to, +debt.amount ] :
