@@ -64,6 +64,11 @@ declare namespace DataBase {
             id: string
             created: Date
         }
+        namespace Document {
+            type Debt = Document<Types.Debt>
+            type Group = Document<Types.Group>
+            type SettleUp = Document<Types.SettleUp>
+        }
         /**
          * Collection of methods to work with offers in DataBase
          */
@@ -73,19 +78,19 @@ declare namespace DataBase {
              * @param id of new offer
              * @param offer offer object
              */
-            createOffer(id: string, offer: Types.Debt): Promise<Document<Types.Debt>>
+            createOffer(id: string, offer: Types.Debt): Promise<Document.Debt>
             /**
              * Creates new offer
              * @param id of new offer
              * @param offer offer object
              */
-            createOffer(id: string, offer: Types.SettleUp): Promise<Document<Types.SettleUp>>
+            createOffer(id: string, offer: Types.SettleUp): Promise<Document.SettleUp>
             /**
              * Creates new offer
              * @param id of new offer
              * @param offer offer object
              */
-            createOffer(id: string, offer: Types.Group.Input): Promise<Document<Types.Group>>
+            createOffer(id: string, offer: Types.Group.Input): Promise<Document.Group>
             /**
              * @param id of an offer
              * @returns props of offer how they are stored in DataBase (if present)

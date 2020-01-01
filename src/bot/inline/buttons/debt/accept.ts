@@ -22,9 +22,7 @@ const onClick: Enhancer.Inline.OnClickStrict = {
     callback: acceptOffer(isDebtOffer, getText, act)
 }
 
-function isDebtOffer(
-        offer: DataBase.Offer.Document
-): offer is DataBase.Offer.Document<DataBase.Offer.Types.Debt> {
+function isDebtOffer(offer: DataBase.Offer.Document): offer is DataBase.Offer.Document.Debt {
     return offer.type == 'debt'
 }
 

@@ -1,7 +1,7 @@
 import groupModel from '#/database/models/Group'
 
 import membersReplyMarkup from '#/helpers/MembersReplyMarkup'
-import getNames           from '#/helpers/GetNames'
+import getNames from '#/helpers/GetNames'
 
 import getLocale from '#/locale/Locale'
 
@@ -14,15 +14,11 @@ import {
  */
 const listener: Enhancer.OnClickStrict = {
     key: group_update_members,
-    async callback(query) {
-        const locale = getLocale(query.from.language_code)
-        const group = await groupModel.makeOrGetGroup(query.message.chat.id)
+    async callback({ message, from }) {
+        const locale = getLocale(from.language_code)
+        const group = await groupModel.makeOrGetGroup(message.chat.id)
         await deleteKicked(this, group)
-        this.editMessageText(locale.messageTexts.group.members(await getNames(group.here_ids)), {
-            chat_id: query.message.chat.id,
-            message_id: query.message.message_id,
-            reply_markup: membersReplyMarkup(locale).reply_markup
-        })
+        updateText(this, group, locale, message.chat.id, message.message_id)
         return {
             text: locale.response.membersUpdated
         }
@@ -39,4 +35,14 @@ async function deleteKicked(bot: Enhancer.TelegramBot, group: DataBase.Group.Doc
             ...here.filter(({ status }) => status == 'kicked').map(({ user }) => user.id))
         return group.save()
     }
+}
+
+async function updateText(
+        bot: Enhancer.TelegramBot, group: DataBase.Group.Document, locale: Locale,
+        chat_id: number, message_id: number
+) {
+    return bot.editMessageText(locale.messageTexts.group.members(await getNames(group.here_ids)), {
+        chat_id, message_id,
+        reply_markup: membersReplyMarkup(locale)
+    })
 }

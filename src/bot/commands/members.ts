@@ -22,7 +22,7 @@ const command: Enhancer.Command = {
             return this.sendMessage(
                 msg.chat.id,
                 locale.messageTexts.group.members(names),
-                membersReplyMarkup(locale)
+                { reply_markup: membersReplyMarkup(locale) }
             )
         } else {
             return this.sendMessage(msg.chat.id, locale.messageTexts.group.notGroup)

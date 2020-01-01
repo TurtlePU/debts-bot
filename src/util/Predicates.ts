@@ -16,6 +16,6 @@ export function isGroup(chat: import('node-telegram-bot-api').Chat): boolean {
 
 export function isGroupOffer(
         offer: DataBase.Offer.Document
-): offer is DataBase.Offer.Document<DataBase.Offer.Types.Group> {
+): offer is DataBase.Offer.Document.Group {
     return offer.type == 'group'
 }

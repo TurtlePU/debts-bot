@@ -21,27 +21,11 @@ const command: Enhancer.Command = {
     key: group_debt_regexp,
     async callback({ chat, from }, match) {
         const locale = getLocale(from?.language_code)
-        if (isGroup(chat)) {
-            const amount = +match[1]
-            const currency = match[2] ?? locale.currency
-            const { id: from_id } = <Enhancer.User> from
-            const group = await groupModel.makeOrGetGroup(chat.id)
-            const { message_id: sent_message_id } =
-                await this.sendMessage(chat.id, locale.messageTexts.toUpdate)
-            const offer = await offerModel.createOffer(
-                groupOfferId(chat.id, sent_message_id), {
-                    from_id,
-                    type: 'group',
-                    debt: {
-                        amount,
-                        currency
-                    },
-                    group: {
-                        payer_ids: [ from_id ],
-                        member_ids: group.here_ids
-                    }
-                })
-            return updateGroupDebtOfferMessage(this, chat.id, sent_message_id, offer, locale)
+        if (isGroup(chat) && from) {
+            const { message_id } = await this.sendMessage(chat.id, locale.messageTexts.toUpdate)
+            const { here_ids } = await groupModel.makeOrGetGroup(chat.id)
+            const offer = await makeOffer(locale, chat.id, message_id, from.id, match, here_ids)
+            return updateGroupDebtOfferMessage(this, chat.id, message_id, offer, locale)
         } else {
             return this.sendMessage(chat.id, locale.messageTexts.wrongChatForDebt)
         }
@@ -49,3 +33,21 @@ const command: Enhancer.Command = {
 }
 
 export default command
+
+function makeOffer(
+        locale: Locale, chat_id: number, message_id: number,
+        from_id: number, match: RegExpExecArray, member_ids: number[]
+) {
+    return offerModel.createOffer(groupOfferId(chat_id, message_id), {
+        from_id,
+        type: 'group',
+        debt: {
+            amount: +match[1],
+            currency: match[2] ?? locale.currency
+        },
+        group: {
+            payer_ids: [ from_id ],
+            member_ids
+        }
+    })
+}

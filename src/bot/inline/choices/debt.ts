@@ -19,12 +19,13 @@ const consumer: Enhancer.Inline.ChoiceConsumer = {
         if (!inline_message_id) {
             throw new Error('Inline message id is missing')
         }
-        const amount = +match[1]
-        const currency = match[2]
         offerPiece.createOffer(inlineOfferId(inline_message_id), {
             from_id: from.id,
             type: 'debt',
-            debt: { amount, currency }
+            debt: {
+                amount: +match[1],
+                currency: match[2]
+            }
         }).catch(log)
     }
 }

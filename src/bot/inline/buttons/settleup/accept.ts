@@ -24,7 +24,7 @@ const onClick: Enhancer.Inline.OnClickStrict = {
 
 function isSettleUpOffer(
         offer: DataBase.Offer.Document
-): offer is DataBase.Offer.Document & DataBase.Offer.Base<'settleup'> {
+): offer is DataBase.Offer.Document.SettleUp {
     return offer.type == 'settleup'
 }
 
