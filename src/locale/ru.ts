@@ -14,16 +14,20 @@ const ru: Locale = {
             '*iii*. Добавь меня в группу для работы с группой!\n' +
             '\n' +
             '*Важно!* inline-режим только для парных долгов, в группах используйте команды.',
-        debts: debts => {
-            const deb = reduce(debts.filter(({ amount }) => amount > 0), 'Вы должны:')
-            const owe = reduce(debts.filter(({ amount }) => amount < 0), 'Вам должны:')
-            if (!deb || !owe) {
-                return deb ?? owe ?? 'Долгов нет!'
+        debts(debts) {
+            const plus = debts.filter(({ amount }) => amount > 0)
+            const mins = debts.filter(({ amount }) => amount < 0)
+            if (plus.length || mins.length) {
+                return '' +
+                    (plus.length ? 'Вы должны:\n' + plus.map(toString).reduce(concat) : '') +
+                    (plus.length && mins.length ? '\n\n' : '') +
+                    (mins.length ? 'Вам должны:\n' + mins.map(toString).reduce(concat) : '')
             } else {
-                return deb + '\n\n' + owe
+                return 'Долгов нет!'
             }
         },
-        toUpdate: 'Подождите, сообщение скоро обновится...',
+        toUpdate:
+            'Подождите, сообщение скоро обновится...',
         wrongChatForDebt:
             'Здесь нельзя создавать долги!\n' +
             'Напиши мне либо в inline-режиме для парного долга, либо в группе для группового.',
@@ -31,33 +35,28 @@ const ru: Locale = {
             hi: 'Всем привет!\n' +
                 '\n' +
                 '*i*. Напишите /members, чтобы посмотреть список участников.',
-            notGroup: 'Мы не в группе, я не могу выполнить такой запрос.',
-            members(names) {
-                if (names.length == 0) {
-                    return 'Участников почему-то нет :('
-                } else {
-                    return names.reduce((prev, name) => `${prev}\n${name}`, 'Участники:\n')
-                }
-            },
-            offer(amount, currency, payers, members) {
-                return `Сумма долга: ${amount} ${currency}.\n` + (
-                    payers.length
-                        ? payers.reduce((str, curr) => `${str}\n${curr}`, '\nКто заплатил:')
-                        : ''
-                ) + (
-                    payers.length && members.length ? '\n' : ''
-                ) + (
-                    members.length
-                        ? members.reduce((str, curr) => `${str}\n${curr}`, '\nКто теперь должен:')
-                        : ''
-                )
-            }
+            notGroup:
+                'Мы не в группе, я не могу выполнить такой запрос.',
+            members: names =>
+                names.length
+                    ? 'Участники:\n' + names.reduce(concat)
+                    : 'Участников почему-то нет :(',
+            offer: (amount, currency, payers, members) =>
+                `Сумма долга: ${amount} ${currency}.\n` +
+                (payers.length ? '\nКто заплатил:' + payers.reduce(concat) : '') +
+                (payers.length && members.length ? '\n' : '') +
+                (members.length ? '\nЗа кого платили:' + members.reduce(concat) : ''),
+            offerSaved: (updates, amount, currency) =>
+                `Сумма долга: ${amount} ${currency}.\n\n` +
+                updates
+                    .sort(({ delta: a }, { delta: b }) => a - b)
+                    .map(({ username, delta }) => `${username}: ${delta}`)
+                    .reduce(concat)
         },
         offerSaved(from_name, to_name, amnt, currency) {
-            const [ from, to, amount ] =
-                amnt > 0 ?
-                    [ from_name, to_name, amnt ] :
-                    [ to_name, from_name, -amnt ]
+            const [ from, to, amount ] = amnt > 0
+                ? [ from_name, to_name, amnt ]
+                : [ to_name, from_name, -amnt ]
             const [ shFrom, shCur, shTo ] = [ from, currency, to ].map(shieldMarkdown)
             return `${shFrom} получил ${amount} ${shCur} от ${shTo}.`
         },
@@ -67,9 +66,7 @@ const ru: Locale = {
     hybrid: {
         offer: {
             expired: 'Пожалуйста, повторите запрос.',
-            declined(by) {
-                return `Отклонено ${shieldMarkdown(by)}.`
-            }
+            declined: by => `Отклонено ${shieldMarkdown(by)}.`
         }
     },
     buttons: {
@@ -105,12 +102,10 @@ const ru: Locale = {
 
 export default ru
 
-function reduce(debts: Locale.Debt[], title: string): string | undefined {
-    if (debts.length == 0) {
-        return undefined
-    } else {
-        return debts
-            .map(({ to, amount, currency }) => `${to}: ${Math.abs(amount)} ${currency}`)
-            .reduce((acc, cur) => acc + '\n' + cur, title + '\n')
-    }
+function toString({ to, amount, currency }: Locale.Debt): string {
+    return to + ': ' + Math.abs(amount) + ' ' + currency
+}
+
+function concat(a: string, b: string) {
+    return a + '\n' + b
 }

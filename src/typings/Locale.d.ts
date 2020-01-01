@@ -18,6 +18,10 @@ declare namespace Locale {
          */
         text: string
     }
+    type BalanceUpdate = {
+        username: string
+        delta: number
+    }
 }
 
 /**
@@ -79,6 +83,7 @@ declare type Locale = {
              * @param members list of those who benefited
              */
             offer(amount: number, currency: string, payers: string[], members: string[]): string
+            offerSaved(updates: Locale.BalanceUpdate[], amount: number, currency: string): string
         }
         /**
          * @param from offerer of debt
