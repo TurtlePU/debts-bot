@@ -4,7 +4,7 @@ import {
 
 import {
     declineOffer
-} from '#/util/FallbackAnswers'
+} from '#/helpers/FallbackAnswers'
 
 /**
  * Declines settle-up offer on click

@@ -3,11 +3,11 @@ import userPiece  from '#/database/models/User'
 
 import getLocale from '#/locale/Locale'
 
-import log from './Log'
+import log from '../util/Log'
 
 import {
     getUserName
-} from './StringUtils'
+} from '../util/StringUtils'
 import { inlineOfferId } from '#/helpers/IdGenerator'
 
 /**
