@@ -2,9 +2,10 @@ import TelegramBot from 'node-telegram-bot-api'
 
 import Enhancer from '#/enhancer/Enhancer'
 
-import editOfferList from './buttons/edit_group_offer_list'
-import joinGroup     from './buttons/join_group'
-import updateGroup   from './buttons/update_group'
+import editOfferList  from './buttons/edit_group_offer_list'
+import joinGroup      from './buttons/join_group'
+import lockGroupOffer from './buttons/lock_group_offer'
+import updateGroup    from './buttons/update_group'
 
 import balance from './commands/balance'
 import debt    from './commands/debt'
@@ -47,6 +48,7 @@ export function enhanceBot(bot: TelegramBot) {
         .onClick(joinGroup)
         .onClick(updateGroup)
         .onClick(editOfferList)
+        .onClick(lockGroupOffer)
         .inject(ConnectEnhancers)
         .inject(ConnectInline)
 }
