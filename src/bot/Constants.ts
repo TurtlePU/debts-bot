@@ -18,3 +18,5 @@ export const group_update_members = 'group.updateMembers'
 export const group_debt_regexp = inline_debt_regexp
 /** RegExp for buttons below group debt offer message */
 export const group_debt_button_regexp = /^group\.debt\.(payers|members)\.(join|leave)$/u
+/** Key of a 'lock' button of group debt offer */
+export const group_debt_lock = 'group.debt.lock'

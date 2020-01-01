@@ -1,5 +1,6 @@
 import offerModel from '#/database/models/Offer'
 
+import offerExpired from '#/helpers/OfferExpired'
 import updateGroupDebtOfferMessage from '#/helpers/UpdateGroupDebtOfferMessage'
 
 import getLocale from '#/locale/Locale'
@@ -22,7 +23,7 @@ const button: Enhancer.OnClick = {
         const locale = getLocale(from.language_code)
         const offer = await offerModel.getOffer(groupOfferId(message.chat.id, message.message_id))
         if (!offer || !isGroupOffer(offer)) {
-            return fail(this, locale, message)
+            return offerExpired(this, locale, message)
         }
         updateList(from.id, offer, match)
         updateGroupDebtOfferMessage(this, message.chat.id, message.message_id, offer, locale)
@@ -33,15 +34,6 @@ const button: Enhancer.OnClick = {
 }
 
 export default button
-
-function fail(bot: Enhancer.TelegramBot, locale: Locale, message: Enhancer.Message) {
-    const text = locale.hybrid.offer.expired
-    bot.editMessageText(text, {
-        chat_id: message.chat.id,
-        message_id: message.message_id
-    })
-    return { text }
-}
 
 function updateList(user_id: number, offer: DataBase.Offer.Document.Group, match: RegExpExecArray) {
     const list = match[1] == 'payers' ? offer.group.payer_ids : offer.group.member_ids
