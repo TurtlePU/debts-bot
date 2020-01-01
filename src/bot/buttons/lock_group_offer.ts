@@ -44,12 +44,11 @@ const onClick: Enhancer.OnClickStrict = {
         }
         offer.remove()
         const group = await groupModel.makeOrGetGroup(message.chat.id)
-        splitWise(group, payers, offer.debt.amount, offer.debt.currency)
-        splitWise(group, memers, -offer.debt.amount, offer.debt.currency)
+        const entries = applyOffer(group, payers, memers, offer.debt.amount, offer.debt.currency)
         group.save()
         updateClosedOfferMessage(
             this, locale, message.chat.id, message.message_id,
-            payers, memers, offer.debt.amount, offer.debt.currency
+            entries, offer.debt.amount, offer.debt.currency
         )
         // TODO: text in locale
         return { text: 'Success' }
@@ -72,18 +71,6 @@ function arrayEquals(a: number[], b: number[]) {
 
 const { abs, floor, sign } = Math
 const PRECISION = 100
-
-function splitWise(group: DataBase.Group, ids: number[], amount: number, currency: string) {
-    const addend = getAddend(amount, ids.length)
-    const balances = group.balances
-    for (const id of ids) {
-        safeAdd(balances, id, addend, currency)
-    }
-    const leftover = getLeftover(amount, ids.length)
-    safeAdd(balances, ids[0], leftover, currency)
-    group.balances = balances
-    return ids.map((_, i) => i == 0 ? addend + leftover : addend)
-}
 
 function getAddend(amount: number, size: number) {
     return sign(amount) * floor(abs(amount) / size * PRECISION) / PRECISION
@@ -111,20 +98,49 @@ function safeAdd(
     }
 }
 
+function applyOffer(
+        group: DataBase.Group.Document,
+        payers: number[], memers: number[],
+        amount: number, currency: string
+) {
+    const entries = mergeEntries(getEntries(payers, amount).concat(getEntries(memers, -amount)))
+    const { balances } = group
+    for (const [ id, delta ] of entries) {
+        safeAdd(balances, id, delta, currency)
+    }
+    group.balances = balances
+    return entries
+}
+
 async function updateClosedOfferMessage(
         bot: Enhancer.TelegramBot, locale: Locale, chat_id: number, message_id: number,
-        payer_ids: number[], memer_ids: number[], amount: number, currency: string
+        entries: [number, number][], amount: number, currency: string
 ) {
-    const [ payer_names, memer_names ] = await Promise.all([
-        getNames(payer_ids), getNames(memer_ids)
-    ])
-    const updates = getUpdates(payer_names, amount).concat(getUpdates(memer_names, -amount))
+    const names = await getNames(entries.map(([ id ]) => id))
+    if (names.length != entries.length) {
+        throw new Error('Not all names were found in database')
+    }
+    const updates = names.map((username, i) => ({ username, delta: entries[i][1] }))
     const text = locale.messageTexts.group.offerSaved(updates, amount, currency)
     return bot.editMessageText(text, { chat_id, message_id })
 }
 
-function getUpdates(names: string[], amount: number) {
-    const addend = getAddend(amount, names.length)
-    const leftover = getLeftover(amount, names.length)
-    return names.map((username, i) => ({ username, delta: i == 0 ? addend + leftover : addend }))
+function getEntries(ids: number[], amount: number): [number, number][] {
+    const addend = getAddend(amount, ids.length)
+    const leftover = getLeftover(amount, ids.length)
+    return ids.map((id, i) => [ id, i == 0 ? addend + leftover : addend ])
+}
+
+function mergeEntries(entries: [number, number][]) {
+    const deltaMap = new Map<number, number>()
+    for (const [ id, addend ] of entries) {
+        const delta = deltaMap.get(id) ?? 0
+        deltaMap.set(id, delta + addend)
+    }
+    for (const [ key, value ] of deltaMap) {
+        if (value == 0) {
+            deltaMap.delete(key)
+        }
+    }
+    return [ ...deltaMap.entries() ]
 }
