@@ -1,7 +1,13 @@
-import debtPiece from '#/database/models/Debt'
-import userPiece from '#/database/models/User'
+import debtModel  from '#/database/models/Debt'
+import groupModel from '#/database/models/Group'
+import userModel  from '#/database/models/User'
 
 import getLocale from '#/locale/Locale'
+
+import {
+    isGroup
+} from '#/util/Predicates'
+import getNames from '#/helpers/GetNames'
 
 /**
  * 1. Responds with list of debts/groups in which user is involved
@@ -15,6 +21,8 @@ const command: Enhancer.Command = {
         let message: string
         if (!msg.from) {
             message = locale.messageTexts.anon
+        } else if (isGroup(msg.chat)) {
+            message = locale.messageTexts.group.balances(await getBalances(msg.chat.id))
         } else {
             message = locale.messageTexts.debts(await getFormattedDebts(msg.from.id))
         }
@@ -25,7 +33,7 @@ const command: Enhancer.Command = {
 export default command
 
 async function formatter({ to, ...info }: DataBase.Debt) {
-    const toUser = await userPiece.getUser(to)
+    const toUser = await userModel.getUser(to)
     if (!toUser) {
         throw new Error('Name of bot user not found in database')
     }
@@ -35,6 +43,20 @@ async function formatter({ to, ...info }: DataBase.Debt) {
 }
 
 async function getFormattedDebts(id: number) {
-    const debts = await debtPiece.getDebts(id)
+    const debts = await debtModel.getDebts(id)
     return Promise.all(debts.map(formatter))
+}
+
+async function getBalances(group_id: number) {
+    const group = await groupModel.makeOrGetGroup(group_id)
+    const names = await getNames([ ...group.balances.keys() ].map(val => +val))
+    let i = 0
+    const balances: Locale.Debt[] = []
+    for (const [ _, map ] of group.balances) {
+        const to = names[i++]
+        for (const [ currency, amount ] of map) {
+            balances.push({ currency, amount, to })
+        }
+    }
+    return balances
 }

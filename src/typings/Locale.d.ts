@@ -76,6 +76,11 @@ declare type Locale = {
              */
             members(names: string[]): string
             /**
+             * Formats a list of balances in group
+             * @param balances list of balances
+             */
+            balances(balances: Locale.Debt[]): string
+            /**
              * Formats a group debt offer current state
              * @param amount of debt
              * @param currency of debt

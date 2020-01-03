@@ -41,6 +41,14 @@ const ru: Locale = {
                 names.length
                     ? 'Участники:\n' + names.reduce(concat)
                     : 'Участников почему-то нет :(',
+            balances(balances) {
+                const sorted = [ ...balances ].sort(debtCompare)
+                return sorted
+                    .map((balance, i) =>
+                        (balances[i - 1]?.currency != balance.currency ? '\n' : '')
+                        + toString(balance))
+                    .reduce(concat)
+            },
             offer: (amount, currency, payers, members) =>
                 `Сумма долга: ${amount} ${currency}.\n` +
                 (payers.length ? '\nКто заплатил:\n' + payers.reduce(concat) : '') +
@@ -110,4 +118,17 @@ function toString({ to, amount, currency }: Locale.Debt): string {
 
 function concat(a: string, b: string) {
     return a + '\n' + b
+}
+
+function debtCompare(
+        { currency: a0, amount: a1, to: a2 }: Locale.Debt,
+        { currency: b0, amount: b1, to: b2 }: Locale.Debt
+) {
+    /* eslint-disable @typescript-eslint/indent */
+    return (
+        a0 != b0 ? a0.localeCompare(b0) :
+        a1 != b1 ? a1 - b1 :
+        a2 != b2 ? a2.localeCompare(b2) : 0
+    )
+    /* eslint-enable @typescript-eslint/indent */
 }
