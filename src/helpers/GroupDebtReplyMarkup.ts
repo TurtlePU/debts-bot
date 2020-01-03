@@ -1,5 +1,6 @@
 import {
-    group_debt_lock
+    group_debt_lock,
+    group_debt_cancel
 } from '#/bot/Constants'
 
 export default function(locale: Locale): import('node-telegram-bot-api').InlineKeyboardMarkup {
@@ -22,6 +23,9 @@ export default function(locale: Locale): import('node-telegram-bot-api').InlineK
             [ {
                 text: locale.buttons.lockOffer,
                 callback_data: group_debt_lock
+            }, {
+                text: locale.buttons.cancelOffer,
+                callback_data: group_debt_cancel
             } ]
         ]
     }

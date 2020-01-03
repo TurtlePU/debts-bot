@@ -20,3 +20,5 @@ export const group_debt_regexp = inline_debt_regexp
 export const group_debt_button_regexp = /^group\.debt\.(payers|members)\.(join|leave)$/u
 /** Key of a 'lock' button of group debt offer */
 export const group_debt_lock = 'group.debt.lock'
+/** Key of a 'cancel' button of group debt offer */
+export const group_debt_cancel = 'group.debt.cancel'

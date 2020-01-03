@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api'
 
 import Enhancer from '#/enhancer/Enhancer'
 
+import cancelOffer    from './buttons/cancel_offer'
 import editOfferList  from './buttons/edit_group_offer_list'
 import joinGroup      from './buttons/join_group'
 import lockGroupOffer from './buttons/lock_group_offer'
@@ -45,6 +46,7 @@ export function enhanceBot(bot: TelegramBot) {
         .command(debt)
         .command(members)
         .command(start)
+        .onClick(cancelOffer)
         .onClick(joinGroup)
         .onClick(updateGroup)
         .onClick(editOfferList)

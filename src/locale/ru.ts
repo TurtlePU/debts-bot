@@ -78,7 +78,8 @@ const ru: Locale = {
         leavePayers: 'Я не платил',
         joinMembers: 'За меня платили',
         leaveMembers: 'За меня не платили',
-        lockOffer: 'Завершить'
+        lockOffer: 'Завершить',
+        cancelOffer: 'Отменить'
     },
     articles: {
         offer: (amount: number, currency: string) => {
@@ -96,7 +97,8 @@ const ru: Locale = {
     response: {
         membersUpdated: 'Список участников обновлен.',
         joinSuccess: 'О\'кей, ты включен',
-        selfAccept: 'Нельзя принять своё же предложение!'
+        selfAccept: 'Нельзя принять своё же предложение!',
+        offerCanceled: 'Предложение отменено'
     }
 }
 

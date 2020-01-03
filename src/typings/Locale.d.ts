@@ -156,6 +156,10 @@ declare type Locale = {
          * Buttons for keyboard below group debt offer
          */
         lockOffer: string
+        /**
+         * Buttons for keyboard below group debt offer
+         */
+        cancelOffer: string
     }
     /**
      * Articles for inline mode
@@ -184,5 +188,9 @@ declare type Locale = {
          * Info: you can't accept an offer from yourself
          */
         selfAccept: string
+        /**
+         * Response on succesful 'Cancel' click
+         */
+        offerCanceled: string
     }
 }
