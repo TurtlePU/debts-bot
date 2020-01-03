@@ -51,7 +51,7 @@ const ru: Locale = {
                     .map((balance, i) =>
                         (sorted[i - 1]?.currency != balance.currency ? '\n' : '')
                         + toString(balance, false))
-                    .reduce(concat)
+                    .reduce(concat, 'Балансы:')
             },
             offer: (amount, currency, payers, members) =>
                 `Сумма долга: ${amount} ${currency}.\n` +
