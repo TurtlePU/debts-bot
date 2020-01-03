@@ -111,7 +111,7 @@ function applyOffer(
         safeAdd(balances, id, delta, currency)
     }
     group.balances = balances
-    console.log(group.balances)
+    console.log(group)
     return entries
 }
 
