@@ -2,6 +2,7 @@ import Mongoose from 'mongoose'
 
 import groupModel from '#/database/models/Group'
 import offerModel from '#/database/models/Offer'
+import userModel  from '#/database/models/User'
 
 import getNames from '#/helpers/GetNames'
 import offerExpired from '#/helpers/OfferExpired'
@@ -81,22 +82,40 @@ function getLeftover(amount: number, size: number) {
     return amount - getAddend(amount, size) * size
 }
 
-function safeAdd(
-        balances: Mongoose.Types.Map<Mongoose.Types.Map<number>>, id: number,
+async function safeAdd(
+        balances: Mongoose.Types.Map<Mongoose.Types.Map<number>>,
+        user_id: number, group_id: number,
         addend: number, currency: string
 ) {
-    const key = '' + id
-    const balance = balances.get(key) ?? new Mongoose.Types.Map()
+    const key = '' + user_id
+    const balance = balances.get(key) ?? await makeBalanceMap(user_id, group_id)
     const old_balance = balance.get(currency) ?? 0
     if (Math.abs(old_balance + addend) < epsilon) {
         balance.delete(currency)
         if (balance.size == 0) {
+            const user = await userModel.getUser(user_id)
+            if (user) {
+                user.debt_holder_in.pull(group_id)
+                user.save()
+            }
             balances.delete(key)
         }
     } else {
         balance.set(currency, old_balance + addend)
         balances.set(key, balance)
     }
+}
+
+async function makeBalanceMap(
+        user_id: number, group_id: number
+): Promise<Mongoose.Types.Map<number>> {
+    const user = await userModel.getUser(user_id)
+    if (!user) {
+        return new Mongoose.Types.Map()
+    }
+    user.debt_holder_in.push(group_id)
+    user.save()
+    return new Mongoose.Types.Map()
 }
 
 function applyOffer(
@@ -107,7 +126,7 @@ function applyOffer(
     const entries = mergeEntries(getEntries(payers, amount).concat(getEntries(memers, -amount)))
     const { balances } = group
     for (const [ id, delta ] of entries) {
-        safeAdd(balances, id, delta, currency)
+        safeAdd(balances, id, group.id, delta, currency)
         group.markModified(`balances.${id}`)
     }
     group.balances = balances
