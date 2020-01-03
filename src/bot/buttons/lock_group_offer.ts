@@ -115,7 +115,7 @@ async function makeBalanceMap(
     if (!user) {
         return new Mongoose.Types.Map()
     }
-    user.debt_holder_in.push(group_id)
+    user.debt_holder_in.addToSet(group_id)
     user.save()
     return new Mongoose.Types.Map()
 }
