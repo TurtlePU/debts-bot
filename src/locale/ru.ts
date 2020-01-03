@@ -19,9 +19,11 @@ const ru: Locale = {
             const mins = debts.filter(({ amount }) => amount < 0)
             if (plus.length || mins.length) {
                 return '' +
-                    (plus.length ? 'Вы должны:\n' + plus.map(toString).reduce(concat) : '') +
+                    (plus.length
+                        ? 'Вы должны:\n' + plus.map(x => toString(x, true)).reduce(concat) : '') +
                     (plus.length && mins.length ? '\n\n' : '') +
-                    (mins.length ? 'Вам должны:\n' + mins.map(toString).reduce(concat) : '')
+                    (mins.length
+                        ? 'Вам должны:\n' + mins.map(x => toString(x, true)).reduce(concat) : '')
             } else {
                 return 'Долгов нет!'
             }
@@ -46,7 +48,7 @@ const ru: Locale = {
                 return sorted
                     .map((balance, i) =>
                         (balances[i - 1]?.currency != balance.currency ? '\n' : '')
-                        + toString(balance))
+                        + toString(balance, false))
                     .reduce(concat)
             },
             offer: (amount, currency, payers, members) =>
@@ -112,8 +114,9 @@ const ru: Locale = {
 
 export default ru
 
-function toString({ to, amount, currency }: Locale.Debt): string {
-    return to + ': ' + Math.abs(amount) + ' ' + currency
+function toString({ to, amount, currency }: Locale.Debt, abs: boolean): string {
+    const amnt = abs ? Math.abs(amount) : amount
+    return to + ': ' + amnt + ' ' + currency
 }
 
 function concat(a: string, b: string) {
