@@ -57,7 +57,9 @@ async function getUserBalances(user_id: number, group_list: number[]) {
     ).filter(isDefined)
     return groups.map(({ balances, title: to }) => {
         const currencies = balances.get('' + user_id) ?? new Map<string, number>()
-        return [ ...currencies.entries() ].map(([ currency, amount ]) => ({ currency, amount, to }))
+        return [ ...currencies.entries() ].map(
+            ([ currency, amount ]) => ({ currency, amount: -amount, to })
+        )
     }).flat()
 }
 
