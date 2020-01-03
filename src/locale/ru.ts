@@ -47,7 +47,7 @@ const ru: Locale = {
                 const sorted = [ ...balances ].sort(debtCompare)
                 return sorted
                     .map((balance, i) =>
-                        (balances[i - 1]?.currency != balance.currency ? '\n' : '')
+                        (sorted[i - 1]?.currency != balance.currency ? '\n' : '')
                         + toString(balance, false))
                     .reduce(concat)
             },
