@@ -42,5 +42,5 @@ function onNewChat(bot: Enhancer.TelegramBot, msg: Enhancer.Message, code?: stri
             ]
         }
     })
-    return groupModel.makeOrGetGroup(msg.chat.id)
+    return groupModel.makeOrGetGroup(msg.chat)
 }

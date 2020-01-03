@@ -4,6 +4,7 @@ declare namespace DataBase {
      */
     type Group = {
         id: number
+        title: string
         /**
          * IDs of users present in the group
          */
@@ -25,9 +26,8 @@ declare namespace DataBase {
         type Model = {
             /**
              * Tries to get group; if not found, creates new and returns it
-             * @param id of a group
              */
-            makeOrGetGroup(id: number): Promise<Document>
+            makeOrGetGroup(group: import('node-telegram-bot-api').Chat): Promise<Document>
             /**
              * Tries to get group; returns null if not found
              * @param id of a group

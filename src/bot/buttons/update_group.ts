@@ -16,7 +16,7 @@ const listener: Enhancer.OnClickStrict = {
     key: group_update_members,
     async callback({ message, from }) {
         const locale = getLocale(from.language_code)
-        const group = await groupModel.makeOrGetGroup(message.chat.id)
+        const group = await groupModel.makeOrGetGroup(message.chat)
         await deleteKicked(this, group)
         updateText(this, group, locale, message.chat.id, message.message_id)
         return {

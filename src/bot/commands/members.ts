@@ -17,7 +17,7 @@ const command: Enhancer.Command = {
     async callback(msg) {
         const locale = getLocale(msg.from?.language_code)
         if (isGroup(msg.chat)) {
-            const group = await groupModel.makeOrGetGroup(msg.chat.id)
+            const group = await groupModel.makeOrGetGroup(msg.chat)
             const names = await getNames(group.here_ids)
             return this.sendMessage(
                 msg.chat.id,

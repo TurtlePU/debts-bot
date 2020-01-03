@@ -43,7 +43,7 @@ const onClick: Enhancer.OnClickStrict = {
             return { text: 'Lists should not be equal' }
         }
         offer.remove()
-        const group = await groupModel.makeOrGetGroup(message.chat.id)
+        const group = await groupModel.makeOrGetGroup(message.chat)
         const entries = applyOffer(group, payers, memers, offer.debt.amount, offer.debt.currency)
         group.save()
         updateClosedOfferMessage(

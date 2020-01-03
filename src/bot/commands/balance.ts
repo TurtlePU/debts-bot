@@ -22,7 +22,7 @@ const command: Enhancer.Command = {
         if (!msg.from) {
             message = locale.messageTexts.anon
         } else if (isGroup(msg.chat)) {
-            message = locale.messageTexts.group.balances(await getBalances(msg.chat.id))
+            message = locale.messageTexts.group.balances(await getBalances(msg.chat))
         } else {
             message = locale.messageTexts.debts(await getFormattedDebts(msg.from.id))
         }
@@ -47,8 +47,8 @@ async function getFormattedDebts(id: number) {
     return Promise.all(debts.map(formatter))
 }
 
-async function getBalances(group_id: number) {
-    const group = await groupModel.makeOrGetGroup(group_id)
+async function getBalances(chat: import('node-telegram-bot-api').Chat) {
+    const group = await groupModel.makeOrGetGroup(chat)
     const names = await getNames([ ...group.balances.keys() ].map(val => +val))
     let i = 0
     const balances: Locale.Debt[] = []

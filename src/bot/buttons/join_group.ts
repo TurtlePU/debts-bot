@@ -21,7 +21,7 @@ const listener: Enhancer.OnClickStrict = {
 export default listener
 
 async function pushUser(query: Enhancer.ClickEvent) {
-    const group = await groupModel.makeOrGetGroup(query.message.chat.id)
+    const group = await groupModel.makeOrGetGroup(query.message.chat)
     group.here_ids.addToSet(query.from.id)
     return group.save()
 }

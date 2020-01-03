@@ -23,7 +23,7 @@ const command: Enhancer.Command = {
         const locale = getLocale(from?.language_code)
         if (isGroup(chat) && from) {
             const { message_id } = await this.sendMessage(chat.id, locale.messageTexts.toUpdate)
-            const { here_ids } = await groupModel.makeOrGetGroup(chat.id)
+            const { here_ids } = await groupModel.makeOrGetGroup(chat)
             const offer = await makeOffer(locale, chat.id, message_id, from.id, match, here_ids)
             return updateGroupDebtOfferMessage(this, chat.id, message_id, offer, locale)
         } else {
