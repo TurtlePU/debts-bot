@@ -43,9 +43,9 @@ const ru: Locale = {
                     : 'Участников почему-то нет :(',
             offer: (amount, currency, payers, members) =>
                 `Сумма долга: ${amount} ${currency}.\n` +
-                (payers.length ? '\nКто заплатил:' + payers.reduce(concat) : '') +
+                (payers.length ? '\nКто заплатил:\n' + payers.reduce(concat) : '') +
                 (payers.length && members.length ? '\n' : '') +
-                (members.length ? '\nЗа кого платили:' + members.reduce(concat) : ''),
+                (members.length ? '\nЗа кого платили:\n' + members.reduce(concat) : ''),
             offerSaved: (updates, amount, currency) =>
                 `Сумма долга: ${amount} ${currency}.\n\n` +
                 updates
