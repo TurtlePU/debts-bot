@@ -45,7 +45,9 @@ const onClick: Enhancer.OnClickStrict = {
         }
         offer.remove()
         const group = await groupModel.makeOrGetGroup(message.chat)
-        const entries = applyOffer(group, payers, memers, offer.debt.amount, offer.debt.currency)
+        const entries = await applyOffer(
+            group, payers, memers, offer.debt.amount, offer.debt.currency
+        )
         group.save()
         updateClosedOfferMessage(
             this, locale, message.chat.id, message.message_id,
@@ -118,18 +120,16 @@ async function makeBalanceMap(
     return new Mongoose.Types.Map()
 }
 
-function applyOffer(
+async function applyOffer(
         group: DataBase.Group.Document,
         payers: number[], memers: number[],
         amount: number, currency: string
 ) {
     const entries = mergeEntries(getEntries(payers, amount).concat(getEntries(memers, -amount)))
-    const { balances } = group
-    for (const [ id, delta ] of entries) {
-        safeAdd(balances, id, group.id, delta, currency)
+    await Promise.all(entries.map(([ id, delta ]) => {
         group.markModified(`balances.${id}`)
-    }
-    group.balances = balances
+        return safeAdd(group.balances, id, group.id, delta, currency)
+    }))
     console.log(group)
     return entries
 }
