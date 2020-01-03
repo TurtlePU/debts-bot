@@ -71,6 +71,7 @@ function arrayEquals(a: number[], b: number[]) {
 
 const { abs, floor, sign } = Math
 const PRECISION = 100
+const epsilon = 0.01
 
 function getAddend(amount: number, size: number) {
     return sign(amount) * floor(abs(amount) / size * PRECISION) / PRECISION
@@ -87,7 +88,7 @@ function safeAdd(
     const key = '' + id
     const balance = balances.get(key) ?? new Mongoose.Types.Map()
     const old_balance = balance.get(currency) ?? 0
-    if (old_balance + addend == 0) {
+    if (Math.abs(old_balance + addend) < epsilon) {
         balance.delete(currency)
         if (balance.size == 0) {
             balances.delete(key)
@@ -104,11 +105,13 @@ function applyOffer(
         amount: number, currency: string
 ) {
     const entries = mergeEntries(getEntries(payers, amount).concat(getEntries(memers, -amount)))
+    console.log(entries)
     const { balances } = group
     for (const [ id, delta ] of entries) {
         safeAdd(balances, id, delta, currency)
     }
     group.balances = balances
+    console.log(group.balances)
     return entries
 }
 
