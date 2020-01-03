@@ -105,13 +105,12 @@ function applyOffer(
         amount: number, currency: string
 ) {
     const entries = mergeEntries(getEntries(payers, amount).concat(getEntries(memers, -amount)))
-    console.log(entries)
     const { balances } = group
     for (const [ id, delta ] of entries) {
         safeAdd(balances, id, delta, currency)
+        group.markModified(`balances.${id}`)
     }
     group.balances = balances
-    console.log(group)
     return entries
 }
 
