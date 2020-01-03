@@ -130,6 +130,7 @@ function applyOffer(
         group.markModified(`balances.${id}`)
     }
     group.balances = balances
+    console.log(group)
     return entries
 }
 
