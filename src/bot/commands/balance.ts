@@ -5,7 +5,7 @@ import userModel  from '#/database/models/User'
 import getLocale from '#/locale/Locale'
 
 import {
-    isGroup
+    isGroup, isDefined
 } from '#/util/Predicates'
 import getNames from '#/helpers/GetNames'
 
@@ -22,9 +22,9 @@ const command: Enhancer.Command = {
         if (!msg.from) {
             message = locale.messageTexts.anon
         } else if (isGroup(msg.chat)) {
-            message = locale.messageTexts.group.balances(await getBalances(msg.chat))
+            message = locale.messageTexts.group.balances(await getChatBalances(msg.chat))
         } else {
-            message = locale.messageTexts.debts(await getFormattedDebts(msg.from.id))
+            message = locale.messageTexts.debts(await getFormattedDebts(msg.from))
         }
         return this.sendMessage(msg.chat.id, message)
     }
@@ -42,12 +42,26 @@ async function formatter({ to, ...info }: DataBase.Debt) {
     }
 }
 
-async function getFormattedDebts(id: number) {
-    const debts = await debtModel.getDebts(id)
-    return Promise.all(debts.map(formatter))
+async function getFormattedDebts(user: Enhancer.User) {
+    const debts = await debtModel.getDebts(user.id)
+    const { debt_holder_in } = await userModel.getUser(user.id) ?? await userModel.updateUser(user)
+    return (
+        await Promise.all(debts.map(formatter))).concat(
+        await getUserBalances(user.id, debt_holder_in)
+    )
 }
 
-async function getBalances(chat: import('node-telegram-bot-api').Chat) {
+async function getUserBalances(user_id: number, group_list: number[]) {
+    const groups = (
+        await Promise.all(group_list.map(id => groupModel.getGroup(id)))
+    ).filter(isDefined)
+    return groups.map(({ balances, title: to }) => {
+        const currencies = balances.get('' + user_id) ?? new Map<string, number>()
+        return [ ...currencies.entries() ].map(([ currency, amount ]) => ({ currency, amount, to }))
+    }).flat()
+}
+
+async function getChatBalances(chat: import('node-telegram-bot-api').Chat) {
     const group = await groupModel.makeOrGetGroup(chat)
     const names = await getNames([ ...group.balances.keys() ].map(val => +val))
     let i = 0
