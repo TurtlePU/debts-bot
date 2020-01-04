@@ -6,7 +6,7 @@ declare namespace DataBase {
     namespace Debt {
         type Endpoint = {
             id: number
-            is_group?: boolean
+            is_group: boolean
         }
         /**
          * Info about debt; also base class for different implementations

@@ -38,8 +38,8 @@ function act(offer: DataBase.Offer.Types.Debt, from: Enhancer.User) {
     return debtPiece.saveDebt({
         amount: offer.debt.amount,
         currency: offer.debt.currency,
-        to: from.id,
-        from: offer.from_id
+        to: { id: from.id, is_group: false },
+        from: { id: offer.from_id, is_group: false }
     }).catch(log)
 }
 

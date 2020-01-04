@@ -33,7 +33,10 @@ function getText(locale: Locale, _: any, offerFrom: DataBase.User, from: Enhance
 }
 
 function act(offer: DataBase.Offer, from: Enhancer.User) {
-    return debtPiece.clearDebts(offer.from_id, from.id).catch(log)
+    return debtPiece.clearDebts(
+        { id: offer.from_id, is_group: false },
+        { id: from.id, is_group: false }
+    ).catch(log)
 }
 
 export default onClick

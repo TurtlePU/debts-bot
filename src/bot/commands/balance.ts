@@ -33,7 +33,7 @@ const command: Enhancer.Command = {
 export default command
 
 async function formatter({ to, ...info }: DataBase.Debt) {
-    const toUser = await userModel.getUser(to)
+    const toUser = await userModel.getUser(to.id)
     if (!toUser) {
         throw new Error('Name of bot user not found in database')
     }
@@ -43,7 +43,7 @@ async function formatter({ to, ...info }: DataBase.Debt) {
 }
 
 async function getFormattedDebts(user: Enhancer.User) {
-    const debts = await debtModel.getDebts(user.id)
+    const debts = await debtModel.getDebts({ id: user.id, is_group: false })
     const { debt_holder_in } = await userModel.getUser(user.id) ?? await userModel.updateUser(user)
     return (
         await Promise.all(debts.map(formatter))).concat(

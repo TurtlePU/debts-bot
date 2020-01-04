@@ -8,7 +8,10 @@ const EndpointSchema = new Mongoose.Schema({
         type: Number,
         required: true
     },
-    is_group: Boolean
+    is_group: {
+        type: Boolean,
+        required: true
+    }
 }, {
     _id: false
 })
