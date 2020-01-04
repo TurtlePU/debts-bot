@@ -3,17 +3,12 @@ declare namespace DataBase {
      * Group how it is stored in database
      */
     type Group = {
-        id: number
+        _id: number
         title: string
         /**
          * IDs of users present in the group
          */
         here_ids: MongoArray<number>
-        /**
-         * Nonzero balances of all users who once been in this group
-         * (member id) => (currency) => (amount)
-         */
-        balances: MongoMap<MongoMap<number>>
     }
     namespace Group {
         /**

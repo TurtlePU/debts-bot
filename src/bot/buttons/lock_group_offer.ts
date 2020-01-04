@@ -1,5 +1,4 @@
-import Mongoose from 'mongoose'
-
+import debtModel  from '#/database/models/Debt'
 import groupModel from '#/database/models/Group'
 import offerModel from '#/database/models/Offer'
 
@@ -73,7 +72,6 @@ function arrayEquals(a: number[], b: number[]) {
 
 const { abs, floor, sign } = Math
 const PRECISION = 100
-const epsilon = 0.01
 
 function getAddend(amount: number, size: number) {
     return sign(amount) * floor(abs(amount) / size * PRECISION) / PRECISION
@@ -83,35 +81,30 @@ function getLeftover(amount: number, size: number) {
     return amount - getAddend(amount, size) * size
 }
 
-function safeAdd(
-        balances: Mongoose.Types.Map<Mongoose.Types.Map<number>>,
-        user_id: number, addend: number, currency: string
-) {
-    const key = '' + user_id
-    const balance = balances.get(key) ?? new Mongoose.Types.Map()
-    const old_balance = balance.get(currency) ?? 0
-    if (Math.abs(old_balance + addend) < epsilon) {
-        balance.delete(currency)
-        if (balance.size == 0) {
-            balances.delete(key)
+function safeAdd(group_id: number, user_id: number, amount: number, currency: string) {
+    return debtModel.saveDebt({
+        amount, currency,
+        from: {
+            id: user_id,
+            is_group: false
+        },
+        to: {
+            id: group_id,
+            is_group: true
         }
-    } else {
-        balance.set(currency, old_balance + addend)
-        balances.set(key, balance)
-    }
+    })
 }
 
-function applyOffer(
+async function applyOffer(
         group: DataBase.Group.Document,
         payers: number[], memers: number[],
         amount: number, currency: string
 ) {
     const entries = mergeEntries(getEntries(payers, amount).concat(getEntries(memers, -amount)))
-    for (const [ id, delta ] of entries) {
+    await Promise.all(entries.map(([ id, delta ]) => {
         group.markModified(`balances.${id}`)
-        safeAdd(group.balances, id, delta, currency)
-    }
-    console.log(group)
+        return safeAdd(group._id, id, delta, currency)
+    }))
     return entries
 }
 

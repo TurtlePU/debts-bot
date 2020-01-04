@@ -9,15 +9,7 @@ const GroupModel = Mongoose.model<DataBase.Group.Document>('Group', new Mongoose
         type: String,
         required: true
     },
-    here_ids: [ Number ],
-    balances: {
-        type: Map,
-        of: {
-            type: Map,
-            of: Number
-        },
-        default: () => new Mongoose.Types.Map()
-    }
+    here_ids: [ Number ]
 }))
 
 const methods: DataBase.Group.Model = {

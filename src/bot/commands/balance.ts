@@ -2,15 +2,12 @@ import debtModel  from '#/database/models/Debt'
 import groupModel from '#/database/models/Group'
 import userModel  from '#/database/models/User'
 
-import getNames from '#/helpers/GetNames'
-
 import getLocale from '#/locale/Locale'
 
 import { isGroup } from '#/util/Predicates'
 
 /**
  * 1. Responds with list of debts/groups in which user is involved
- * TODO:
  * 2. Responds with nonzero balances in group
  */
 const command: Enhancer.Command = {
@@ -32,12 +29,22 @@ const command: Enhancer.Command = {
 export default command
 
 async function formatter({ to, ...info }: DataBase.Debt) {
-    const toUser = await userModel.getUser(to.id)
-    if (!toUser) {
-        throw new Error('Name of bot user not found in database')
-    }
-    return {
-        to: toUser.name, ...info
+    if (to.is_group) {
+        const toGroup = await groupModel.getGroup(to.id)
+        if (!toGroup) {
+            throw new Error('Title of group not found in database')
+        }
+        return {
+            to: toGroup.title, ...info
+        }
+    } else {
+        const toUser = await userModel.getUser(to.id)
+        if (!toUser) {
+            throw new Error('Name of bot user not found in database')
+        }
+        return {
+            to: toUser.name, ...info
+        }
     }
 }
 
@@ -47,15 +54,6 @@ async function getFormattedDebts(user: Enhancer.User) {
 }
 
 async function getChatBalances(chat: import('node-telegram-bot-api').Chat) {
-    const group = await groupModel.makeOrGetGroup(chat)
-    const names = await getNames([ ...group.balances.keys() ].map(val => +val))
-    let i = 0
-    const balances: Locale.Debt[] = []
-    for (const [ _, map ] of group.balances) {
-        const to = names[i++]
-        for (const [ currency, amount ] of map) {
-            balances.push({ currency, amount, to })
-        }
-    }
-    return balances
+    const debts = await debtModel.getDebts({ id: chat.id, is_group: true })
+    return Promise.all(debts.map(formatter))
 }
