@@ -20,6 +20,9 @@ import {
     getUserName
 } from '#/util/StringUtils'
 
+/**
+ * Cancels group debt offer
+ */
 const onClick: Enhancer.OnClickStrict = {
     key: group_debt_cancel,
     async callback({ from, message }) {

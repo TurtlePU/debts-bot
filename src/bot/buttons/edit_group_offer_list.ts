@@ -17,6 +17,9 @@ import {
     isGroupOffer
 } from '#/util/Predicates'
 
+/**
+ * Updates lists of users in group offers
+ */
 const button: Enhancer.OnClick = {
     key: group_debt_button_regexp,
     async callback({ from, message }, match) {

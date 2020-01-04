@@ -43,10 +43,7 @@ const onClick: Enhancer.OnClickStrict = {
         }
         offer.remove()
         const group = await groupModel.makeOrGetGroup(message.chat)
-        const entries = await applyOffer(
-            group, payers, memers, offer.debt.amount, offer.debt.currency
-        )
-        group.save()
+        const entries = await debtModel.saveGroupDebt(group.id, payers, memers, offer.debt)
         updateClosedOfferMessage(
             this, locale, message.chat.id, message.message_id,
             entries, offer.debt.amount, offer.debt.currency
@@ -70,44 +67,6 @@ function arrayEquals(a: number[], b: number[]) {
     return true
 }
 
-const { abs, floor, sign } = Math
-const PRECISION = 100
-
-function getAddend(amount: number, size: number) {
-    return sign(amount) * floor(abs(amount) / size * PRECISION) / PRECISION
-}
-
-function getLeftover(amount: number, size: number) {
-    return amount - getAddend(amount, size) * size
-}
-
-function safeAdd(group_id: number, user_id: number, amount: number, currency: string) {
-    return debtModel.saveDebt({
-        amount, currency,
-        from: {
-            id: user_id,
-            is_group: false
-        },
-        to: {
-            id: group_id,
-            is_group: true
-        }
-    })
-}
-
-async function applyOffer(
-        group: DataBase.Group.Document,
-        payers: number[], memers: number[],
-        amount: number, currency: string
-) {
-    const entries = mergeEntries(getEntries(payers, amount).concat(getEntries(memers, -amount)))
-    await Promise.all(entries.map(([ id, delta ]) => {
-        group.markModified(`balances.${id}`)
-        return safeAdd(group._id, id, delta, currency)
-    }))
-    return entries
-}
-
 async function updateClosedOfferMessage(
         bot: Enhancer.TelegramBot, locale: Locale, chat_id: number, message_id: number,
         entries: [number, number][], amount: number, currency: string
@@ -119,24 +78,4 @@ async function updateClosedOfferMessage(
     const updates = names.map((username, i) => ({ username, delta: entries[i][1] }))
     const text = locale.messageTexts.group.offerSaved(updates, amount, currency)
     return bot.editMessageText(text, { chat_id, message_id })
-}
-
-function getEntries(ids: number[], amount: number): [number, number][] {
-    const addend = getAddend(amount, ids.length)
-    const leftover = getLeftover(amount, ids.length)
-    return ids.map((id, i) => [ id, i == 0 ? addend + leftover : addend ])
-}
-
-function mergeEntries(entries: [number, number][]) {
-    const deltaMap = new Map<number, number>()
-    for (const [ id, addend ] of entries) {
-        const delta = deltaMap.get(id) ?? 0
-        deltaMap.set(id, delta + addend)
-    }
-    for (const [ key, value ] of deltaMap) {
-        if (value == 0) {
-            deltaMap.delete(key)
-        }
-    }
-    return [ ...deltaMap.entries() ]
 }

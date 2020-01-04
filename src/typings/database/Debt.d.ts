@@ -27,6 +27,9 @@ declare namespace DataBase {
          * Collection of methods to work with Debts in database
          */
         type Model = {
+            saveGroupDebt(
+                group_id: number, from: number[], to: number[], info: Info
+            ): Promise<[number, number][]>
             /**
              * Adds new debt to database (includes basic simplification of debts)
              */

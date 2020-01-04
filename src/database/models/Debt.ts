@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose'
 
-const methods: DataBase.Debt.Model = { saveDebt, getDebts, clearDebts }
+const methods: DataBase.Debt.Model = { saveGroupDebt, saveDebt, getDebts, clearDebts }
 export default methods
 
 const EndpointSchema = new Mongoose.Schema({
@@ -34,6 +34,21 @@ const DebtModel = Mongoose.model<DataBase.Debt.Document>('Debt', new Mongoose.Sc
         required: true
     }
 }))
+
+async function saveGroupDebt(
+        group_id: number, from: number[], to: number[], { amount, currency }: DataBase.Debt.Info
+) {
+    const entries = mergeEntries(getEntries(from, amount).concat(getEntries(to, -amount)))
+    await Promise.all(entries.map(([ id, delta ]) =>
+        saveDebt({
+            amount: delta,
+            currency,
+            from: { id, is_group: false },
+            to: { id: group_id, is_group: true }
+        })
+    ))
+    return entries
+}
 
 async function saveDebt(debt: DataBase.Debt.Input) {
     const [ from, to, amount ] =
@@ -76,4 +91,35 @@ function less(
         { is_group: a1, id: b1 }: DataBase.Debt.Endpoint
 ) {
     return a0 != a1 ? !a0 && a1 : b0 < b1
+}
+
+const { abs, floor, sign } = Math
+const PRECISION = 100
+
+function getAddend(amount: number, size: number) {
+    return sign(amount) * floor(abs(amount) / size * PRECISION) / PRECISION
+}
+
+function getLeftover(amount: number, size: number) {
+    return amount - getAddend(amount, size) * size
+}
+
+function getEntries(ids: number[], amount: number): [number, number][] {
+    const addend = getAddend(amount, ids.length)
+    const leftover = getLeftover(amount, ids.length)
+    return ids.map((id, i) => [ id, i == 0 ? addend + leftover : addend ])
+}
+
+function mergeEntries(entries: [number, number][]) {
+    const deltaMap = new Map<number, number>()
+    for (const [ id, addend ] of entries) {
+        const delta = deltaMap.get(id) ?? 0
+        deltaMap.set(id, delta + addend)
+    }
+    for (const [ key, value ] of deltaMap) {
+        if (value == 0) {
+            deltaMap.delete(key)
+        }
+    }
+    return [ ...deltaMap.entries() ]
 }
