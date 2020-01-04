@@ -5,10 +5,6 @@ declare namespace DataBase {
     type User = {
         id: number
         name: string
-        /**
-         * IDs of groups in which user holds nonzero balance
-         */
-        debt_holder_in: MongoArray<number>
     }
     namespace User {
         /**

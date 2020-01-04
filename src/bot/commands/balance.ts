@@ -2,12 +2,11 @@ import debtModel  from '#/database/models/Debt'
 import groupModel from '#/database/models/Group'
 import userModel  from '#/database/models/User'
 
+import getNames from '#/helpers/GetNames'
+
 import getLocale from '#/locale/Locale'
 
-import {
-    isGroup, isDefined
-} from '#/util/Predicates'
-import getNames from '#/helpers/GetNames'
+import { isGroup } from '#/util/Predicates'
 
 /**
  * 1. Responds with list of debts/groups in which user is involved
@@ -44,23 +43,7 @@ async function formatter({ to, ...info }: DataBase.Debt) {
 
 async function getFormattedDebts(user: Enhancer.User) {
     const debts = await debtModel.getDebts({ id: user.id, is_group: false })
-    const { debt_holder_in } = await userModel.getUser(user.id) ?? await userModel.updateUser(user)
-    return (
-        await Promise.all(debts.map(formatter))).concat(
-        await getUserBalances(user.id, debt_holder_in)
-    )
-}
-
-async function getUserBalances(user_id: number, group_list: number[]) {
-    const groups = (
-        await Promise.all(group_list.map(id => groupModel.getGroup(id)))
-    ).filter(isDefined)
-    return groups.map(({ balances, title: to }) => {
-        const currencies = balances.get('' + user_id) ?? new Map<string, number>()
-        return [ ...currencies.entries() ].map(
-            ([ currency, amount ]) => ({ currency, amount: -amount, to })
-        )
-    }).flat()
+    return Promise.all(debts.map(formatter))
 }
 
 async function getChatBalances(chat: import('node-telegram-bot-api').Chat) {
