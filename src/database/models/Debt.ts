@@ -3,13 +3,23 @@ import Mongoose from 'mongoose'
 const methods: DataBase.Debt.Model = { saveDebt, getDebts, clearDebts }
 export default methods
 
-const DebtModel = Mongoose.model<DataBase.Debt.Document>('Debt', new Mongoose.Schema({
-    from: {
+const EndpointSchema = new Mongoose.Schema({
+    id: {
         type: Number,
         required: true
     },
+    is_group: Boolean
+}, {
+    _id: false
+})
+
+const DebtModel = Mongoose.model<DataBase.Debt.Document>('Debt', new Mongoose.Schema({
+    from: {
+        type: EndpointSchema,
+        required: true
+    },
     to: {
-        type: Number,
+        type: EndpointSchema,
         required: true
     },
     amount: {
@@ -24,7 +34,7 @@ const DebtModel = Mongoose.model<DataBase.Debt.Document>('Debt', new Mongoose.Sc
 
 async function saveDebt(debt: DataBase.Debt.Input) {
     const [ from, to, amount ] =
-        debt.from < debt.to ?
+        less(debt.from, debt.to) ?
             [ debt.from, debt.to, +debt.amount ] :
             [ debt.to, debt.from, -debt.amount ]
     const currency = debt.currency
@@ -41,10 +51,10 @@ async function saveDebt(debt: DataBase.Debt.Input) {
     }
 }
 
-async function getDebts(id: number) {
+async function getDebts(endpoint: DataBase.Debt.Endpoint) {
     const result = await Promise.all([
-        DebtModel.find({ from: id }),
-        DebtModel.find({ to: id })
+        DebtModel.find({ from: endpoint }),
+        DebtModel.find({ to: endpoint })
     ])
     return [
         ...result[0].map(({ to, amount, currency }) => ({ to, amount, currency })),
@@ -52,8 +62,15 @@ async function getDebts(id: number) {
     ]
 }
 
-async function clearDebts(first: number, second: number) {
+async function clearDebts(first: DataBase.Debt.Endpoint, second: DataBase.Debt.Endpoint) {
     const [ from, to ] =
-        first < second ? [ first, second ] : [ second, first ]
+        less(first, second) ? [ first, second ] : [ second, first ]
     await DebtModel.deleteMany({ from, to })
+}
+
+function less(
+        { is_group: a0, id: b0 }: DataBase.Debt.Endpoint,
+        { is_group: a1, id: b1 }: DataBase.Debt.Endpoint
+) {
+    return a0 != a1 ? !a0 && a1 : b0 < b1
 }

@@ -2,8 +2,12 @@ declare namespace DataBase {
     /**
      * Debt how it is returned from model
      */
-    type Debt = Debt.Info & { to: number }
+    type Debt = Debt.Info & { to: Debt.Endpoint }
     namespace Debt {
+        type Endpoint = {
+            id: number
+            is_group?: boolean
+        }
         /**
          * Info about debt; also base class for different implementations
          */
@@ -14,7 +18,7 @@ declare namespace DataBase {
         /**
          * Debt how it should be supplied to model
          */
-        type Input = Debt & { from: number }
+        type Input = Debt & { from: Debt.Endpoint }
         /**
          * Mongoose document on top of debt
          */
@@ -25,20 +29,16 @@ declare namespace DataBase {
         type Model = {
             /**
              * Adds new debt to database (includes basic simplification of debts)
-             * @param debt Debt to be saved
              */
             saveDebt(debt: Input): Promise<Document>
             /**
-             * Gets debts of user how they are stored in database
-             * @param id of a user
+             * Gets balances of endpoint how they are stored in database
              */
-            getDebts(id: number): Promise<Debt[]>
+            getDebts(endpoint: Debt.Endpoint): Promise<Debt[]>
             /**
-             * Clears all debts between two users
-             * @param first ID of a first user
-             * @param second ID of a second user
+             * Clears all debts between two endpoints
              */
-            clearDebts(first: number, second: number): Promise<void>
+            clearDebts(first: Debt.Endpoint, second: Debt.Endpoint): Promise<void>
         }
     }
 }
