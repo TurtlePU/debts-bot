@@ -18,12 +18,11 @@ const ru: Locale = {
             const plus = debts.filter(({ amount }) => amount > 0)
             const mins = debts.filter(({ amount }) => amount < 0)
             if (plus.length || mins.length) {
-                return '' +
-                    (plus.length
-                        ? 'Вы должны:\n' + plus.map(x => toString(x, true)).reduce(concat) : '') +
+                return (
+                    (plus.length ? 'Вам должны:\n' + plus.map(toStringAbs).reduce(concat) : '') +
                     (plus.length && mins.length ? '\n\n' : '') +
-                    (mins.length
-                        ? 'Вам должны:\n' + mins.map(x => toString(x, true)).reduce(concat) : '')
+                    (mins.length ? 'Вы должны:\n' + mins.map(toStringAbs).reduce(concat) : '')
+                )
             } else {
                 return 'Долгов нет!'
             }
@@ -50,7 +49,7 @@ const ru: Locale = {
                 return sorted
                     .map((balance, i) =>
                         (sorted[i - 1]?.currency != balance.currency ? '\n' : '')
-                        + toString(balance, false))
+                            + toString(balance))
                     .reduce(concat, 'Балансы:')
             },
             offer: (amount, currency, payers, members) =>
@@ -70,7 +69,7 @@ const ru: Locale = {
                 ? [ from_name, to_name, amnt ]
                 : [ to_name, from_name, -amnt ]
             const [ shFrom, shCur, shTo ] = [ from, currency, to ].map(shieldMarkdown)
-            return `${shFrom} получил ${amount} ${shCur} от ${shTo}.`
+            return `${shFrom} дал ${amount} ${shCur} ${shTo}.`
         },
         settledUp: (first, second) =>
             `Долги между ${shieldMarkdown(first)} и ${shieldMarkdown(second)} обнулены.`
@@ -97,8 +96,8 @@ const ru: Locale = {
         offer: (amount: number, currency: string) => {
             const abs = Math.abs(amount)
             const shielded = shieldMarkdown(currency)
-            const title = amount > 0 ? `Взять ${abs} ${currency}` : `Дать ${abs} ${currency}`
-            const text = amount > 0 ? `Я взял ${abs} ${shielded}.` : `Я дал ${abs} ${shielded}.`
+            const title = amount > 0 ? `Дать ${abs} ${currency}` : `Взять ${abs} ${currency}`
+            const text = amount > 0 ? `Я дал ${abs} ${shielded}.` : `Я взял ${abs} ${shielded}.`
             return { title, text }
         },
         settleUp: {
@@ -116,9 +115,12 @@ const ru: Locale = {
 
 export default ru
 
-function toString({ to, amount, currency }: Locale.Debt, abs: boolean): string {
-    const amnt = abs ? Math.abs(amount) : amount
-    return to + ': ' + amnt + ' ' + currency
+function toString({ to, amount, currency }: Locale.Debt): string {
+    return to + ': ' + amount + ' ' + currency
+}
+
+function toStringAbs({ to, amount, currency }: Locale.Debt): string {
+    return toString({ to, amount: Math.abs(amount), currency })
 }
 
 function concat(a: string, b: string) {
