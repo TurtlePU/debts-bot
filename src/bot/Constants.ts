@@ -3,7 +3,7 @@ export const inline_debt_accept = 'offer.accept'
 /** Key of a 'decline' button of debt offer */
 export const inline_debt_decline = 'offer.decline'
 /** RegExp which fits debt offer queries & debt offer article ids */
-export const inline_debt_regexp = /^(-?\d{1,9})\s*([^\s\d].{0,99})?$/u
+export const inline_debt_regexp = /^(-?\d{1,9}(?:\.\d{1,2})?)\s*([^\s\d].{0,99})?$/u
 /** Key of an 'accept' button of settle up offer */
 export const inline_settleup_accept = 'settleUp.accept'
 /** Key of a 'decline' button of settle up offer */
