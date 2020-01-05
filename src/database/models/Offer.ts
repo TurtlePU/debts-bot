@@ -32,7 +32,7 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
             }
         },
         required(this: DataBase.Offer.Document) {
-            return this.type == 'debt'
+            return this.type == 'debt' || this.type == 'group'
         }
     },
     group: {
