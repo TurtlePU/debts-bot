@@ -40,7 +40,7 @@ const ru: Locale = {
                 'Мы не в группе, я не могу выполнить такой запрос.',
             members: names =>
                 names.length
-                    ? '*Участники*:\n' + names.map(noMention).reduce(concat)
+                    ? '*Участники*:\n\n' + names.map(noMention).reduce(concat)
                     : 'Участников почему-то нет :(',
             balances(balances) {
                 const sorted = [ ...balances ].sort(debtCompare)
@@ -48,7 +48,7 @@ const ru: Locale = {
                     .map(({ to, ...tail }) => ({ to: noMention(to), ...tail }))
                     .map((balance, i) =>
                         (sorted[i - 1]?.currency != balance.currency ? '\n' : '')
-                            + toString(balance))
+                        + toString(balance))
                     .reduce(concat, '*Балансы*:')
             },
             offer: (amount, currency, from, to) =>
