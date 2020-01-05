@@ -2,8 +2,6 @@ import 'module-alias/register'
 
 import https from 'https'
 
-import log from '#/util/Log'
-
 import {
     connectBot,
     enhanceBot,
@@ -13,6 +11,8 @@ import {
 import {
     connectToDataBase
 } from '#/database/ConnectToDataBase'
+
+import { log } from '#/util/Log'
 
 (async function() {
     // eslint-disable-next-line @typescript-eslint/no-extra-parens

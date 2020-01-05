@@ -5,9 +5,7 @@ import getNames           from '#/helpers/GetNames'
 
 import getLocale from '#/locale/Locale'
 
-import {
-    isGroup
-} from '#/util/Predicates'
+import { isGroup } from '#/util/Predicates'
 
 /**
  * Responds with list of group members stored in database

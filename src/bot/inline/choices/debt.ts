@@ -1,14 +1,10 @@
 import offerPiece from '#/database/models/Offer'
 
-import log from '#/util/Log'
+import { inline_debt_regexp } from '#/bot/Constants'
 
-import {
-    inline_debt_regexp
-} from '#/bot/Constants'
+import { inlineOfferId } from '#/helpers/IdGenerator'
 
-import {
-    inlineOfferId
-} from '#/helpers/IdGenerator'
+import { log } from '#/util/Log'
 
 /**
  * Saves chosen debt offer to Offer model
@@ -19,9 +15,9 @@ const consumer: Enhancer.Inline.ChoiceConsumer = {
         if (!inline_message_id) {
             throw new Error('Inline message id is missing')
         }
-        offerPiece.createOffer(inlineOfferId(inline_message_id), {
+        offerPiece.createOffer('debt', {
+            id: inlineOfferId(inline_message_id),
             from_id: from.id,
-            type: 'debt',
             debt: {
                 amount: +match[1],
                 currency: match[2]

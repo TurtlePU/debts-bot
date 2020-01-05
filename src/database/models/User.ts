@@ -1,8 +1,6 @@
 import Mongoose from 'mongoose'
 
-import {
-    getUserName
-} from '#/util/StringUtils'
+import { getUserName } from '#/util/StringUtils'
 
 const UserModel = Mongoose.model<DataBase.User.Document>('User', new Mongoose.Schema({
     _id: {

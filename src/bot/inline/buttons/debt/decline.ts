@@ -1,10 +1,6 @@
-import {
-    inline_debt_decline
-} from '#/bot/Constants'
+import { inline_debt_decline } from '#/bot/Constants'
 
-import {
-    declineOffer
-} from '#/helpers/FallbackAnswers'
+import { declineOffer } from '#/helpers/FallbackAnswers'
 
 /**
  * Declines debt offer on click

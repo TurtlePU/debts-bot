@@ -1,6 +1,6 @@
 import userPiece from '#/database/models/User'
 
-import log from '#/util/Log'
+import { log } from '#/util/Log'
 
 /**
  * Forces bot to update user in database on each interaction of Telegram user with a bot

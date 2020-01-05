@@ -1,5 +1,8 @@
+import inlineKeyboard from '#/util/InlineKeyboard'
+
 import {
-    group_join, group_update_members
+    group_join,
+    group_update_members
 } from '#/bot/Constants'
 
 /**
@@ -7,13 +10,8 @@ import {
  * @param locale 
  */
 export default function(locale: Locale) {
-    return {
-        inline_keyboard: [ [ {
-            text: locale.buttons.join,
-            callback_data: group_join
-        }, {
-            text: locale.buttons.updateMembers,
-            callback_data: group_update_members
-        } ] ]
-    }
+    return inlineKeyboard([ [
+        [ locale.buttons.join, group_join ],
+        [ locale.buttons.updateMembers, group_update_members ]
+    ] ])
 }

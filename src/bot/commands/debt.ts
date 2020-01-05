@@ -5,17 +5,11 @@ import updateGroupDebtOfferMessage from '#/helpers/UpdateGroupDebtOfferMessage'
 
 import getLocale from '#/locale/Locale'
 
-import {
-    group_debt_regexp
-} from '#/bot/Constants'
+import { group_debt_regexp } from '#/bot/Constants'
 
-import {
-    groupOfferId
-} from '#/helpers/IdGenerator'
+import { groupOfferId } from '#/helpers/IdGenerator'
 
-import {
-    isGroup
-} from '#/util/Predicates'
+import { isGroup } from '#/util/Predicates'
 
 const command: Enhancer.Command = {
     key: group_debt_regexp,
@@ -38,9 +32,9 @@ function makeOffer(
         locale: Locale, chat_id: number, message_id: number,
         from_id: number, match: RegExpExecArray, member_ids: number[]
 ) {
-    return offerModel.createOffer(groupOfferId(chat_id, message_id), {
+    return offerModel.createOffer('group', {
+        id: groupOfferId(chat_id, message_id),
         from_id,
-        type: 'group',
         debt: {
             amount: +match[1],
             currency: match[2] ?? locale.currency

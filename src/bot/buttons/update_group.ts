@@ -5,9 +5,7 @@ import getNames from '#/helpers/GetNames'
 
 import getLocale from '#/locale/Locale'
 
-import {
-    group_update_members
-} from '#/bot/Constants'
+import { group_update_members } from '#/bot/Constants'
 
 /**
  * Removes kicked members from list saved in group document
@@ -18,7 +16,7 @@ const listener: Enhancer.OnClickStrict = {
         const locale = getLocale(from.language_code)
         const group = await groupModel.makeOrGetGroup(message.chat)
         await deleteKicked(this, group)
-        updateText(this, group, locale, message.chat.id, message.message_id)
+        await updateText(this, group, locale, message.chat.id, message.message_id)
         return {
             text: locale.response.membersUpdated
         }
@@ -29,11 +27,13 @@ export default listener
 
 async function deleteKicked(bot: Enhancer.TelegramBot, group: DataBase.Group.Document) {
     if (await bot.getChatMembersCount(group.id) != group.here_ids.length) {
-        const here = await Promise.all(
-            group.here_ids.map(id => bot.getChatMember(group.id, '' + id)))
-        group.here_ids.pull(
-            ...here.filter(({ status }) => status == 'kicked').map(({ user }) => user.id))
+        const here = await Promise.all(group.here_ids.map(getChatMember))
+        group.here_ids.pull(...here.filter(isKicked).map(getId))
         return group.save()
+    }
+
+    function getChatMember(id: number) {
+        return bot.getChatMember(group.id, '' + id)
     }
 }
 
@@ -45,4 +45,12 @@ async function updateText(
         chat_id, message_id,
         reply_markup: membersReplyMarkup(locale)
     })
+}
+
+function isKicked({ status }: import('node-telegram-bot-api').ChatMember) {
+    return status == 'kicked'
+}
+
+function getId({ user }: import('node-telegram-bot-api').ChatMember) {
+    return user.id
 }

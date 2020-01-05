@@ -3,12 +3,11 @@ import userPiece  from '#/database/models/User'
 
 import getLocale from '#/locale/Locale'
 
-import log from '../util/Log'
-
-import {
-    getUserName
-} from '../util/StringUtils'
 import { inlineOfferId } from '#/helpers/IdGenerator'
+
+import { getUserName } from '#/util/StringUtils'
+
+import { log } from '#/util/Log'
 
 /**
  * Callback for 'decline offer' buttons
@@ -31,17 +30,20 @@ export function declineOffer(
  * @param act should execute offered action
  * @returns built callback
  */
-export function acceptOffer<T extends DataBase.Offer.Document>(
-        checker: (offer: DataBase.Offer.Document) => offer is T,
-        getText: (locale: Locale, offer: T, from: DataBase.User, to: Enhancer.User) => string,
-        act: (offer: T, to: Enhancer.User) => any
+export function acceptOffer<T extends keyof DataBase.Offer.Typenames>(
+        type: T,
+        getText: (
+            locale: Locale, offer: DataBase.Offer.Documents[T],
+            from: DataBase.User, to: Enhancer.User
+        ) => string,
+        act: (offer: DataBase.Offer.Documents[T], to: Enhancer.User) => any
 ): Enhancer.Inline.OnClickStrict['callback'] {
     return async function(
         this: Enhancer.TelegramBot, { inline_message_id, from: to }: Enhancer.Inline.Click
     ) {
         const locale = getLocale(to.language_code)
         const offer = await offerPiece.getOffer(inlineOfferId(inline_message_id))
-        if (!offer || !checker(offer)) {
+        if (!checker(type, offer)) {
             const text = locale.hybrid.offer.expired
             this.editMessageText(text, { inline_message_id }).catch(log)
             return { text }
@@ -52,11 +54,17 @@ export function acceptOffer<T extends DataBase.Offer.Document>(
             if (!from) {
                 throw new Error('Offerer not found')
             }
-            offer.remove().catch(log)
+            (offer as DataBase.Offer.Document).remove().catch(log)
             act(offer, to)
             const text = getText(locale, offer, from, to)
             this.editMessageText(text, { inline_message_id }).catch(log)
             return { text }
         }
     }
+}
+
+function checker<T extends keyof DataBase.Offer.Typenames>(
+        type: T, offer: DataBase.Offer.Document | null
+): offer is DataBase.Offer.Documents[T] {
+    return offer?.type == type
 }

@@ -3,9 +3,7 @@ import userModel  from '#/database/models/User'
 
 import getLocale from '#/locale/Locale'
 
-import {
-    group_join
-} from '#/bot/Constants'
+import { group_join } from '#/bot/Constants'
 
 /**
  * Greets new group with 'new group' message;

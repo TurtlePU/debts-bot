@@ -1,14 +1,10 @@
 import offerPiece from '#/database/models/Offer'
 
-import log from '#/util/Log'
+import { inline_settleup_article_id } from '#/bot/Constants'
 
-import {
-    inline_settleup_article_id
-} from '#/bot/Constants'
+import { inlineOfferId } from '#/helpers/IdGenerator'
 
-import {
-    inlineOfferId
-} from '#/helpers/IdGenerator'
+import { log } from '#/util/Log'
 
 /**
  * Saves chosen settle-up offer to Offer model
@@ -19,9 +15,9 @@ const consumer: Enhancer.Inline.StrictChoiceConsumer = {
         if (!inline_message_id) {
             throw new Error('Inline message id is missing')
         }
-        offerPiece.createOffer(inlineOfferId(inline_message_id), {
-            from_id: from.id,
-            type: 'settleup'
+        offerPiece.createOffer('settleup', {
+            id: inlineOfferId(inline_message_id),
+            from_id: from.id
         }).catch(log)
     }
 }

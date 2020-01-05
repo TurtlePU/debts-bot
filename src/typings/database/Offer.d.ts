@@ -1,73 +1,85 @@
 declare namespace DataBase {
-    type Offer = Offer.Types.Debt | Offer.Types.SettleUp | Offer.Types.Group
     namespace Offer {
         /**
-         * Base type for all offers
+         * List of possible offer types
          */
-        type Base<T extends string> = {
-            from_id: number
-            type: T
+        type Typenames = {
+            group: never
+            debt: never
+            settleup: never
         }
-        namespace Parts {
+        namespace _private {
+            /**
+             * Base type for all offers
+             */
+            type Base = {
+                id: string
+                from_id: number
+            }
+            type Type<T extends keyof Typenames> = Selector<{}, { type: T }>
             /**
              * Part specific for debt offers
              */
-            type Debt = {
-                debt: {
+            type DebtPart = {
+                debt: Debt.Info
+            }
+            /**
+             * Part specific for group debt offers
+             */
+            type GroupPart<T> = {
+                group: {
                     /**
-                     * Amount of money in offer
+                     * Those who paid
                      */
-                    amount: number
+                    payer_ids: T
                     /**
-                     * Currency of money in offer
+                     * Those who used money
                      */
-                    currency: string
+                    member_ids: T
                 }
             }
-            type Group = Group.Base<MongoArray<number>>
-            namespace Group {
-                type Base<T> = {
-                    group: {
-                        /**
-                         * Those who paid
-                         */
-                        payer_ids: T
-                        /**
-                         * Those who used money
-                         */
-                        member_ids: T
-                    }
-                }
-                type Input = Base<number[]>
+            /**
+             * GroupPart returned from database
+             */
+            type GroupPartOutput = GroupPart<MongoArray<number>>
+            /**
+             * Selector of GroupPart-s
+             */
+            type GroupPartSelector = Selector<GroupPart<number[]>, GroupPartOutput>
+            /**
+             * Offer types
+             */
+            type Types<K extends keyof Selector> = {
+                settleup: Base & Type<'settleup'>[K]
+                debt: Base & Type<'debt'>[K] & DebtPart
+                group: Base & Type<'group'>[K] & DebtPart & GroupPartSelector[K]
             }
+            /**
+             * Offer how it is stored in database
+             */
+            type InDatabase =
+                Base & Type<keyof Typenames>['else'] & Partial<DebtPart & GroupPartOutput>
         }
-        namespace Types {
-            type Debt = Base<'debt'> & Parts.Debt
-            type SettleUp = Base<'settleup'>
-            type Group = Group.Base & Parts.Group
-            namespace Group {
-                type Base = Offer.Base<'group'> & Parts.Debt
-                type Input = Base & Parts.Group.Input
-            }
-        }
-        type Input = Types.Debt | Types.SettleUp | Types.Group.Input
         /**
-         * Offer properties how they are stored in DataBase
+         * Offers how they should be provided to database
          */
-        type InDatabase =
-            Offer.Base<'debt' | 'settleup' | 'group'>
-            & Partial<Offer.Parts.Debt & Offer.Parts.Group>
+        type Inputs = _private.Types<'then'>
+        type Input = Inputs['debt'] | Inputs['group'] | Inputs['settleup']
         /**
-         * Mongoose document on top of Offer properties in DataBase
+         * Offers how they are returned from database
          */
-        type Document<Type = InDatabase> = DataBase.Document & Type & {
-            id: string
+        type Outputs = _private.Types<'else'>
+        /**
+         * Document on top of offer
+         */
+        type Document<Type = _private.InDatabase> = DataBase.Document & Type & {
             created: Date
         }
-        namespace Document {
-            type Debt = Document<Types.Debt>
-            type Group = Document<Types.Group>
-            type SettleUp = Document<Types.SettleUp>
+        /**
+         * Documents on top of Output offers
+         */
+        type Documents = {
+            [K in keyof Inputs]: Document<Outputs[K]>
         }
         /**
          * Collection of methods to work with offers in DataBase
@@ -78,19 +90,7 @@ declare namespace DataBase {
              * @param id of new offer
              * @param offer offer object
              */
-            createOffer(id: string, offer: Types.Debt): Promise<Document.Debt>
-            /**
-             * Creates new offer
-             * @param id of new offer
-             * @param offer offer object
-             */
-            createOffer(id: string, offer: Types.SettleUp): Promise<Document.SettleUp>
-            /**
-             * Creates new offer
-             * @param id of new offer
-             * @param offer offer object
-             */
-            createOffer(id: string, offer: Types.Group.Input): Promise<Document.Group>
+            createOffer<K extends keyof Inputs>(type: K, offer: Inputs[K]): Promise<Documents[K]>
             /**
              * @param id of an offer
              * @returns props of offer how they are stored in DataBase (if present)

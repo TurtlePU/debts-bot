@@ -15,4 +15,14 @@ declare namespace DataBase {
      * Plain Mongoose map
      */
     type MongoMap<T> = import('mongoose').Types.Map<T>
+    /**
+     * Stores different types for different options
+     */
+    type Selector<T = any, U = any> = {
+        then: T
+        else: U
+    }
+    type ExcludeFields<Without, With = any> = {
+        [K in keyof With]: K extends keyof Without ? never : With[K]
+    }
 }

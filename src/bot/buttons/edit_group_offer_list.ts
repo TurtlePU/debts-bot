@@ -5,17 +5,11 @@ import updateGroupDebtOfferMessage from '#/helpers/UpdateGroupDebtOfferMessage'
 
 import getLocale from '#/locale/Locale'
 
-import {
-    group_debt_button_regexp
-} from '#/bot/Constants'
+import { group_debt_button_regexp } from '#/bot/Constants'
 
-import {
-    groupOfferId
-} from '#/helpers/IdGenerator'
+import { groupOfferId } from '#/helpers/IdGenerator'
 
-import {
-    isGroupOffer
-} from '#/util/Predicates'
+import { isGroupOffer } from '#/util/Predicates'
 
 /**
  * Updates lists of users in group offers
@@ -25,11 +19,11 @@ const button: Enhancer.OnClick = {
     async callback({ from, message }, match) {
         const locale = getLocale(from.language_code)
         const offer = await offerModel.getOffer(groupOfferId(message.chat.id, message.message_id))
-        if (!offer || !isGroupOffer(offer)) {
+        if (!isGroupOffer(offer)) {
             return offerExpired(this, locale, message)
         }
-        updateList(from.id, offer, match)
-        updateGroupDebtOfferMessage(this, message.chat.id, message.message_id, offer, locale)
+        await updateList(from.id, offer, match)
+        await updateGroupDebtOfferMessage(this, message.chat.id, message.message_id, offer, locale)
         return {
             text: locale.response.membersUpdated
         }
@@ -38,7 +32,9 @@ const button: Enhancer.OnClick = {
 
 export default button
 
-function updateList(user_id: number, offer: DataBase.Offer.Document.Group, match: RegExpExecArray) {
+function updateList(
+        user_id: number, offer: DataBase.Offer.Documents['group'], match: RegExpExecArray
+) {
     const list = match[1] == 'payers' ? offer.group.payer_ids : offer.group.member_ids
     if (match[2] == 'join') {
         list.addToSet(user_id)

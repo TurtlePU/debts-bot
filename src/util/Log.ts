@@ -1,3 +1,3 @@
-export default function log(obj: any) {
+export function log(obj: any) {
     console.log(obj)
 }

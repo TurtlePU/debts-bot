@@ -1,10 +1,6 @@
-import {
-    inline_settleup_decline
-} from '#/bot/Constants'
+import { inline_settleup_decline } from '#/bot/Constants'
 
-import {
-    declineOffer
-} from '#/helpers/FallbackAnswers'
+import { declineOffer } from '#/helpers/FallbackAnswers'
 
 /**
  * Declines settle-up offer on click

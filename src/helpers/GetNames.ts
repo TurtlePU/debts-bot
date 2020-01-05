@@ -1,8 +1,6 @@
 import userModel  from '#/database/models/User'
 
-import {
-    isDefined
-} from '#/util/Predicates'
+import { isDefined } from '#/util/Predicates'
 
 /**
  * Gets names of users by their ids

@@ -2,22 +2,16 @@ import debtModel  from '#/database/models/Debt'
 import groupModel from '#/database/models/Group'
 import offerModel from '#/database/models/Offer'
 
-import getNames from '#/helpers/GetNames'
+import getNames     from '#/helpers/GetNames'
 import offerExpired from '#/helpers/OfferExpired'
 
 import getLocale from '#/locale/Locale'
 
-import {
-    group_debt_lock
-} from '#/bot/Constants'
+import { group_debt_lock } from '#/bot/Constants'
 
-import {
-    groupOfferId
-} from '#/helpers/IdGenerator'
+import { groupOfferId } from '#/helpers/IdGenerator'
 
-import {
-    isGroupOffer
-} from '#/util/Predicates'
+import { isGroupOffer } from '#/util/Predicates'
 
 const onClick: Enhancer.OnClickStrict = {
     key: group_debt_lock,
@@ -41,13 +35,10 @@ const onClick: Enhancer.OnClickStrict = {
             // TODO: text in locale
             return { text: 'Lists should not be equal' }
         }
-        offer.remove()
-        const group = await groupModel.makeOrGetGroup(message.chat)
-        const entries = await debtModel.saveGroupDebt(group.id, payers, memers, offer.debt)
-        updateClosedOfferMessage(
-            this, locale, message.chat.id, message.message_id,
-            entries, offer.debt.amount, offer.debt.currency
-        )
+        await Promise.all([
+            offer.remove(),
+            applyOfferAndUpdateMessage(this, message, locale, offer.debt, payers, memers)
+        ])
         // TODO: text in locale
         return { text: 'Success' }
     }
@@ -67,15 +58,17 @@ function arrayEquals(a: number[], b: number[]) {
     return true
 }
 
-async function updateClosedOfferMessage(
-        bot: Enhancer.TelegramBot, locale: Locale, chat_id: number, message_id: number,
-        entries: [number, number][], amount: number, currency: string
+async function applyOfferAndUpdateMessage(
+        bot: Enhancer.TelegramBot, { chat, message_id }: Enhancer.Message, locale: Locale,
+        debt: DataBase.Debt.Info, from: number[], to: number[]
 ) {
+    const group = await groupModel.makeOrGetGroup(chat)
+    const entries = await debtModel.saveGroupDebt(group.id, from, to, debt)
     const names = await getNames(entries.map(([ id ]) => id))
     if (names.length != entries.length) {
         throw new Error('Not all names were found in database')
     }
     const updates = names.map((username, i) => ({ username, delta: entries[i][1] }))
-    const text = locale.messageTexts.group.offerSaved(updates, amount, currency)
-    return bot.editMessageText(text, { chat_id, message_id })
+    const text = locale.messageTexts.group.offerSaved(updates, debt.amount, debt.currency)
+    return bot.editMessageText(text, { chat_id: chat.id, message_id })
 }

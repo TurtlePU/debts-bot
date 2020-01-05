@@ -3,6 +3,8 @@ import Mongoose from 'mongoose'
 const GroupSchema = new Mongoose.Schema({
     payer_ids: [ Number ],
     member_ids: [ Number ]
+}, {
+    _id: false
 })
 
 const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose.Schema({
@@ -47,13 +49,11 @@ const OfferModel = Mongoose.model<DataBase.Offer.Document>('Offer', new Mongoose
 }))
 
 const methods: DataBase.Offer.Model = {
-    createOffer,
+    createOffer(type, { id: _id, ...tail }) {
+        return new OfferModel({ _id, type, ...tail }).save() as any
+    },
     getOffer: OfferModel.findById.bind(OfferModel),
     deleteOffer: OfferModel.findByIdAndRemove.bind(OfferModel)
-}
-
-function createOffer(_id: string, offer: DataBase.Offer.Input): any {
-    return new OfferModel({ _id, ...offer }).save()
 }
 
 export default methods
