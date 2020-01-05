@@ -12,18 +12,16 @@ import { isGroup } from '#/util/Predicates'
  */
 const command: Enhancer.Command = {
     key: /\/members/u,
-    async callback(msg) {
-        const locale = getLocale(msg.from?.language_code)
-        if (isGroup(msg.chat)) {
-            const group = await groupModel.makeOrGetGroup(msg.chat)
-            const names = await getNames(group.here_ids)
-            return this.sendMessage(
-                msg.chat.id,
-                locale.messageTexts.group.members(names),
+    async callback({ chat, from }) {
+        const locale = getLocale(from?.language_code)
+        if (isGroup(chat)) {
+            const { here_ids } = await groupModel.makeOrGetGroup(chat)
+            const names = await getNames(here_ids)
+            return this.sendMessage(chat.id, locale.messageTexts.group.members(names),
                 { reply_markup: membersReplyMarkup(locale) }
             )
         } else {
-            return this.sendMessage(msg.chat.id, locale.messageTexts.group.notGroup)
+            return this.sendMessage(chat.id, locale.messageTexts.group.notGroup)
         }
     }
 }

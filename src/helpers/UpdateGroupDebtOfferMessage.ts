@@ -8,15 +8,16 @@ import {
 } from '#/bot/Constants'
 
 export default async function(bot: Enhancer.TelegramBot, chat_id: number, message_id: number,
-        offer: DataBase.Offer.Outputs['group'], locale: Locale) {
+        { debt, group }: DataBase.Offer.Outputs['group'], { messageTexts, buttons }: Locale) {
     return bot.editMessageText(
-        locale.messageTexts.group.offer(
-            offer.debt.amount, offer.debt.currency,
-            await getNames(offer.group.payer_ids), await getNames(offer.group.member_ids)
+        messageTexts.group.offer(
+            debt.amount, debt.currency,
+            await getNames(group.payer_ids),
+            await getNames(group.member_ids)
         ),
         {
             chat_id, message_id,
-            reply_markup: keyboard(locale.buttons)
+            reply_markup: keyboard(buttons)
         }
     )
 }

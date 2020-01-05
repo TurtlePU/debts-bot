@@ -1,10 +1,7 @@
 export default async function(
-        bot: Enhancer.TelegramBot, locale: Locale, message: Enhancer.Message
+        bot: Enhancer.TelegramBot, { hybrid }: Locale, { chat, message_id }: Enhancer.Message
 ) {
-    const text = locale.hybrid.offer.expired
-    await bot.editMessageText(text, {
-        chat_id: message.chat.id,
-        message_id: message.message_id
-    })
+    const text = hybrid.offer.expired
+    await bot.editMessageText(text, { chat_id: chat.id, message_id })
     return { text }
 }

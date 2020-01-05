@@ -1,7 +1,9 @@
 import getLocale from '#/locale/Locale'
 
+import inlineKeyboard from '#/util/InlineKeyboard'
+
 import {
-    inline_settleup_article_id,
+    inline_settleup_article_id as id,
     inline_settleup_accept,
     inline_settleup_decline
 } from '#/bot/Constants'
@@ -12,21 +14,15 @@ import {
 const command: Enhancer.Inline.RegExpCommand = {
     key: /.*/u,
     callback(query) {
-        const locale = getLocale(query.from.language_code)
+        const { articles, buttons } = getLocale(query.from.language_code)
+        const { title, text: message_text } = articles.settleUp
         return [ {
-            id: inline_settleup_article_id,
-            type: 'article',
-            title: locale.articles.settleUp.title,
-            input_message_content: {
-                message_text: locale.articles.settleUp.text,
-                parse_mode: 'Markdown'
-            },
-            reply_markup: {
-                inline_keyboard: [ [ 
-                    { text: locale.buttons.accept, callback_data: inline_settleup_accept },
-                    { text: locale.buttons.reject, callback_data: inline_settleup_decline }
-                ] ]
-            }
+            id, type: 'article', title,
+            input_message_content: { message_text, parse_mode: 'Markdown' },
+            reply_markup: inlineKeyboard([ [
+                [ buttons.accept, inline_settleup_accept ],
+                [ buttons.reject, inline_settleup_decline ]
+            ] ])
         } ]
     }
 }

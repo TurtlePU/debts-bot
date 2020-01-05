@@ -7,11 +7,10 @@ import {
 
 /**
  * Reply markup below `/members` response
- * @param locale 
  */
-export default function(locale: Locale) {
+export default function({ buttons }: Locale) {
     return inlineKeyboard([ [
-        [ locale.buttons.join, group_join ],
-        [ locale.buttons.updateMembers, group_update_members ]
+        [ buttons.join, group_join ],
+        [ buttons.updateMembers, group_update_members ]
     ] ])
 }

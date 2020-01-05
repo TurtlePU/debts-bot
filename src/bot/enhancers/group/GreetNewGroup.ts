@@ -18,13 +18,11 @@ export default function(this: Enhancer.TelegramBot) {
 async function onNewChatMembers(this: Enhancer.TelegramBot, msg: Enhancer.Message) {
     const me = await this.getMe()
     const new_members = (msg.new_chat_members ?? []).filter(({ id }) => id != me.id)
-    for (const member of new_members) {
-        userModel.updateUser(member)
-    }
+    const user_updates = Promise.all(new_members.map(userModel.updateUser))
     const group = await groupModel.getGroup(msg.chat.id)
                   ?? await onNewChat(this, msg, new_members[0]?.language_code)
     group.here_ids.addToSet(...new_members.map(({ id }) => id))
-    return group.save()
+    return Promise.all([ user_updates, group.save() ])
 }
 
 function onGroupCreated(this: Enhancer.TelegramBot, msg: Enhancer.Message) {

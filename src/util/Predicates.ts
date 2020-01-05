@@ -23,3 +23,7 @@ export function checkOfferType<T extends keyof DataBase.Offer.Typenames>(
 ): offer is DataBase.Offer.Documents[T] {
     return offer?.type == type
 }
+
+export function isUnmodifiedMessageError(error: Error) {
+    return error.message.includes('message is not modified')
+}

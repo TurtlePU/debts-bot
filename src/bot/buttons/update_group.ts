@@ -7,6 +7,8 @@ import getLocale from '#/locale/Locale'
 
 import { group_update_members } from '#/bot/Constants'
 
+import { catchUnmodified } from '#/util/Catchers'
+
 /**
  * Removes kicked members from list saved in group document
  */
@@ -16,10 +18,13 @@ const listener: Enhancer.OnClickStrict = {
         const locale = getLocale(from.language_code)
         const group = await groupModel.makeOrGetGroup(message.chat)
         await deleteKicked(this, group)
-        await updateText(this, group, locale, message.chat.id, message.message_id)
-        return {
-            text: locale.response.membersUpdated
+        try {
+            await updateText(this, group, locale, message.chat.id, message.message_id)
+        } catch (error) {
+            // TODO: Move to Locale
+            return catchUnmodified(error, { text: 'No diff' })
         }
+        return { text: locale.response.membersUpdated }
     }
 }
 

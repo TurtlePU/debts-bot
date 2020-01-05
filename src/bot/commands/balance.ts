@@ -12,17 +12,17 @@ import { isGroup } from '#/util/Predicates'
  */
 const command: Enhancer.Command = {
     key: /\/balance/u,
-    async callback(msg) {
-        const locale = getLocale(msg.from?.language_code)
+    async callback({ chat, from }) {
+        const { messageTexts } = getLocale(from?.language_code)
         let message: string
-        if (!msg.from) {
-            message = locale.messageTexts.anon
-        } else if (isGroup(msg.chat)) {
-            message = locale.messageTexts.group.balances(await getChatBalances(msg.chat))
+        if (!from) {
+            message = messageTexts.anon
+        } else if (isGroup(chat)) {
+            message = messageTexts.group.balances(await getChatBalances(chat))
         } else {
-            message = locale.messageTexts.debts(await getFormattedDebts(msg.from))
+            message = messageTexts.debts(await getFormattedDebts(from))
         }
-        return this.sendMessage(msg.chat.id, message)
+        return this.sendMessage(chat.id, message)
     }
 }
 

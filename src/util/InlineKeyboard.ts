@@ -1,3 +1,6 @@
+/**
+ * @param source buttons in format [ text, callback_data ]
+ */
 export default function(
         source: [ string, string ][][]
 ): import('node-telegram-bot-api').InlineKeyboardMarkup {

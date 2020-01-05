@@ -22,11 +22,14 @@ const button: Enhancer.OnClick = {
         if (!checkOfferType('group', offer)) {
             return offerExpired(this, locale, message)
         }
-        await updateList(from.id, offer, match)
-        await updateGroupDebtOfferMessage(this, message.chat.id, message.message_id, offer, locale)
-        return {
-            text: locale.response.membersUpdated
+        const update = updateList(from.id, offer, match)
+        if (!update) {
+            // TODO: Move to Locale
+            return { text: 'No diff' }
         }
+        await update
+        await updateGroupDebtOfferMessage(this, message.chat.id, message.message_id, offer, locale)
+        return { text: locale.response.membersUpdated }
     }
 }
 
@@ -37,9 +40,12 @@ function updateList(
 ) {
     const list = match[1] == 'payers' ? offer.group.payer_ids : offer.group.member_ids
     if (match[2] == 'join') {
-        list.addToSet(user_id)
-    } else {
-        list.pull(user_id)
+        if (list.includes(user_id)) {
+            return
+        }
+        list.push(user_id)
+    } else if (list.pull(user_id).length == 0) {
+        return
     }
     return offer.save()
 }
