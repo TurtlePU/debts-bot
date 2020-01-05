@@ -5,6 +5,8 @@ import getLocale from '#/locale/Locale'
 
 import { inlineOfferId } from '#/helpers/IdGenerator'
 
+import { checkOfferType } from '#/util/Predicates'
+
 import { getUserName } from '#/util/StringUtils'
 
 import { log } from '#/util/Log'
@@ -25,7 +27,7 @@ export function declineOffer(
 
 /**
  * Builds a callback for 'accept offer' button
- * @param checker should check that found offer is of correct type
+ * @param type offer type
  * @param getText should return text for corresponding type of offer
  * @param act should execute offered action
  * @returns built callback
@@ -43,7 +45,7 @@ export function acceptOffer<T extends keyof DataBase.Offer.Typenames>(
     ) {
         const locale = getLocale(to.language_code)
         const offer = await offerPiece.getOffer(inlineOfferId(inline_message_id))
-        if (!checker(type, offer)) {
+        if (!checkOfferType(type, offer)) {
             const text = locale.hybrid.offer.expired
             this.editMessageText(text, { inline_message_id }).catch(log)
             return { text }
@@ -61,10 +63,4 @@ export function acceptOffer<T extends keyof DataBase.Offer.Typenames>(
             return { text }
         }
     }
-}
-
-function checker<T extends keyof DataBase.Offer.Typenames>(
-        type: T, offer: DataBase.Offer.Document | null
-): offer is DataBase.Offer.Documents[T] {
-    return offer?.type == type
 }

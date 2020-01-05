@@ -9,7 +9,7 @@ import { group_debt_button_regexp } from '#/bot/Constants'
 
 import { groupOfferId } from '#/helpers/IdGenerator'
 
-import { isGroupOffer } from '#/util/Predicates'
+import { checkOfferType } from '#/util/Predicates'
 
 /**
  * Updates lists of users in group offers
@@ -19,7 +19,7 @@ const button: Enhancer.OnClick = {
     async callback({ from, message }, match) {
         const locale = getLocale(from.language_code)
         const offer = await offerModel.getOffer(groupOfferId(message.chat.id, message.message_id))
-        if (!isGroupOffer(offer)) {
+        if (!checkOfferType('group', offer)) {
             return offerExpired(this, locale, message)
         }
         await updateList(from.id, offer, match)

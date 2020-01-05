@@ -11,14 +11,14 @@ import { group_debt_lock } from '#/bot/Constants'
 
 import { groupOfferId } from '#/helpers/IdGenerator'
 
-import { isGroupOffer } from '#/util/Predicates'
+import { checkOfferType } from '#/util/Predicates'
 
 const onClick: Enhancer.OnClickStrict = {
     key: group_debt_lock,
     async callback({ message, from }) {
         const locale = getLocale(from.language_code)
         const offer = await offerModel.getOffer(groupOfferId(message.chat.id, message.message_id))
-        if (!isGroupOffer(offer)) {
+        if (!checkOfferType('group', offer)) {
             return offerExpired(this, locale, message)
         }
         if (offer.group.payer_ids.length == 0) {
