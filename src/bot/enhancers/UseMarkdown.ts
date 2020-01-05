@@ -1,8 +1,12 @@
 /**
- * Switches parse mode of all bot messages to Markdown
+ * Switches default parse mode of all bot messages to Markdown
  */
 export default function(this: Enhancer.TelegramBot) {
-    const oldSendMessage = this.sendMessage.bind(this)
+    const sendMessage = this.sendMessage.bind(this)
     this.sendMessage = (chatId, text, options) =>
-        oldSendMessage(chatId, text, { ...options, parse_mode: 'Markdown' })
+        sendMessage(chatId, text, { parse_mode: 'Markdown', ...options })
+
+    const editMessageText = this.editMessageText.bind(this)
+    this.editMessageText = (text, options) =>
+        editMessageText(text, { parse_mode: 'Markdown', ...options })
 }
