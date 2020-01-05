@@ -40,26 +40,27 @@ const ru: Locale = {
                 'Мы не в группе, я не могу выполнить такой запрос.',
             members: names =>
                 names.length
-                    ? 'Участники:\n' + names.reduce(concat)
+                    ? 'Участники:\n' + names.map(noMention).reduce(concat)
                     : 'Участников почему-то нет :(',
             balances(balances) {
                 const sorted = [ ...balances ].sort(debtCompare)
                 return sorted
+                    .map(({ to, ...tail }) => ({ to: noMention(to), ...tail }))
                     .map((balance, i) =>
                         (sorted[i - 1]?.currency != balance.currency ? '\n' : '')
                             + toString(balance))
                     .reduce(concat, 'Балансы:')
             },
-            offer: (amount, currency, payers, members) =>
+            offer: (amount, currency, from, to) =>
                 `Сумма долга: ${amount} ${currency}.\n` +
-                (payers.length ? '\nКто заплатил:\n' + payers.reduce(concat) : '') +
-                (payers.length && members.length ? '\n' : '') +
-                (members.length ? '\nЗа кого платили:\n' + members.reduce(concat) : ''),
+                (from.length ? '\nКто заплатил:\n' + from.map(noMention).reduce(concat) : '') +
+                (from.length && to.length ? '\n' : '') +
+                (to.length ? '\nЗа кого платили:\n' + to.map(noMention).reduce(concat) : ''),
             offerSaved: (updates, amount, currency) =>
                 `Сумма долга: ${amount} ${currency}.\n\n` +
                 updates
                     .sort(({ delta: a }, { delta: b }) => a - b)
-                    .map(({ username, delta }) => `${username}: ${delta}`)
+                    .map(({ username, delta }) => `${noMention(username)}: ${delta}`)
                     .reduce(concat)
         },
         offerSaved(from_name, to_name, amnt, currency) {
@@ -112,6 +113,10 @@ const ru: Locale = {
 }
 
 export default ru
+
+function noMention(username: string): string {
+    return username[0] == '@' ? username.substr(1) : username
+}
 
 function toString({ to, amount, currency }: Locale.Debt): string {
     return to + ': ' + amount + ' ' + currency
