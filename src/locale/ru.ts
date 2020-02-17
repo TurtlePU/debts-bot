@@ -115,7 +115,7 @@ const ru: Locale = {
 export default ru
 
 function noMention(username: string): string {
-    return username[0] == '@' ? username.substr(1) : username
+    return shieldMarkdown(username[0] == '@' ? username.substr(1) : username)
 }
 
 function toString({ to, amount, currency }: Locale.Debt): string {
