@@ -55,5 +55,8 @@ async function getFormattedDebts(user: Enhancer.User) {
 
 async function getChatBalances(chat: import('node-telegram-bot-api').Chat) {
     const debts = await debtModel.getDebts({ id: chat.id, is_group: true })
-    return Promise.all(debts.map(formatter))
+    return Promise.all(debts
+        .map(({ amount, ...tail }) => ({ amount: -amount, ...tail }))
+        .map(formatter)
+    )
 }
