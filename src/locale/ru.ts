@@ -119,7 +119,7 @@ function noMention(username: string): string {
 }
 
 function toString({ to, amount, currency }: Locale.Debt): string {
-    return to + ': ' + amount + ' ' + currency
+    return to + ': ' + amount + ' ' + shieldMarkdown(currency)
 }
 
 function toStringAbs({ to, amount, currency }: Locale.Debt): string {
