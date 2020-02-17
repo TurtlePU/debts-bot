@@ -89,6 +89,7 @@ declare type Locale = {
              */
             offer(amount: number, currency: string, payers: string[], members: string[]): string
             offerSaved(updates: Locale.BalanceUpdate[], amount: number, currency: string): string
+            debtsCleared: string
         }
         /**
          * @param from offerer of debt

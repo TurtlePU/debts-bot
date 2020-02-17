@@ -61,7 +61,9 @@ const ru: Locale = {
                 updates
                     .sort(({ delta: a }, { delta: b }) => a - b)
                     .map(({ username, delta }) => `${noMention(username)}: ${delta}`)
-                    .reduce(concat)
+                    .reduce(concat),
+            debtsCleared:
+                'Все долги группы удалены.'
         },
         offerSaved(from_name, to_name, amnt, currency) {
             const [ from, to, amount ] = amnt > 0

@@ -47,6 +47,10 @@ declare namespace DataBase {
              * Clears all debts between two endpoints
              */
             clearDebts(first: Debt.Endpoint, second: Debt.Endpoint): Promise<void>
+            /**
+             * Clears all debts in group
+             */
+            clearGroupDebts(group_id: number): Promise<void>
         }
     }
 }

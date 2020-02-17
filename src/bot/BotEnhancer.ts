@@ -11,6 +11,7 @@ import updateGroup    from './buttons/update_group'
 import balance from './commands/balance'
 import debt    from './commands/debt'
 import members from './commands/members'
+import reset   from './commands/reset'
 import start   from './commands/start'
 
 import ConnectEnhancers from './enhancers/ConnectEnhancements'
@@ -45,6 +46,7 @@ export function enhanceBot(bot: TelegramBot) {
         .command(balance)
         .command(debt)
         .command(members)
+        .command(reset)
         .command(start)
         .onClick(cancelOffer)
         .onClick(joinGroup)

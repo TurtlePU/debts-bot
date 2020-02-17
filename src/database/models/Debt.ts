@@ -1,6 +1,8 @@
 import Mongoose from 'mongoose'
 
-const methods: DataBase.Debt.Model = { saveGroupDebt, saveDebt, getDebts, clearDebts }
+const methods: DataBase.Debt.Model = {
+    saveGroupDebt, saveDebt, getDebts, clearDebts, clearGroupDebts
+}
 export default methods
 
 const EndpointSchema = new Mongoose.Schema({
@@ -91,6 +93,17 @@ function less(
         { is_group: a1, id: b1 }: DataBase.Debt.Endpoint
 ) {
     return a0 != a1 ? !a0 && a1 : b0 < b1
+}
+
+async function clearGroupDebts(group_id: number) {
+    let endpoint: DataBase.Debt.Endpoint = {
+        id: group_id,
+        is_group: true
+    }
+    await Promise.all([
+        DebtModel.deleteMany({ from: endpoint }),
+        DebtModel.deleteMany({ to: endpoint })
+    ])
 }
 
 const { abs, floor, sign } = Math
