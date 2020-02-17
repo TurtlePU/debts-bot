@@ -52,12 +52,12 @@ const ru: Locale = {
                     .reduce(concat, '*Балансы*:')
             },
             offer: (amount, currency, from, to) =>
-                `*Сумма долга*: ${amount} ${currency}.\n` +
+                `*Сумма долга*: ${amount} ${shieldMarkdown(currency)}.\n` +
                 (from.length ? '\n*Кто заплатил*:\n' + from.map(noMention).reduce(concat) : '') +
                 (from.length && to.length ? '\n' : '') +
                 (to.length ? '\n*За кого платили*:\n' + to.map(noMention).reduce(concat) : ''),
             offerSaved: (updates, amount, currency) =>
-                `*Сумма долга*: ${amount} ${currency}.\n\n` +
+                `*Сумма долга*: ${amount} ${shieldMarkdown(currency)}.\n\n` +
                 updates
                     .sort(({ delta: a }, { delta: b }) => a - b)
                     .map(({ username, delta }) => `${noMention(username)}: ${delta}`)
